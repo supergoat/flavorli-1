@@ -15,14 +15,10 @@ const optionsReducer = (state: {[category: string]: string[]}, action: any) => {
           action.price > 0 ? [...categoryOptions, action.name] : [action.name],
       };
     case 'REMOVE_OPTION':
-      const optionIndex = categoryOptions.indexOf(action.name);
-
+      if (action.price === 0) return state;
       return {
         ...state,
-        [action.categoryName]: [
-          ...categoryOptions.slice(0, optionIndex),
-          ...categoryOptions.slice(optionIndex + 1),
-        ],
+        [action.categoryName]: categoryOptions.filter(c => c !== action.name),
       };
     default:
       return state;
@@ -83,8 +79,7 @@ const MealView = ({mealId}: Props) => {
       state.options[option.categoryName] &&
       state.options[option.categoryName].includes(option.name);
 
-    const type =
-      !isSelected && option.price > 0 ? 'ADD_OPTION' : 'REMOVE_OPTION';
+    const type = !isSelected ? 'ADD_OPTION' : 'REMOVE_OPTION';
 
     dispatch({
       type,
