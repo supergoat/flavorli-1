@@ -1,4 +1,3 @@
-// @flow
 import styled from 'styled-components/macro';
 
 const Input = styled.input.attrs({

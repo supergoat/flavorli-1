@@ -1,6 +1,7 @@
 import React, {FormEvent} from 'react';
-import Label from '../ui/Label';
+import Tile from '../ui/Tile';
 import Button from '../ui/Button';
+import Label from '../ui/Label';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
 
@@ -27,18 +28,22 @@ const CheckOut = ({account, orderTotal}: Props) => {
 
       <form onSubmit={handleSubmit}>
         <Label htmlFor="name">Details</Label>
-        <Tile type="button" onClick={() => navigate('/account')}>
-          <Heading>{account.address}</Heading>
-          <SubHeading>{account.tel}</SubHeading>
 
-          <CTA>Change Details</CTA>
-        </Tile>
+        <Tile
+          onClick={() => navigate('/account')}
+          heading={account.address}
+          subHeading={account.tel}
+          cta={'Change Details'}
+        />
 
         <Label htmlFor="basketItems">Order Summary</Label>
-        <Tile type="button" onClick={() => navigate('/basket')}>
-          <Heading>Total: £{orderTotal.toFixed(2)}</Heading>
-          <CTA>View Basket</CTA>
-        </Tile>
+
+        <Tile
+          onClick={() => navigate('/basket')}
+          heading={`Total: £${orderTotal.toFixed(2)}`}
+          subHeading={account.tel}
+          cta={'View Basket'}
+        />
 
         <SendOrderBtn type="submit">Send Order</SendOrderBtn>
       </form>
@@ -79,33 +84,6 @@ const CloseButton = styled.div`
   &:before {
     content: 'X';
   }
-`;
-
-const Tile = styled(Button).attrs({
-  secondary: true,
-})`
-  width: 100%;
-  border: 1px solid var(--silver);
-  text-align: left;
-  margin-bottom: 20px;
-`;
-
-const Heading = styled.h5`
-  font-size: 15px;
-  margin-bottom: 10px;
-`;
-
-const SubHeading = styled.p`
-  font-size: 14px;
-  color: var(--osloGrey);
-`;
-
-const CTA = styled.p`
-  font-size: 14px;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--silver);
-  font-weight: bold;
 `;
 
 const SendOrderBtn = styled(Button)`

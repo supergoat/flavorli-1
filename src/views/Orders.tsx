@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../ui/Button';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
+import Tile from '../ui/Tile';
 
 const orders = [
   {
@@ -25,15 +26,19 @@ const Orders = (_: Props) => {
       <Title>Orders</Title>
 
       {orders.map(order => (
-        <Tile key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
-          <Heading>Total: £{order.total.toFixed(2)}</Heading>
-          <SubHeading>
-            {order.status}
-            <br />
-            {order.deliveredOn}
-          </SubHeading>
-          <CTA>View Order</CTA>
-        </Tile>
+        <Tile
+          key={order.id}
+          onClick={() => navigate(`/order/${order.id}`)}
+          heading={`Total: £${order.total.toFixed(2)}`}
+          subHeading={
+            <>
+              {order.status}
+              <br />
+              {order.deliveredOn}
+            </>
+          }
+          cta={'View Order'}
+        />
       ))}
     </OrdersWrapper>
   );
@@ -53,31 +58,4 @@ const Title = styled.header`
   font-size: 30px;
   font-weight: 300;
   margin-bottom: 20px;
-`;
-
-const Tile = styled(Button).attrs({
-  secondary: true,
-})`
-  width: 100%;
-  border: 1px solid var(--silver);
-  text-align: left;
-  margin-bottom: 20px;
-`;
-
-const Heading = styled.h5`
-  font-size: 15px;
-  margin-bottom: 10px;
-`;
-
-const SubHeading = styled.p`
-  font-size: 14px;
-  color: var(--osloGrey);
-`;
-
-const CTA = styled.p`
-  font-size: 14px;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--gallery);
-  font-weight: bold;
 `;
