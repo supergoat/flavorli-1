@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import {Router, RouteComponentProps} from '@reach/router';
 import MealList from '../components/MealList';
 import MealView from './Meal';
+import CheckOutFooter from '../components/CheckOutFooter';
 
 interface Props extends RouteComponentProps {}
 const Home = (_: Props) => {
@@ -12,7 +13,7 @@ const Home = (_: Props) => {
       <Router>
         <MealView path="/meal/:mealId" />
       </Router>
-      {/* {basket && <CheckOutFooter history={history} />} */}
+      <CheckOutFooter noOfBasketItems={1} />
     </HomeWrapper>
   );
 };
