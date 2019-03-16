@@ -147,6 +147,7 @@ const Options = styled.div`
   flex-direction: column;
   align-items: flex-end;
 `;
+
 const OptionName = styled.p`
   width: 90%;
   font-size: 13px;
@@ -155,7 +156,7 @@ const OptionName = styled.p`
 
 const Quantity = styled.div`
   justify-content: space-around;
-  flex: 0.1;
+  width: 10%;
   padding-top: 2px;
   font-size: 18px;
   &:after {
@@ -166,12 +167,13 @@ const Quantity = styled.div`
 const Name = styled.div`
   font-size: 18px;
   font-weight: 300;
-  flex: 0.7;
+  width: 70%;
+  margin-bottom: 5px;
 `;
 
 const Price = styled.div`
   font-size: 18px;
-  flex: 0.2;
+  width: 20%;
   text-align: right;
   &:before {
     content: '£';

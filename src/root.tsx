@@ -4,6 +4,7 @@ import Home from './views/Home';
 import Basket from './views/Basket';
 import Account from './views/Account';
 import CheckOut from './views/CheckOut';
+import Order from './views/Order';
 
 const Root = () => {
   return (
@@ -19,6 +20,7 @@ const Root = () => {
         }}
         orderTotal={10}
       />
+      <Order path="/order/:id" />
     </Router>
   );
 };
