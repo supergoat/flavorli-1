@@ -89,7 +89,7 @@ const Account = (_: Props) => {
         />
 
         <div>
-          <CancelButton secondary onClick={() => navigate('/')} />
+          <CancelButton secondary onClick={() => window.history.back()} />
           <SaveButton type="submit" />
         </div>
       </form>

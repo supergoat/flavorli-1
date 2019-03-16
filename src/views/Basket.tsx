@@ -1,5 +1,5 @@
 import React from 'react';
-import {navigate, RouteComponentProps} from '@reach/router';
+import {RouteComponentProps} from '@reach/router';
 import CheckOutBtn from '../components/CheckOutBtn';
 import styled from 'styled-components/macro';
 
@@ -37,7 +37,7 @@ const Basket = (_: Props) => {
       <Header>
         <Title>Basket</Title>
         <ClearBasket />
-        <CloseButton onClick={() => navigate('/')} />
+        <CloseButton onClick={() => window.history.back()} />
       </Header>
 
       {basket.items.map(
