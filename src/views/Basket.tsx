@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import {navigate, RouteComponentProps} from '@reach/router';
 import CheckOutBtn from '../components/CheckOutBtn';
