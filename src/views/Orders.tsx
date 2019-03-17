@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '../ui/Button';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
 import Tile from '../ui/Tile';

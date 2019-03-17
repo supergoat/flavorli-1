@@ -33,7 +33,14 @@ const CheckOut = ({account, orderTotal}: Props) => {
           onClick={() => navigate('/details')}
           heading={account.address}
           subHeading={account.tel}
-          cta={'Change Details'}
+          cta={'Change Address'}
+        />
+
+        <Tile
+          onClick={() => navigate('/details')}
+          heading={'American Express'}
+          subHeading={'Ending 0000'}
+          cta={'Change Payment'}
         />
 
         <Label htmlFor="basketItems">Order Summary</Label>
@@ -41,8 +48,14 @@ const CheckOut = ({account, orderTotal}: Props) => {
         <Tile
           onClick={() => navigate('/basket')}
           heading={`Total: £${orderTotal.toFixed(2)}`}
-          subHeading={'Delivery: ASAP'}
           cta={'View Basket'}
+        />
+
+        <Tile
+          onClick={() => navigate('/basket')}
+          heading={`Delivery: ASAP `}
+          subHeading={`Approx. 20 -  30 mins`}
+          cta={'Change time'}
         />
 
         <SendOrderBtn type="submit">Send Order</SendOrderBtn>

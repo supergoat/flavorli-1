@@ -32,7 +32,8 @@ const Account = (_: Props) => {
 
       <Tile
         onClick={() => navigate('/details')}
-        heading={'Ending 0000'}
+        heading={'American Express'}
+        subHeading={'Ending 0000'}
         cta={'Change Payment'}
       />
     </AccountWrapper>
