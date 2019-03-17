@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 import {Link, navigate} from '@reach/router';
 
 const Navbar = () => {
-  const [showMenu, setShowMenu] = useState(true);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     if (showMenu) {
@@ -63,7 +63,7 @@ const NavbarWrapper = styled.header`
   z-index: 1;
   width: 100%;
   border-bottom: 1px solid var(--alabaster);
-  padding: 5px;
+  padding: 5px 20px;
   background: var(--white);
   opacity: 0.95;
   position: fixed;
@@ -90,7 +90,7 @@ const Title = styled(Link)`
 const RightItem = styled.div`
   display: flex;
   flex: 0.2;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   height: 60%;
   img {

@@ -30,7 +30,7 @@ const CheckOut = ({account, orderTotal}: Props) => {
         <Label htmlFor="name">Details</Label>
 
         <Tile
-          onClick={() => navigate('/account')}
+          onClick={() => navigate('/details')}
           heading={account.address}
           subHeading={account.tel}
           cta={'Change Details'}
