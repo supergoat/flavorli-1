@@ -41,7 +41,7 @@ const CheckOut = ({account, orderTotal}: Props) => {
         <Tile
           onClick={() => navigate('/basket')}
           heading={`Total: £${orderTotal.toFixed(2)}`}
-          subHeading={account.tel}
+          subHeading={'Delivery: ASAP'}
           cta={'View Basket'}
         />
 

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components/macro';
-import {Link, navigate} from '@reach/router';
+import {navigate} from '@reach/router';
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -18,7 +18,7 @@ const Navbar = () => {
       <NavbarWrapper>
         <LeftItem />
 
-        <Title to="/">flavorli</Title>
+        <Title onClick={() => navigate('/')}>flavorli</Title>
 
         <RightItem onClick={() => setShowMenu(true)}>
           <img src={require('../assets/icons/list.svg')} alt="View Basket" />
@@ -29,7 +29,7 @@ const Navbar = () => {
       <Menu showMenu={showMenu}>
         <CloseButton onClick={() => setShowMenu(false)} />
 
-        <Title to="/">flavorli</Title>
+        <Title>flavorli</Title>
 
         <MenuItem
           onClick={() => {
@@ -79,12 +79,13 @@ const LeftItem = styled.div`
   justify-content: center;
 `;
 
-const Title = styled(Link)`
+const Title = styled.div`
   display: flex;
   font-family: Pacifico;
   font-size: 22px;
   flex: auto;
   justify-content: center;
+  cursor: default;
 `;
 
 const RightItem = styled.div`
@@ -100,7 +101,7 @@ const RightItem = styled.div`
 
 const BackDrop = styled.div`
   z-index: 1;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -113,12 +114,12 @@ interface MenuProps {
 }
 const Menu = styled.div`
   z-index: 1;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   width: 80%;
-  height: 100vh;
+  height: 100%;
   background: var(--white);
   padding-top: 15px;
   box-shadow: -5px 0px 10px 1px rgba(0, 0, 0, 0.1);
