@@ -1,23 +1,56 @@
-import React, {FormEvent} from 'react';
+import React, {MouseEvent} from 'react';
 import Tile from '../ui/Tile';
 import Button from '../ui/Button';
 import Label from '../ui/Label';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
 
-interface Props extends RouteComponentProps {
-  account: {
-    address: string;
-    tel: string;
+interface Props extends RouteComponentProps {}
+
+interface AccountType {
+  email: string;
+  name: string;
+  address: {
+    houseNumber: number;
+    streetName: string;
+    city: string;
+    postalCode: string;
+    notes: string;
   };
-  orderTotal: number;
+  tel: string;
 }
 
-const CheckOut = ({account, orderTotal}: Props) => {
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+const account: AccountType = {
+  name: 'Panayiotis Nicolaou',
+  email: 'p.nicolaou.13@gmail.com',
+  address: {
+    houseNumber: 7,
+    streetName: 'Fermain Court North, De Beauvoir Road',
+    city: 'London',
+    postalCode: 'N15SX',
+    notes: 'Please come from Downham Road',
+  },
+  tel: '07960778401',
+};
+const orderTotal: number = 10;
+
+const CheckOut = (_: Props) => {
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     navigate('/');
+  };
+
+  const formatAddress = (address: {
+    houseNumber: number;
+    streetName: string;
+    city: string;
+    postalCode: string;
+    notes: string;
+  }) => {
+    return `${address.houseNumber} ${address.streetName}, ${address.city}, ${
+      address.postalCode
+    }`;
   };
 
   return (
@@ -26,40 +59,54 @@ const CheckOut = ({account, orderTotal}: Props) => {
 
       <CloseButton onClick={() => navigate('/', {replace: true})} />
 
-      <form onSubmit={handleSubmit}>
-        <Label htmlFor="name">Details</Label>
+      <Label>Order Summary</Label>
 
-        <Tile
-          onClick={() => navigate('/details')}
-          heading={account.address}
-          subHeading={account.tel}
-          cta={'Change Address'}
-        />
+      <Tile
+        onClick={() => navigate('/basket')}
+        heading={`Total: £${orderTotal.toFixed(2)}`}
+        cta={'View Basket'}
+      />
 
-        <Tile
-          onClick={() => navigate('/details')}
-          heading={'American Express'}
-          subHeading={'Ending 0000'}
-          cta={'Change Payment'}
-        />
+      <Tile
+        onClick={() => navigate('/basket')}
+        heading={`Delivery: ASAP `}
+        subHeading={`Approx. 20 -  30 mins`}
+        cta={'Change time'}
+      />
 
-        <Label htmlFor="basketItems">Order Summary</Label>
+      <Label>Payment</Label>
 
-        <Tile
-          onClick={() => navigate('/basket')}
-          heading={`Total: £${orderTotal.toFixed(2)}`}
-          cta={'View Basket'}
-        />
+      <Tile
+        onClick={() => navigate('/details')}
+        heading={'American Express'}
+        subHeading={'Ending 0000'}
+        cta={'Change Payment'}
+      />
 
-        <Tile
-          onClick={() => navigate('/basket')}
-          heading={`Delivery: ASAP `}
-          subHeading={`Approx. 20 -  30 mins`}
-          cta={'Change time'}
-        />
+      <Label>Details</Label>
 
-        <SendOrderBtn type="submit">Send Order</SendOrderBtn>
-      </form>
+      <Tile
+        onClick={() => navigate('/details')}
+        heading={'Panayiotis Nicolaou'}
+        subHeading={
+          <>
+            <p>{account.email}</p>
+            <p>{account.tel}</p>
+          </>
+        }
+        cta={'Change Contact'}
+      />
+
+      <Tile
+        onClick={() => navigate('/address')}
+        heading={formatAddress(account.address)}
+        subHeading={account.address.notes}
+        cta={'Change Address'}
+      />
+
+      <SendOrderBtn onClick={handleSubmit} type="submit">
+        Send Order
+      </SendOrderBtn>
     </CheckOutWrapper>
   );
 };

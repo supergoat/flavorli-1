@@ -6,7 +6,15 @@ import styled from 'styled-components/macro';
 interface Props extends RouteComponentProps {}
 const Account = (_: Props) => {
   const account = {
-    address: '7 Fermain Court North, De Beauvoir Road, London, N15SX',
+    name: 'Panayiotis Nicolaou',
+    email: 'p.nicolaou.13@gmail.com',
+    address: {
+      houseNumber: 7,
+      streetName: 'Fermain Court North, De Beauvoir Road',
+      city: 'London',
+      postalCode: 'N15SX',
+      notes: 'Please come from Downham Road',
+    },
     tel: '07960778401',
   };
   return (
@@ -17,16 +25,19 @@ const Account = (_: Props) => {
         heading={'Panayiotis Nicolaou'}
         subHeading={
           <>
-            <p>p.nicolaou.13@gmail.com</p>
-            {account.tel}
+            <p>{account.email}</p>
+            <p>{account.tel}</p>
           </>
         }
         cta={'Change Details'}
       />
 
       <Tile
-        onClick={() => navigate('/address')}
-        heading={account.address}
+        onClick={() => navigate('/details')}
+        heading={`${account.address.houseNumber} ${
+          account.address.streetName
+        }, ${account.address.city}, ${account.address.postalCode}`}
+        subHeading={account.address.notes}
         cta={'Change Address'}
       />
 

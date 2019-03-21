@@ -13,14 +13,7 @@ const Root = () => {
   return (
     <Router>
       <Home path="/*" />
-      <CheckOut
-        path="/checkout"
-        account={{
-          address: 'De Beauvoir Road, 7 fermain Court North, London, N15SX',
-          tel: '07960778401',
-        }}
-        orderTotal={10}
-      />
+      <CheckOut path="/checkout" />
       <Basket path="/basket" />
       <Account path="/account" />
       <Details path="/details" />

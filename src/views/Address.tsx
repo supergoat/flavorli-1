@@ -3,6 +3,7 @@ import {navigate, RouteComponentProps} from '@reach/router';
 import FAButton from '../ui/Button';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
+import TextArea from '../ui/TextArea';
 import styled from 'styled-components/macro';
 
 interface Props extends RouteComponentProps {}
@@ -10,6 +11,7 @@ const Address = (_: Props) => {
   const [houseNumber, setHouseNumber] = useState('');
   const [streetName, setStreetName] = useState('');
   const [postalCode, setPostalCode] = useState('');
+  const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
 
   const isFormValid = () => {
@@ -86,13 +88,23 @@ const Address = (_: Props) => {
           disabled
         />
 
-        <Label htmlFor="address">Delivery Address</Label>
+        <Label htmlFor="country">Country</Label>
         <AddressInput
-          id="address"
+          id="country"
           type="text"
-          name="address"
+          name="country"
           value={'United Kingdom'}
           disabled
+        />
+
+        <Label htmlFor="notes">Notes</Label>
+        <Notes
+          rows={4}
+          id="notes"
+          placeholder="Additional notes..."
+          name="notes"
+          value={notes}
+          onChange={e => setNotes(e.currentTarget.value)}
         />
 
         <div>
@@ -135,6 +147,10 @@ const AddressInput = styled(Input)`
     font-weight: 400;
     cursor: not-allowed;
   }
+`;
+
+const Notes = styled(TextArea)`
+  margin-bottom: 15px;
 `;
 
 const Error = styled.p`
