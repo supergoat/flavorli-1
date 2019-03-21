@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
 import Tile from '../ui/Tile';
+import Page from '../Templates/Page';
 
 const orders = [
   {
@@ -21,9 +21,7 @@ const orders = [
 interface Props extends RouteComponentProps {}
 const Orders = (_: Props) => {
   return (
-    <OrdersWrapper>
-      <Title>Orders</Title>
-
+    <Page heading="Orders" showNavbar>
       {orders.map(order => (
         <Tile
           key={order.id}
@@ -39,22 +37,8 @@ const Orders = (_: Props) => {
           cta={'View Order'}
         />
       ))}
-    </OrdersWrapper>
+    </Page>
   );
 };
 
 export default Orders;
-
-const OrdersWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: var(--white);
-  overflow-y: auto;
-  padding: 10px 20px;
-`;
-
-const Title = styled.header`
-  font-size: 30px;
-  font-weight: 300;
-  margin-bottom: 20px;
-`;

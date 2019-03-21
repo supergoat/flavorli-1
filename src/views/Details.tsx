@@ -4,6 +4,7 @@ import FAButton from '../ui/Button';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import styled from 'styled-components/macro';
+import Page from '../Templates/Page';
 
 interface Props extends RouteComponentProps {}
 const Details = (_: Props) => {
@@ -36,9 +37,7 @@ const Details = (_: Props) => {
   };
 
   return (
-    <DetailsWrapper>
-      <Title>Details</Title>
-
+    <Page heading="Details">
       {errors.map(error => (
         <Error>{error}</Error>
       ))}
@@ -79,7 +78,7 @@ const Details = (_: Props) => {
           <SaveButton type="submit" />
         </div>
       </form>
-    </DetailsWrapper>
+    </Page>
   );
 };
 
@@ -87,26 +86,6 @@ export default Details;
 
 /* Styled Components
 ============================================================================= */
-const DetailsWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--white);
-  overflow-y: auto;
-  padding: 20px;
-  z-index: 1;
-`;
-
-const Title = styled.header`
-  font-size: 30px;
-  font-weight: 300;
-  margin-bottom: 20px;
-`;
-
 const DetailsInput = styled(Input)`
   margin-bottom: 15px;
 `;

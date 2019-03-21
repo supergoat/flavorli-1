@@ -4,6 +4,7 @@ import styled from 'styled-components/macro';
 import SelectOptions from '../components/SelectOptions';
 import SelectQuantity from '../components/SelectQuantity';
 import AddToOrder from '../components/AddToOrder';
+import Modal from '../Templates/ModalPage';
 
 const optionsReducer = (state: {[category: string]: string[]}, action: any) => {
   const categoryOptions = state[action.categoryName] || [];
@@ -88,9 +89,9 @@ const MealView = ({mealId}: Props) => {
   };
 
   return (
-    <MealWrapper>
+    <Modal>
       {meal && (
-        <Meal>
+        <MealWrapper>
           <Name>{meal.name}</Name>
           <Description>{meal.description}</Description>
           <SelectOptions
@@ -100,9 +101,9 @@ const MealView = ({mealId}: Props) => {
           />
           <SelectQuantity qty={qty} setQty={setQty} />
           <AddToOrder price={(meal.price + state.price) * qty} />
-        </Meal>
+        </MealWrapper>
       )}
-    </MealWrapper>
+    </Modal>
   );
 };
 
@@ -111,20 +112,6 @@ export default MealView;
 /* Styled Components
 ============================================================================= */
 const MealWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  overflow-y: auto;
-  padding: 5% 0;
-  z-index: 1;
-`;
-
-const Meal = styled.div`
   background: var(--white);
   height: auto;
   padding: 15px;

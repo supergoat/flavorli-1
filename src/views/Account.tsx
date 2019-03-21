@@ -1,7 +1,7 @@
 import React from 'react';
 import {RouteComponentProps, navigate} from '@reach/router';
 import Tile from '../ui/Tile';
-import styled from 'styled-components/macro';
+import Page from '../Templates/Page';
 
 interface Props extends RouteComponentProps {}
 const Account = (_: Props) => {
@@ -18,8 +18,7 @@ const Account = (_: Props) => {
     tel: '07960778401',
   };
   return (
-    <AccountWrapper>
-      <Title>Account</Title>
+    <Page heading="Account" showNavbar>
       <Tile
         onClick={() => navigate('/details')}
         heading={'Panayiotis Nicolaou'}
@@ -47,18 +46,8 @@ const Account = (_: Props) => {
         subHeading={'Ending 0000'}
         cta={'Change Payment'}
       />
-    </AccountWrapper>
+    </Page>
   );
 };
 
 export default Account;
-
-const AccountWrapper = styled.div`
-  padding: 20px;
-`;
-
-const Title = styled.header`
-  font-size: 30px;
-  font-weight: 300;
-  margin-bottom: 20px;
-`;

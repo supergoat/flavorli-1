@@ -4,6 +4,7 @@ import Button from '../ui/Button';
 import Label from '../ui/Label';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
+import Page from '../Templates/Page';
 
 interface Props extends RouteComponentProps {}
 
@@ -54,11 +55,7 @@ const CheckOut = (_: Props) => {
   };
 
   return (
-    <CheckOutWrapper>
-      <Title>Checkout</Title>
-
-      <CloseButton onClick={() => navigate('/', {replace: true})} />
-
+    <Page heading="Checkout" onClose={() => navigate('/', {replace: true})}>
       <Label>Order Summary</Label>
 
       <Tile
@@ -107,7 +104,7 @@ const CheckOut = (_: Props) => {
       <SendOrderBtn onClick={handleSubmit} type="submit">
         Send Order
       </SendOrderBtn>
-    </CheckOutWrapper>
+    </Page>
   );
 };
 
@@ -115,37 +112,6 @@ export default CheckOut;
 
 /* Styled Components
 ============================================================================= */
-const CheckOutWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--white);
-  overflow-y: auto;
-  padding: 20px;
-  z-index: 1;
-`;
-
-const Title = styled.header`
-  font-size: 30px;
-  font-weight: 300;
-  margin-bottom: 20px;
-`;
-
-const CloseButton = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 25px;
-  cursor: pointer;
-  &:before {
-    content: 'X';
-  }
-`;
-
 const SendOrderBtn = styled(Button)`
   margin-top: 10px;
   width: 100%;

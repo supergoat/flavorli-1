@@ -29,7 +29,7 @@ export default MealList;
 /* Styled Components
 ============================================================================= */
 const MealListWrapper = styled.div`
-  padding: 0 10px;
+  padding: 0 10px 71px;
 `;
 
 export const mealList: Meal[] = [

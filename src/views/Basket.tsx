@@ -2,6 +2,7 @@ import React from 'react';
 import {RouteComponentProps} from '@reach/router';
 import CheckOutBtn from '../components/CheckOutBtn';
 import styled from 'styled-components/macro';
+import Page from '../Templates/Page';
 
 interface Props extends RouteComponentProps {}
 
@@ -33,13 +34,8 @@ const Basket = (_: Props) => {
   };
 
   return (
-    <BasketWrapper>
-      <Header>
-        <Title>Basket</Title>
-        <ClearBasket />
-        <CloseButton onClick={() => window.history.back()} />
-      </Header>
-
+    <Page heading="Basket" onClose={() => window.history.back()}>
+      <ClearBasket />
       {basket.items.map(
         (basketItem: {
           id: number;
@@ -80,7 +76,7 @@ const Basket = (_: Props) => {
       </Total>
 
       <CheckOutBtn />
-    </BasketWrapper>
+    </Page>
   );
 };
 
@@ -88,29 +84,6 @@ export default Basket;
 
 /* Styled Components
 ============================================================================= */
-const BasketWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--white);
-  overflow-y: auto;
-  padding: 20px;
-  z-index: 1;
-`;
-
-const Header = styled.header`
-  margin-bottom: 5px;
-`;
-
-const Title = styled.header`
-  font-size: 30px;
-  font-weight: 300;
-`;
-
 const ClearBasket = styled.a`
   display: block;
   font-size: 16px;
@@ -119,17 +92,6 @@ const ClearBasket = styled.a`
   color: var(--azure);
   &:before {
     content: 'Clear basket';
-  }
-`;
-
-const CloseButton = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 25px;
-  cursor: pointer;
-  &:before {
-    content: 'X';
   }
 `;
 

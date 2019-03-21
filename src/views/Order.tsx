@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../ui/Button';
 import styled from 'styled-components/macro';
 import {RouteComponentProps, navigate} from '@reach/router';
+import Page from '../Templates/Page';
 
 const getOrder = () => {
   return {
@@ -48,8 +49,7 @@ interface Props extends RouteComponentProps {}
 const Order = (_: Props) => {
   const order = getOrder();
   return (
-    <OrderWrapper>
-      <Title>Thank You!</Title>
+    <Page heading="Thank You!">
       <OrderId>Order #{order.id}</OrderId>
 
       <DeliveryDate>
@@ -115,28 +115,13 @@ const Order = (_: Props) => {
       <Button width="100%" onClick={() => navigate('/', {replace: true})}>
         Home
       </Button>
-    </OrderWrapper>
+    </Page>
   );
 };
-
-const OrderWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: var(--white);
-  overflow-y: auto;
-  padding: 20px;
-  z-index: 1;
-`;
 
 const OrderId = styled.h3`
   color: var(--osloGrey);
   margin-bottom: 20px;
-`;
-
-const Title = styled.header`
-  font-size: 30px;
-  font-weight: 300;
-  margin-bottom: 5px;
 `;
 
 const DeliveryDate = styled.div`

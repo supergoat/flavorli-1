@@ -5,6 +5,7 @@ import Label from '../ui/Label';
 import Input from '../ui/Input';
 import TextArea from '../ui/TextArea';
 import styled from 'styled-components/macro';
+import Page from '../Templates/Page';
 
 interface Props extends RouteComponentProps {}
 const Address = (_: Props) => {
@@ -41,9 +42,7 @@ const Address = (_: Props) => {
   };
 
   return (
-    <AddressWrapper>
-      <Title>Address</Title>
-
+    <Page heading="Address">
       {errors.map(error => (
         <Error>{error}</Error>
       ))}
@@ -112,7 +111,7 @@ const Address = (_: Props) => {
           <SaveButton type="submit" />
         </div>
       </form>
-    </AddressWrapper>
+    </Page>
   );
 };
 
@@ -120,26 +119,6 @@ export default Address;
 
 /* Styled Components
 ============================================================================= */
-const AddressWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--white);
-  overflow-y: auto;
-  padding: 20px;
-  z-index: 1;
-`;
-
-const Title = styled.header`
-  font-size: 30px;
-  font-weight: 300;
-  margin-bottom: 20px;
-`;
-
 const AddressInput = styled(Input)`
   margin-bottom: 15px;
 
