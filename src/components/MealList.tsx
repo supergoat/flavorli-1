@@ -7,6 +7,7 @@ interface Meal {
   name: string;
   description: string;
   price: number;
+  image: string;
 }
 const MealList = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
@@ -40,14 +41,7 @@ export const mealList: Meal[] = [
       dish that combines mushrooms, pancetta, parmesan and cream to create an
       earthy, creamy sauce.`,
     price: 9.0,
-  },
-  {
-    id: 10,
-    name: 'Farfalle alla Boscaiola',
-    description: `Pasta alla Boscaiola, "Woodman’s Pasta", is a classic Italian
-      dish that combines mushrooms, pancetta, parmesan and cream to create an
-      earthy, creamy sauce.`,
-    price: 9.0,
+    image: 'farfalle_alla_boscaiola.jpg',
   },
   {
     id: 1,
@@ -57,6 +51,7 @@ export const mealList: Meal[] = [
       Amatrice, the Amatriciana is one of the best known pasta sauces in Roman
       and Italian cuisine.`,
     price: 9.0,
+    image: 'bucatini_all_amatriciana.jpg',
   },
   {
     id: 2,
@@ -65,6 +60,7 @@ export const mealList: Meal[] = [
       capers and garlic. Spaghetti alla puttanesca was invented in Naples in the
       mid-20th century.`,
     price: 9.0,
+    image: 'spaghetti_alla_puttanesca.jpg',
   },
   {
     id: 3,
@@ -72,6 +68,7 @@ export const mealList: Meal[] = [
     description: `Italian pasta with zucchini and tuna. This is a family
       favourite italian dish that is simple yet absolutely delicious.`,
     price: 8.0,
+    image: 'zucchine_e_tonno.jpg',
   },
   {
     id: 4,
@@ -79,5 +76,6 @@ export const mealList: Meal[] = [
     description: `Farfalle pasta with chunks of tender Salmon with a creamy
       sauce that tastes as good as it looks.`,
     price: 10.0,
+    image: 'farfalle_al_salmone.jpg',
   },
 ];

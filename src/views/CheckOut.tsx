@@ -39,7 +39,7 @@ const CheckOut = (_: Props) => {
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    navigate('/');
+    navigate('/order/1');
   };
 
   const formatAddress = (address: {
@@ -55,7 +55,10 @@ const CheckOut = (_: Props) => {
   };
 
   return (
-    <Page heading="Checkout" onClose={() => navigate('/', {replace: true})}>
+    <Page
+      heading="Checkout"
+      onClose={() => navigate('/meals', {replace: true})}
+    >
       <Label>Order Summary</Label>
 
       <Tile

@@ -4,10 +4,8 @@ import Button from '../ui/Button';
 import styled, {keyframes} from 'styled-components/macro';
 import {navigate} from '@reach/router';
 
-interface Props {
-  noOfBasketItems: number;
-}
-const CheckOutFooter = ({noOfBasketItems}: Props) => {
+const CheckOutFooter = () => {
+  const noOfBasketItems = 1;
   return (
     <CheckOutFooterWrapper>
       <CheckOutBtn />

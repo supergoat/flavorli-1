@@ -5,14 +5,14 @@ import {RouteComponentProps} from '@reach/router';
 interface Props extends RouteComponentProps {
   onClose?: () => void;
   showNavbar?: boolean;
-  heading: string;
+  heading?: string;
   children: any;
 }
 const Page = ({onClose, showNavbar = false, heading, children}: Props) => {
   return (
     <PageWrapper showNavbar={showNavbar}>
       {onClose && <CloseButton onClick={onClose} />}
-      <Heading>{heading}</Heading>
+      {heading && <Heading>{heading}</Heading>}
       {children}
     </PageWrapper>
   );

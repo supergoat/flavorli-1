@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import {Link} from '@reach/router';
+import {navigate} from '@reach/router';
 
 interface Props {
   meal: {
@@ -8,10 +8,14 @@ interface Props {
     name: string;
     description: string;
     price: number;
+    image: string;
   };
 }
 const MealItem = ({meal}: Props) => (
-  <Meal to={`/meal/${meal.id}`}>
+  <Meal
+    onClick={() => navigate(`/meals/meal/${meal.id}`)}
+    backgroundImage={require(`../assets/meals/${meal.image}`)}
+  >
     <Name>{meal.name}</Name>
     <Description>{meal.description}</Description>
     <Price>
@@ -25,8 +29,8 @@ export default MealItem;
 
 /* Styled Components
 ============================================================================= */
-const Meal = styled(Link)`
-  border-bottom: 2px solid (--white);
+const Meal = styled.div`
+  border-bottom: 2px solid var(--white);
   padding: 20px 10px;
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
@@ -34,6 +38,25 @@ const Meal = styled(Link)`
   position: relative;
   &:last-of-type {
     border-bottom: none;
+  }
+  &:after {
+    content: '';
+    background-image: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 1) 45%,
+        rgba(255, 255, 255, 0.8) 100%
+      ),
+      url(${(props: {backgroundImage: string}) => props.backgroundImage});
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
   }
 `;
 

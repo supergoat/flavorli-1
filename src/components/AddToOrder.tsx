@@ -6,18 +6,9 @@ import {navigate} from '@reach/router';
 const AddToOrder = ({price}: {price: number}) => {
   return (
     <AddToOrderWrapper>
-      <CancelButton
-        secondary
-        onClick={() => {
-          navigate('/');
-        }}
-      />
+      <CancelButton secondary onClick={() => window.history.back()} />
 
-      <ConfirmButton
-        onClick={() => {
-          navigate('/');
-        }}
-      >
+      <ConfirmButton onClick={() => navigate('/')}>
         Add for £{price.toFixed(2)}
       </ConfirmButton>
     </AddToOrderWrapper>
