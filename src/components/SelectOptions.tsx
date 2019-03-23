@@ -1,43 +1,38 @@
-import React from 'react';
-import Option from './Option';
+import React, {useContext, Fragment} from 'react';
+import Selection from './Selection';
 import styled from 'styled-components/macro';
+import {OptionsContext} from '../views/Meal';
 
 interface Props {
-  selectedOptions: {
-    [category: string]: string[];
-  };
-  options: {
-    [category: string]: {
+  onSelection: (
+    freeSelections: number,
+    optionName: string,
+    selection: {
       name: string;
       price: number;
-    }[];
-  };
-  onSelectOption: (option: {
-    categoryName: string;
-    name: string;
-    price: number;
-  }) => void;
+    },
+  ) => void;
 }
-const SelectOptions = ({selectedOptions, options, onSelectOption}: Props) => {
+const SelectOptions = ({onSelection}: Props) => {
+  const options = useContext(OptionsContext);
   return (
     <>
-      {Object.keys(options).map((categoryName, index) => (
-        <>
-          <Name>{categoryName}</Name>
-          {options[categoryName].map((option, index) => {
-            const isSelected =
-              selectedOptions[categoryName] &&
-              selectedOptions[categoryName].includes(option.name);
-            return (
-              <Option
-                key={index}
-                option={{categoryName, ...option}}
-                isSelected={isSelected}
-                onClick={() => onSelectOption({categoryName, ...option})}
-              />
-            );
-          })}
-        </>
+      {options.default.map(option => (
+        <Fragment key={option.name}>
+          <Name>{option.name}</Name>
+
+          {option.selections.map((selection: any) => (
+            <Selection
+              key={selection.name}
+              freeSelections={option.freeSelections}
+              optionName={option.name}
+              selection={selection}
+              onChange={() =>
+                onSelection(option.freeSelections, option.name, selection)
+              }
+            />
+          ))}
+        </Fragment>
       ))}
     </>
   );
