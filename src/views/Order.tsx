@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../ui/Button';
 import styled from 'styled-components/macro';
 import {RouteComponentProps, navigate} from '@reach/router';
-import Page from '../Templates/Page';
+import Page from '../templates/Page';
 
 const getOrder = () => {
   return {

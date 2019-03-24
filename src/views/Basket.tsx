@@ -2,7 +2,7 @@ import React from 'react';
 import {RouteComponentProps} from '@reach/router';
 import CheckOutBtn from '../components/CheckOutBtn';
 import styled from 'styled-components/macro';
-import Page from '../Templates/Page';
+import Page from '../templates/Page';
 
 interface Props extends RouteComponentProps {}
 
@@ -80,6 +80,8 @@ const Basket = (_: Props) => {
   );
 };
 
+/* Export
+============================================================================= */
 export default Basket;
 
 /* Styled Components

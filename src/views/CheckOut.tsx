@@ -1,10 +1,11 @@
-import React, {MouseEvent} from 'react';
+import React, {MouseEvent, useState} from 'react';
 import Tile from '../ui/Tile';
 import Button from '../ui/Button';
 import Label from '../ui/Label';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
-import Page from '../Templates/Page';
+import Page from '../templates/Page';
+import ChangeTime from './ChangeTime';
 
 interface Props extends RouteComponentProps {}
 
@@ -36,6 +37,7 @@ const account: AccountType = {
 const orderTotal: number = 10;
 
 const CheckOut = (_: Props) => {
+  const [isTimeModalOpen, setIsTimeModalOpen] = useState(false);
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -68,11 +70,19 @@ const CheckOut = (_: Props) => {
       />
 
       <Tile
-        onClick={() => navigate('/basket')}
+        onClick={() => setIsTimeModalOpen(s => !s)}
         heading={`Delivery: ASAP `}
-        subHeading={`Approx. 20 -  30 mins`}
+        subHeading={`Approx. 30 mins`}
         cta={'Change time'}
       />
+
+      {isTimeModalOpen && (
+        <ChangeTime
+          openingTime={11}
+          closingTime={20}
+          onCancel={() => setIsTimeModalOpen(false)}
+        />
+      )}
 
       <Label>Payment</Label>
 

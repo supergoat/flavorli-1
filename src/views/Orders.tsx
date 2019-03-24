@@ -1,7 +1,7 @@
 import React from 'react';
 import {navigate, RouteComponentProps} from '@reach/router';
 import Tile from '../ui/Tile';
-import Page from '../Templates/Page';
+import Page from '../templates/Page';
 
 const orders = [
   {

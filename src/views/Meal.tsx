@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 import SelectOptions from '../components/SelectOptions';
 import SelectQuantity from '../components/SelectQuantity';
 import AddToOrder from '../components/AddToOrder';
-import Modal from '../Templates/ModalPage';
+import Modal from '../templates/ModalPage';
 
 export const OptionsContext = createContext<{
   selected: {[name: string]: string[]};

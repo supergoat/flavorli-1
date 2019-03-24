@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/macro';
 import {OptionsContext} from '../views/Meal';
+import Select from '../ui/Select';
 
 interface Props {
   freeSelections: number;
@@ -31,42 +32,23 @@ const Selection = ({
   const showPrice = !isIncluded && !isFreeSelection && isNotFreeSelection;
 
   return (
-    <SelectionWrapper isSelected={isSelected}>
-      <div>
-        <p>{selection.name}</p>
-        {showPrice && (
-          <Price isSelected={isSelected}>
-            {isSelected ? '-' : '+'} £{selection.price.toFixed(2)}
-          </Price>
-        )}
-      </div>
-
-      <input
-        onChange={onChange}
-        checked={isSelected || false}
-        name={optionName}
-        type={selection.price > 0 ? 'checkbox' : 'radio'}
-      />
-    </SelectionWrapper>
+    <Select
+      onChange={onChange}
+      checked={isSelected || false}
+      name={optionName}
+      type={selection.price > 0 ? 'checkbox' : 'radio'}
+    >
+      <p>{selection.name}</p>
+      {showPrice && (
+        <Price isSelected={isSelected}>
+          {isSelected ? '-' : '+'} £{selection.price.toFixed(2)}
+        </Price>
+      )}
+    </Select>
   );
 };
 
 export default Selection;
-
-interface SelectionWrapperProps {
-  isSelected: boolean;
-}
-const SelectionWrapper = styled.label`
-  display: flex;
-  padding: 15px 10px;
-  margin-bottom: 10px;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid var(--gallery);
-  border-radius: 3px;
-  border: ${(props: SelectionWrapperProps) =>
-    props.isSelected ? '1px solid var(--oxfordBlue)' : '1px solid trasparent'};
-`;
 
 interface PriceProps {
   isSelected: boolean;

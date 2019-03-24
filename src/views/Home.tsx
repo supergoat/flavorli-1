@@ -12,11 +12,15 @@ const Home = (_: Props) => {
         <Title>flavorli</Title>
         <Description>Buy homeade food from your neighbours</Description>
 
-        <PostaCodeInput placeholder="Enter your postcode" />
+        <PostCodeInput placeholder="Enter your postcode" />
 
-        <Button secondary width="300px" onClick={() => navigate('/meals')}>
+        <FindFoodButton
+          secondary
+          width="300px"
+          onClick={() => navigate('/meals')}
+        >
           Find Food Around You
-        </Button>
+        </FindFoodButton>
       </Cover>
 
       <Copyright>Flavorli © {new Date().getFullYear()}</Copyright>
@@ -73,10 +77,19 @@ const Description = styled.p`
   color: var(--white);
 `;
 
-const PostaCodeInput = styled(Input)`
+const PostCodeInput = styled(Input)`
   width: 300px;
   margin-bottom: 12px;
-  font-weight: 400;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
+  padding: 12px;
+
+  &::placeholder {
+    text-transform: none;
+    font-weight: 400;
+  }
 `;
 
 const Copyright = styled.span`
@@ -86,4 +99,12 @@ const Copyright = styled.span`
   bottom: 10px;
   left: 0;
   right: 0;
+`;
+
+const FindFoodButton = styled(Button)`
+  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  &:hover {
+    transform: translateY(-1%);
+  }
 `;

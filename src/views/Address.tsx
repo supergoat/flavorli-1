@@ -1,11 +1,11 @@
 import React, {useState, FormEvent} from 'react';
 import {navigate, RouteComponentProps} from '@reach/router';
-import FAButton from '../ui/Button';
+import Button from '../ui/Button';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import TextArea from '../ui/TextArea';
 import styled from 'styled-components/macro';
-import Page from '../Templates/Page';
+import Page from '../templates/Page';
 
 interface Props extends RouteComponentProps {}
 const Address = (_: Props) => {
@@ -137,7 +137,7 @@ const Error = styled.p`
   margin: 5px 0 20px;
 `;
 
-const CancelButton = styled(FAButton)`
+const CancelButton = styled(Button)`
   margin-top: 10px;
   width: 27.5%;
   margin-right: 2.5%;
@@ -146,7 +146,7 @@ const CancelButton = styled(FAButton)`
   }
 `;
 
-const SaveButton = styled(FAButton)`
+const SaveButton = styled(Button)`
   margin-top: 10px;
   width: 70%;
   &::before {

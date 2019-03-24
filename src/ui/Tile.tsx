@@ -39,7 +39,7 @@ const Heading = styled.h5`
   margin-bottom: 10px;
 `;
 
-const SubHeading = styled.p`
+const SubHeading = styled.div`
   font-size: 14px;
   color: var(--osloGrey);
 `;

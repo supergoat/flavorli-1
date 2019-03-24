@@ -4,7 +4,7 @@ import FAButton from '../ui/Button';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import styled from 'styled-components/macro';
-import Page from '../Templates/Page';
+import Page from '../templates/Page';
 
 interface Props extends RouteComponentProps {}
 const Details = (_: Props) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {RouteComponentProps, navigate} from '@reach/router';
 import Tile from '../ui/Tile';
-import Page from '../Templates/Page';
+import Page from '../templates/Page';
 
 interface Props extends RouteComponentProps {}
 const Account = (_: Props) => {
@@ -32,7 +32,7 @@ const Account = (_: Props) => {
       />
 
       <Tile
-        onClick={() => navigate('/details')}
+        onClick={() => navigate('/address')}
         heading={`${account.address.houseNumber} ${
           account.address.streetName
         }, ${account.address.city}, ${account.address.postalCode}`}
