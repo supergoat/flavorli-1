@@ -255,7 +255,7 @@ export const mealList: MealType[] = [
       {
         name: 'Ingredients',
         freeSelections: 1,
-        selections: [{name: 'Parmesan', price: 0.5, selected: true}],
+        selections: [{name: 'Parmesan', price: 0.5, selected: false}],
       },
     ],
   },
@@ -270,7 +270,7 @@ export const mealList: MealType[] = [
       {
         name: 'Ingredients',
         freeSelections: 1,
-        selections: [{name: 'Parmesan', price: 0.5, selected: true}],
+        selections: [{name: 'Parmesan', price: 0.5, selected: false}],
       },
     ],
   },
