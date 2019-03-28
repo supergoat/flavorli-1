@@ -13,49 +13,49 @@ interface Props {
 const ChangeTime = ({openingTime, closingTime, onCancel}: Props) => {
   const [day, setDay] = useState('Today');
   const [time, setTime] = useState('ASAP');
-  const [deliveryTimes, setDeliveryTimes] = useState<string[]>([]);
-  const [deliveryDays, setDeliveryDays] = useState(['Today', 'Tomorrow']);
+  const [takeAwayTimes, setTakeAwayTimes] = useState<string[]>([]);
+  const [takeAwayDays, setTakeAwayDays] = useState(['Today', 'Tomorrow']);
 
   useEffect(() => {
-    getDeliveryDays();
+    getTakeAwayDays();
   }, []);
 
   useEffect(() => {
-    getDeliveryTimes();
+    getTakeAwayTimes();
   }, [day]);
 
-  const getDeliveryTimes = () => {
+  const getTakeAwayTimes = () => {
     const date = new Date();
     const hours = date.getHours();
     const minutes = date.getMinutes();
 
-    let deliveryTimes: string[] = [];
+    let takeAwayTimes: string[] = [];
 
     let initialTime = minutes >= 30 ? hours + 1 : hours;
 
     if (day === 'Tomorrow' || hours < openingTime) {
       initialTime = openingTime - 1;
     } else {
-      deliveryTimes.push('ASAP');
+      takeAwayTimes.push('ASAP');
     }
 
     for (let i = initialTime; i < closingTime; i++) {
-      deliveryTimes.push(`${i + 1}:00`);
+      takeAwayTimes.push(`${i + 1}:00`);
     }
 
-    setDeliveryTimes(deliveryTimes);
-    setTime(deliveryTimes[0]);
+    setTakeAwayTimes(takeAwayTimes);
+    setTime(takeAwayTimes[0]);
   };
 
-  const getDeliveryDays = () => {
+  const getTakeAwayDays = () => {
     const date = new Date();
     const hours = date.getHours();
 
     if (hours > closingTime) {
-      setDeliveryDays(['Tomorrow']);
+      setTakeAwayDays(['Tomorrow']);
       setDay('Tomorrow');
     } else {
-      setDeliveryDays(['Today', 'Tomorrow']);
+      setTakeAwayDays(['Today', 'Tomorrow']);
       setDay('Today');
     }
   };
@@ -63,40 +63,44 @@ const ChangeTime = ({openingTime, closingTime, onCancel}: Props) => {
   return (
     <Modal>
       <ChangeTimeWrapper>
-        <Heading>Select Delivery Time:</Heading>
+        {time && takeAwayDays.length > 0 && takeAwayTimes.length > 0 && (
+          <>
+            <Heading>Select Take Away Time:</Heading>
 
-        <Label>Day</Label>
+            <Label>Day</Label>
 
-        {deliveryDays.map(deliveryDay => (
-          <Select
-            key={deliveryDay}
-            onChange={() => setDay(deliveryDay)}
-            checked={day === deliveryDay}
-            name="day"
-            type="radio"
-          >
-            {deliveryDay}
-          </Select>
-        ))}
+            {takeAwayDays.map(takeAwayDay => (
+              <Select
+                key={takeAwayDay}
+                onChange={() => setDay(takeAwayDay)}
+                checked={day === takeAwayDay}
+                name="day"
+                type="radio"
+              >
+                {takeAwayDay}
+              </Select>
+            ))}
 
-        <Label>Time</Label>
+            <Label>Time</Label>
 
-        {deliveryTimes.map(deliveryTime => (
-          <Select
-            key={deliveryTime}
-            onChange={() => setTime(deliveryTime)}
-            checked={time === deliveryTime}
-            name="time"
-            type="radio"
-          >
-            {deliveryTime}
-          </Select>
-        ))}
+            {takeAwayTimes.map(takeAwayTime => (
+              <Select
+                key={takeAwayTime}
+                onChange={() => setTime(takeAwayTime)}
+                checked={time === takeAwayTime}
+                name="time"
+                type="radio"
+              >
+                {takeAwayTime}
+              </Select>
+            ))}
 
-        <div>
-          <CancelButton secondary onClick={onCancel} />
-          <SaveButton onClick={onCancel} />
-        </div>
+            <div>
+              <CancelButton secondary onClick={onCancel} />
+              <SaveButton onClick={onCancel} />
+            </div>
+          </>
+        )}
       </ChangeTimeWrapper>
     </Modal>
   );

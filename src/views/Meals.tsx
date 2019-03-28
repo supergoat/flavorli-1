@@ -18,6 +18,8 @@ const Meals = (_: Props) => {
   );
 };
 
+/* Export
+============================================================================= */
 export default Meals;
 
 /* Styled Components

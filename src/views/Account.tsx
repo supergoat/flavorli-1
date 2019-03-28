@@ -32,15 +32,6 @@ const Account = (_: Props) => {
       />
 
       <Tile
-        onClick={() => navigate('/address')}
-        heading={`${account.address.houseNumber} ${
-          account.address.streetName
-        }, ${account.address.city}, ${account.address.postalCode}`}
-        subHeading={account.address.notes}
-        cta={'Change Address'}
-      />
-
-      <Tile
         onClick={() => navigate('/details')}
         heading={'American Express'}
         subHeading={'Ending 0000'}

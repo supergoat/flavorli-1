@@ -2,11 +2,11 @@ import React from 'react';
 import {Router} from '@reach/router';
 import Home from './views/Home';
 import Meals from './views/Meals';
-import Basket from './views/Basket';
+import Order from './views/Order';
 import Details from './views/Details';
 import Account from './views/Account';
 import CheckOut from './views/CheckOut';
-import Order from './views/Order';
+import Receipt from './views/Receipt';
 import Orders from './views/Orders';
 import Addresses from './views/Address';
 
@@ -16,12 +16,12 @@ const Root = () => {
       <Home path="/" />
       <Meals path="/meals/*" />
       <CheckOut path="/checkout" />
-      <Basket path="/basket" />
+      <Order path="/order/:id" />
       <Account path="/account" />
       <Details path="/details" />
       <Addresses path="/address" />
       <Orders path="/orders" />
-      <Order path="/order/:id" />
+      <Receipt path="/receipt/:id" />
     </Router>
   );
 };

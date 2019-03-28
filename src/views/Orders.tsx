@@ -25,7 +25,7 @@ const Orders = (_: Props) => {
       {orders.map(order => (
         <Tile
           key={order.id}
-          onClick={() => navigate(`/order/${order.id}`)}
+          onClick={() => navigate(`/receipt/${order.id}`)}
           heading={`Total: £${order.total.toFixed(2)}`}
           subHeading={
             <>

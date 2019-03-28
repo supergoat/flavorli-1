@@ -21,8 +21,12 @@ const SelectQuantity = ({
   );
 };
 
+/* Export
+============================================================================= */
 export default SelectQuantity;
 
+/* Styled Components
+============================================================================= */
 const SelectQuantityWrapper = styled.div`
   display: flex;
   justify-content: center;

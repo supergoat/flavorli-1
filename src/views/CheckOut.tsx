@@ -5,7 +5,7 @@ import Label from '../ui/Label';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
 import Page from '../templates/Page';
-import ChangeTime from './ChangeTime';
+import ChangeTime from '../components/ChangeTime';
 
 interface Props extends RouteComponentProps {}
 
@@ -44,18 +44,6 @@ const CheckOut = (_: Props) => {
     navigate('/order/1');
   };
 
-  const formatAddress = (address: {
-    houseNumber: number;
-    streetName: string;
-    city: string;
-    postalCode: string;
-    notes: string;
-  }) => {
-    return `${address.houseNumber} ${address.streetName}, ${address.city}, ${
-      address.postalCode
-    }`;
-  };
-
   return (
     <Page
       heading="Checkout"
@@ -64,14 +52,14 @@ const CheckOut = (_: Props) => {
       <Label>Order Summary</Label>
 
       <Tile
-        onClick={() => navigate('/basket')}
+        onClick={() => navigate('/order/1')}
         heading={`Total: £${orderTotal.toFixed(2)}`}
         cta={'View Basket'}
       />
 
       <Tile
         onClick={() => setIsTimeModalOpen(s => !s)}
-        heading={`Delivery: ASAP `}
+        heading={`Take Away: ASAP `}
         subHeading={`Approx. 30 mins`}
         cta={'Change time'}
       />
@@ -105,13 +93,6 @@ const CheckOut = (_: Props) => {
           </>
         }
         cta={'Change Contact'}
-      />
-
-      <Tile
-        onClick={() => navigate('/address')}
-        heading={formatAddress(account.address)}
-        subHeading={account.address.notes}
-        cta={'Change Address'}
       />
 
       <SendOrderBtn onClick={handleSubmit} type="submit">

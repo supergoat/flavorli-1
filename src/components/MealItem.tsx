@@ -25,6 +25,8 @@ const MealItem = ({meal}: Props) => (
   </Meal>
 );
 
+/* Export
+============================================================================= */
 export default MealItem;
 
 /* Styled Components

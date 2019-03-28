@@ -25,6 +25,8 @@ const MealList = () => {
   );
 };
 
+/* Export
+============================================================================= */
 export default MealList;
 
 /* Styled Components

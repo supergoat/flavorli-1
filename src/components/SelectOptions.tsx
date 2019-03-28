@@ -38,8 +38,12 @@ const SelectOptions = ({onSelection}: Props) => {
   );
 };
 
+/* Export
+============================================================================= */
 export default SelectOptions;
 
+/* Styled Components
+============================================================================= */
 const Name = styled.h4`
   margin: 15px 0;
   font-weight: bold;

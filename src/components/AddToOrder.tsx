@@ -15,8 +15,12 @@ const AddToOrder = ({price}: {price: number}) => {
   );
 };
 
+/* Export
+============================================================================= */
 export default AddToOrder;
 
+/* Styled Components
+============================================================================= */
 const AddToOrderWrapper = styled.div`
   display: flex;
 `;
