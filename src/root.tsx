@@ -9,6 +9,7 @@ import CheckOut from './views/CheckOut';
 import Receipt from './views/Receipt';
 import Orders from './views/Orders';
 import Addresses from './views/Address';
+import Restaurants from './views/Restaurants';
 
 const Root = () => {
   return (
@@ -22,6 +23,7 @@ const Root = () => {
       <Addresses path="/address" />
       <Orders path="/orders" />
       <Receipt path="/receipt/:id" />
+      <Restaurants path="/restaurants" />
     </Router>
   );
 };
