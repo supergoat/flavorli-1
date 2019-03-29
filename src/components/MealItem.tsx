@@ -35,8 +35,6 @@ const Meal = styled.div`
   border-bottom: 2px solid var(--white);
   padding: 20px 10px;
   cursor: pointer;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  -webkit-tap-highlight-color: transparent;
   position: relative;
   &:last-of-type {
     border-bottom: none;
@@ -46,7 +44,7 @@ const Meal = styled.div`
     background-image: linear-gradient(
         to right,
         rgba(255, 255, 255, 1) 45%,
-        rgba(255, 255, 255, 0.8) 100%
+        rgba(255, 255, 255, 0.5) 100%
       ),
       url(${(props: {backgroundImage: string}) => props.backgroundImage});
     background-size: cover;
@@ -65,7 +63,6 @@ const Meal = styled.div`
 const Name = styled.h3`
   font-size: 18px;
   color: var(--oxfordBlue);
-  font-weight: bold;
 `;
 
 const Description = styled.h4`
