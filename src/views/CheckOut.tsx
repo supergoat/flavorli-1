@@ -47,7 +47,7 @@ const CheckOut = (_: Props) => {
   return (
     <Page
       heading="Checkout"
-      onClose={() => navigate('/meals', {replace: true})}
+      onClose={() => navigate('/restaurants', {replace: true})}
     >
       <Label>Order Summary</Label>
 

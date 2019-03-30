@@ -99,7 +99,10 @@ const Receipt = (_: Props) => {
         <div>Total:</div>
         <div>£{order.total.toFixed(2)}</div>
       </Total>
-      <Button width="100%" onClick={() => navigate('/meals', {replace: true})}>
+      <Button
+        width="100%"
+        onClick={() => navigate('/restaurants', {replace: true})}
+      >
         Home
       </Button>
     </Page>

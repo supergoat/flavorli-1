@@ -4,6 +4,7 @@ import {navigate} from '@reach/router';
 
 interface Props {
   restaurant: {
+    id: number;
     name: string;
     image: string;
     description: string;
@@ -13,14 +14,16 @@ interface Props {
 const RestaurantItem = ({restaurant}: Props) => {
   const {name, image, description, tags} = restaurant;
   return (
-    <RestaurantItemWrapper onClick={() => navigate('/meals')}>
+    <RestaurantItemWrapper
+      onClick={() => navigate(`/restaurant/${restaurant.id}`)}
+    >
       <Name>{name}</Name>
       <Description>{description}</Description>
       {tags.length > 0 && (
         <Tags>
           <TagIcon src={require('../assets/icons/tag.svg')} alt="tag icon" />
           {tags.map(tag => (
-            <li>{tag}</li>
+            <li key={tag}>{tag}</li>
           ))}
         </Tags>
       )}
@@ -57,7 +60,6 @@ const Tags = styled.ul`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 10px;
-  line-clamp: 1;
 
   li {
     font-size: 10px;
@@ -85,5 +87,4 @@ const Image = styled.img`
   height: 200px;
   border-radius: 3px;
   object-fit: cover;
-  background: blue;
 `;

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/macro';
-import {OptionsContext} from '../views/Meal';
+import {OptionsContext} from '../views/MenuItem';
 import Select from '../ui/Select';
 
 interface Props {
@@ -38,12 +38,14 @@ const Selection = ({
       name={optionName}
       type={selection.price > 0 ? 'checkbox' : 'radio'}
     >
-      <p>{selection.name}</p>
-      {showPrice && (
-        <Price isSelected={isSelected}>
-          {isSelected ? '-' : '+'} £{selection.price.toFixed(2)}
-        </Price>
-      )}
+      <div>
+        <p>{selection.name}</p>
+        {showPrice && (
+          <Price isSelected={isSelected}>
+            {isSelected ? '-' : '+'} £{selection.price.toFixed(2)}
+          </Price>
+        )}
+      </div>
     </Select>
   );
 };

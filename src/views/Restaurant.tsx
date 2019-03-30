@@ -1,30 +1,123 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import {RouteComponentProps} from '@reach/router';
-import Page from '../templates/Page';
-import RestaurantItem from '../components/RestaurantItem';
+import {Router, RouteComponentProps} from '@reach/router';
+import Menu from '../components/Menu';
+import MenuItemView from './MenuItem';
+import CheckOutFooter from '../components/CheckOutFooter';
 
-interface Props extends RouteComponentProps {}
-const RestaurantsView = (_: Props) => {
+interface Props extends RouteComponentProps {
+  restaurantId?: number;
+}
+const RestaurantView = ({restaurantId}: Props) => {
+  const restaurant = restaurants[restaurantId || 0];
+
   return (
-    <Page heading="BoxPark" showNavbar>
-      <NoOfRestaurants>{restaurants.length} Restaurants</NoOfRestaurants>
-      {restaurants.map(restaurant => (
-        <RestaurantItem key={restaurant.id} restaurant={restaurant} />
-      ))}
-    </Page>
+    <>
+      <Image
+        src={require(`../assets/restaurants/${restaurant.image}`)}
+        alt={restaurant.name}
+      />
+      <Info>
+        <Name>{restaurant.name}</Name>
+        <Description>{restaurant.description}</Description>
+
+        {restaurant.tags.length > 0 && (
+          <InfoItem>
+            <Icon src={require('../assets/icons/tag.svg')} alt="tag icon" />
+
+            {restaurant.tags.map(tag => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
+          </InfoItem>
+        )}
+
+        <InfoItem>
+          <Icon src={require('../assets/icons/time.svg')} alt="time icon" />
+          <p>11:30 - 22:30</p>
+        </InfoItem>
+        <InfoItem>
+          <Icon src={require('../assets/icons/tel.svg')} alt="telephone icon" />
+          <p> 07960778401</p>
+        </InfoItem>
+        <InfoItem>
+          <Icon
+            src={require('../assets/icons/location.svg')}
+            alt="location icon"
+          />
+          <p> 7 Fermain Court North, De Beauvoir Road, London, N15SX</p>
+        </InfoItem>
+      </Info>
+
+      <Menu />
+      <Router>
+        <MenuItemView path="/menu/item/:itemId" />
+      </Router>
+      <CheckOutFooter />
+    </>
   );
 };
 
 /* Export
 ============================================================================= */
-export default RestaurantsView;
+export default RestaurantView;
 
 /* Styled Compoents
 ============================================================================= */
-const NoOfRestaurants = styled.p`
-  font-size: 14px;
-  margin-bottom: 30px;
+const Image = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+`;
+
+const Name = styled.h1`
+  font-size: 22px;
+  font-weight: 300;
+  margin-bottom: 10px;
+`;
+
+const Description = styled.p`
+  font-size: 13px;
+  font-weight: 300;
+  margin-bottom: 10px;
+  line-height: 1.5em;
+`;
+
+const Info = styled.div`
+  padding: 30px 10px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--gallery);
+`;
+
+const InfoItem = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 5px 0;
+
+  p {
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+`;
+
+const Tag = styled.div`
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-right: 5px;
+
+  :after {
+    content: ',';
+  }
+
+  :last-of-type:after {
+    content: '';
+  }
+`;
+
+const Icon = styled.img`
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
 `;
 
 const restaurants = [
