@@ -4,10 +4,11 @@ export const items: {
   description: string;
   price: number;
   image?: string;
-  labels?: string[];
+  dietary?: string[];
   options: {
     name: string;
     freeSelections: number;
+    description?: string;
     selections: {
       name: string;
       price: number;
@@ -22,7 +23,7 @@ export const items: {
           and lemon juice. Served inside our Greek handmade pita with lettuce, tomatoes, red onions,
            parsley, fries and our homemade tzatziki sauce`,
     price: 6.5,
-    labels: [],
+    dietary: [],
     options: [
       {
         name: 'Extras',
@@ -44,11 +45,11 @@ export const items: {
   },
   {
     id: 1,
-    name: 'Double Lamb Naked Souvlak',
+    name: 'Double Lamb Naked Souvlaki',
     description:
       'Our delicious Greek salad alongside our special lamb skewers with tzatziki (served cold)',
     price: 9.0,
-    labels: [],
+    dietary: [],
     options: [],
   },
   {
@@ -58,7 +59,7 @@ export const items: {
     description:
       'Grilled pork skewer served in Greek handmade pita with lettuce, tomatoes, red onions, parsley, oregano fries and tzatziki sauce',
     price: 6.0,
-    labels: [],
+    dietary: [],
     options: [
       {
         name: 'Extras',
@@ -104,7 +105,7 @@ export const items: {
     description:
       'Grilled chicken skewer served in Greek handmade pita with lettuce, tomatoes, red onions, parsley, oregano fries and yoghurt, mustard and honey sauce',
     price: 6.0,
-    labels: [],
+    dietary: [],
     options: [
       {
         name: 'Extras',
@@ -151,7 +152,7 @@ export const items: {
       'Grilled ground lamb & beef served in Greek handmade pita with lettuce, tomatoes, red onions, parsley, oregano fries and spicy feta and red pepper sauce',
     price: 6.0,
     image: 'lamb_beef_souvlaki.png',
-    labels: [],
+    dietary: [],
     options: [
       {
         name: 'Extras',
@@ -194,7 +195,7 @@ export const items: {
   {
     id: 5,
     name: 'Halloumi Souvlaki Wrap',
-    labels: ['vegeterian'],
+    dietary: ['vegeterian'],
     description:
       'Grilled halloumi served in Greek handmade pita with lettuce, tomatoes, red onions, parsley, oregano fries and yoghurt, mustard and honey sauce',
     price: 6.0,
@@ -227,7 +228,7 @@ export const items: {
   {
     id: 6,
     name: 'Mushrooms Souvlaki Wrap',
-    labels: ['vegan'],
+    dietary: ['vegan'],
     description:
       'Grilled mushrooms served in Greek handmade pita with tomatoes, red onions, parsley, oregano fries and vegan mayonnaise',
     price: 6.0,
@@ -259,7 +260,7 @@ export const items: {
   {
     id: 7,
     name: 'Tomato Croquettes Souvlaki Wrap',
-    labels: ['vegan'],
+    dietary: ['vegan'],
     description:
       'Tomato croquettes served in Greek handmade pita with lettuce, tomatoes, red onions, parsley, oregano fries and aubergine sauce',
     price: 6.0,
@@ -295,7 +296,7 @@ export const items: {
       'Pork shavings served in Greek handmade pita with lettuce, tomatoes, red onions, parsley, oregano fries and tzatziki sauce',
     price: 6.5,
     image: 'pork_gyros.png',
-    labels: [],
+    dietary: [],
     options: [
       {
         name: 'Upgrade to Box',
@@ -312,7 +313,7 @@ export const items: {
       'Chicken shavings served in Greek handmade pita with lettuce, tomatoes, red onions, parsley, oregano fries and and yoghurt, mustard and honey sauce',
     price: 6.5,
     image: 'chicken_gyros.png',
-    labels: [],
+    dietary: [],
     options: [
       {
         name: 'Upgrade to Box',
@@ -325,7 +326,7 @@ export const items: {
   {
     id: 10,
     name: 'Vegan Gyros Wrap',
-    labels: ['vegan'],
+    dietary: ['vegan'],
     description:
       'Vegan organic seitan gyros served in Greek handmade pita with tomatoes, red onions, parsley, oregano fries and vegan mayonnaise',
     price: 6.5,
@@ -341,13 +342,14 @@ export const items: {
   {
     id: 11,
     name: 'Naked Souvlaki',
-    labels: ['gluten-free'],
+    dietary: ['gluten-free'],
     description:
       'Our delicious Greek salad with your choice of two skewers and homemade sauce',
     price: 8,
     options: [
       {
-        name: 'CHOOSE SKEWERS',
+        name: 'Skewers',
+        description: 'Choose a skewer',
         freeSelections: 0,
         selections: [
           {name: 'Double Pork', price: 0, selected: false},
@@ -358,7 +360,8 @@ export const items: {
         ],
       },
       {
-        name: 'CHOOSE SAUCE',
+        name: 'Sauce',
+        description: 'Choose a sauce',
         freeSelections: 0,
         selections: [
           {name: 'Tzatziki', price: 0, selected: false},
@@ -374,7 +377,7 @@ export const items: {
   {
     id: 12,
     name: 'Greek Salad',
-    labels: ['gluten-free'],
+    dietary: ['gluten-free'],
     description:
       'Tomatoes, red onions, feta cheese & Kalamata olives dressed in oregano & Greek extra virgin olive oil',
     price: 5.5,

@@ -9,11 +9,11 @@ interface Props {
     description: string;
     price: number;
     image?: string;
-    labels?: string[];
+    dietary?: string[];
   };
 }
 const MenuItem = ({item}: Props) => {
-  const {id, name, description, price, image, labels = []} = item;
+  const {id, name, description, price, image, dietary = []} = item;
 
   return (
     <Item onClick={() => navigate(`/restaurant/0/menu/item/${id}`)}>
@@ -24,29 +24,44 @@ const MenuItem = ({item}: Props) => {
         {price.toFixed(2)}
       </Price>
 
-      <Labels>
-        {labels.map(label => {
+      <Dietary>
+        {dietary.map(dietaryItem => {
           return (
-            <Fragment key={label}>
-              {label === 'vegan' && (
-                <Icon src={require(`../assets/icons/plant.svg`)} />
+            <Fragment key={dietaryItem}>
+              {dietaryItem === 'vegan' && (
+                <Icon
+                  src={require(`../assets/icons/plant.svg`)}
+                  alt="vegan item"
+                />
               )}
-              {label === 'vegeterian' && (
-                <Icon src={require(`../assets/icons/leaf.svg`)} />
+              {dietaryItem === 'vegeterian' && (
+                <Icon
+                  src={require(`../assets/icons/leaf.svg`)}
+                  alt="vegeterian item"
+                />
               )}
-              {label === 'gluten-free' && (
-                <Icon src={require(`../assets/icons/gluten-free.svg`)} />
+              {dietaryItem === 'gluten-free' && (
+                <Icon
+                  src={require(`../assets/icons/gluten-free.svg`)}
+                  alt="gluten free item"
+                />
               )}
-              {(label === 'dairy-free' || label === 'vegan') && (
-                <Icon src={require(`../assets/icons/dairy.svg`)} />
+              {(dietaryItem === 'dairy-free' || dietaryItem === 'vegan') && (
+                <Icon
+                  src={require(`../assets/icons/dairy.svg`)}
+                  alt="dairy free item"
+                />
               )}
-              {label === 'halal' && (
-                <Icon src={require(`../assets/icons/halal.svg`)} />
+              {dietaryItem === 'halal' && (
+                <Icon
+                  src={require(`../assets/icons/halal.svg`)}
+                  alt="halal item"
+                />
               )}
             </Fragment>
           );
         })}
-      </Labels>
+      </Dietary>
       <Description>{description}</Description>
 
       {image && <Image src={require(`../assets/items/${image}`)} alt={name} />}
@@ -74,7 +89,7 @@ const Name = styled.h3`
   margin-bottom: 5px;
 `;
 
-const Labels = styled.div`
+const Dietary = styled.div`
   margin: 5px 0;
 `;
 
@@ -82,8 +97,8 @@ const Description = styled.p`
   margin-top: 5px;
   margin-bottom: 10px;
   font-size: 16px;
-  color: var(--osloGrey);
   line-height: 1.5em;
+  font-weight: 300;
 `;
 
 const Image = styled.img`

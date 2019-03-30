@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import {Router, RouteComponentProps} from '@reach/router';
 import Menu from '../components/Menu';
-import MenuItemView from './MenuItem';
+import ItemView from './Item';
 import CheckOutFooter from '../components/CheckOutFooter';
 
 interface Props extends RouteComponentProps {
@@ -50,7 +50,7 @@ const RestaurantView = ({restaurantId}: Props) => {
 
       <Menu />
       <Router>
-        <MenuItemView path="/menu/item/:itemId" />
+        <ItemView path="/menu/item/:itemId" />
       </Router>
       <CheckOutFooter />
     </>

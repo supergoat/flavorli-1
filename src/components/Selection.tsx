@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/macro';
-import {OptionsContext} from '../views/MenuItem';
+import {OptionsContext} from '../views/Item';
 import Select from '../ui/Select';
 
 interface Props {

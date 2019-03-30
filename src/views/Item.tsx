@@ -1,4 +1,4 @@
-import React, {useState, useReducer, createContext} from 'react';
+import React, {useState, useReducer, createContext, Fragment} from 'react';
 import {RouteComponentProps} from '@reach/router';
 import styled from 'styled-components/macro';
 import SelectOptions from '../components/SelectOptions';
@@ -12,6 +12,7 @@ export const OptionsContext = createContext<{
   default: {
     name: string;
     freeSelections: number;
+    description?: string;
     selections: {
       name: string;
       price: number;
@@ -23,15 +24,17 @@ export const OptionsContext = createContext<{
   default: [],
 });
 
-interface MenuItemType {
+interface ItemType {
   id: number;
   name: string;
   description: string;
   price: number;
   image?: string;
+  dietary?: string[];
   options: {
     name: string;
     freeSelections: number;
+    description?: string;
     selections: {
       name: string;
       price: number;
@@ -42,9 +45,9 @@ interface MenuItemType {
 interface Props extends RouteComponentProps {
   itemId?: number;
 }
-const MenuItem = ({itemId}: Props) => {
-  const menuItem = items[itemId || 0];
-  const [state, dispatch] = useReducer(menuItemReducer, menuItem, initReducer);
+const Item = ({itemId}: Props) => {
+  const item = items[itemId || 0];
+  const [state, dispatch] = useReducer(itemReducer, item, initReducer);
   const [qty, setQty] = useState(1);
 
   const onSelection = (
@@ -65,21 +68,47 @@ const MenuItem = ({itemId}: Props) => {
   return (
     <Modal>
       <OptionsContext.Provider
-        value={{selected: state.options, default: menuItem.options}}
+        value={{selected: state.options, default: item.options}}
       >
-        <MenuItemWrapper>
-          {menuItem.image && (
+        <ItemWrapper>
+          {item.image && (
             <Image
-              src={require(`../assets/items/${menuItem.image}`)}
-              alt={menuItem.name}
+              src={require(`../assets/items/${item.image}`)}
+              alt={item.name}
             />
           )}
-          <Name>{menuItem.name}</Name>
-          <Description>{menuItem.description}</Description>
+          <Name>{item.name}</Name>
+
+          <Dietary>
+            {(item.dietary || []).map(dietaryItem => {
+              return (
+                <Fragment key={dietaryItem}>
+                  {dietaryItem === 'vegan' && (
+                    <Icon src={require(`../assets/icons/plant.svg`)} />
+                  )}
+                  {dietaryItem === 'vegeterian' && (
+                    <Icon src={require(`../assets/icons/leaf.svg`)} />
+                  )}
+                  {dietaryItem === 'gluten-free' && (
+                    <Icon src={require(`../assets/icons/gluten-free.svg`)} />
+                  )}
+                  {(dietaryItem === 'dairy-free' ||
+                    dietaryItem === 'vegan') && (
+                    <Icon src={require(`../assets/icons/dairy.svg`)} />
+                  )}
+                  {dietaryItem === 'halal' && (
+                    <Icon src={require(`../assets/icons/halal.svg`)} />
+                  )}
+                </Fragment>
+              );
+            })}
+          </Dietary>
+
+          <Description>{item.description}</Description>
           <SelectOptions onSelection={onSelection} />
           <SelectQuantity qty={qty} setQty={setQty} />
           <AddToOrder price={state.price * qty} />
-        </MenuItemWrapper>
+        </ItemWrapper>
       </OptionsContext.Provider>
     </Modal>
   );
@@ -87,14 +116,14 @@ const MenuItem = ({itemId}: Props) => {
 
 /*  Export
 ============================================================================= */
-export default MenuItem;
+export default Item;
 
 /*  Reducers
 ============================================================================= */
-const initReducer = (menuItem: MenuItemType) => {
+const initReducer = (item: ItemType) => {
   let options: {[name: string]: string[]} = {};
 
-  menuItem.options.forEach(option => {
+  item.options.forEach(option => {
     options[option.name] = [];
 
     option.selections.forEach(
@@ -107,11 +136,11 @@ const initReducer = (menuItem: MenuItemType) => {
 
   return {
     options,
-    price: menuItem.price,
+    price: item.price,
   };
 };
 
-const menuItemReducer = (state: any, action: any) => {
+const itemReducer = (state: any, action: any) => {
   const options = optionsReducer(state.options, action);
   switch (action.type) {
     case 'ADD_SELECTION': {
@@ -157,7 +186,7 @@ const optionsReducer = (state: {[name: string]: string[]}, action: any) => {
 
 /* Styled Components
 ============================================================================= */
-const MenuItemWrapper = styled.div`
+const ItemWrapper = styled.div`
   background: var(--white);
   height: auto;
   padding: 15px;
@@ -170,17 +199,27 @@ const MenuItemWrapper = styled.div`
 const Image = styled.img`
   width: 100%;
   height: 100%;
+  margin-bottom: 10px;
 `;
 
 const Name = styled.h1`
   font-size: 25px;
   color: var(--oxfordBlue);
-  padding: 10px 0;
-  font-weight: bold;
+  font-weight: 300;
+`;
+
+const Dietary = styled.div`
+  margin: 5px 0;
+`;
+
+const Icon = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
 `;
 
 const Description = styled.p`
-  margin: 10px 0;
   font-size: 18px;
   color: var(--osloGrey);
+  font-weight: 300;
 `;

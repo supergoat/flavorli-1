@@ -6,9 +6,16 @@ import {navigate} from '@reach/router';
 const AddToOrder = ({price}: {price: number}) => {
   return (
     <AddToOrderWrapper>
-      <CancelButton secondary onClick={() => window.history.back()} />
+      <CancelButton
+        secondary
+        onClick={() => window.history.back()}
+        aria-label="Back to restaurant view"
+      />
 
-      <ConfirmButton onClick={() => navigate('/')}>
+      <ConfirmButton
+        onClick={() => navigate('/')}
+        aria-label="Add item to order"
+      >
         Add for £{price.toFixed(2)}
       </ConfirmButton>
     </AddToOrderWrapper>
