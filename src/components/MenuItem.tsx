@@ -1,5 +1,6 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
+import Dietary from './Dietary';
 import {navigate} from '@reach/router';
 
 interface Props {
@@ -24,44 +25,7 @@ const MenuItem = ({item}: Props) => {
         {price.toFixed(2)}
       </Price>
 
-      <Dietary>
-        {dietary.map(dietaryItem => {
-          return (
-            <Fragment key={dietaryItem}>
-              {dietaryItem === 'vegan' && (
-                <Icon
-                  src={require(`../assets/icons/plant.svg`)}
-                  alt="vegan item"
-                />
-              )}
-              {dietaryItem === 'vegeterian' && (
-                <Icon
-                  src={require(`../assets/icons/leaf.svg`)}
-                  alt="vegeterian item"
-                />
-              )}
-              {dietaryItem === 'gluten-free' && (
-                <Icon
-                  src={require(`../assets/icons/gluten-free.svg`)}
-                  alt="gluten free item"
-                />
-              )}
-              {(dietaryItem === 'dairy-free' || dietaryItem === 'vegan') && (
-                <Icon
-                  src={require(`../assets/icons/dairy.svg`)}
-                  alt="dairy free item"
-                />
-              )}
-              {dietaryItem === 'halal' && (
-                <Icon
-                  src={require(`../assets/icons/halal.svg`)}
-                  alt="halal item"
-                />
-              )}
-            </Fragment>
-          );
-        })}
-      </Dietary>
+      <Dietary dietary={dietary} />
       <Description>{description}</Description>
 
       {image && <Image src={require(`../assets/items/${image}`)} alt={name} />}
@@ -89,10 +53,6 @@ const Name = styled.h3`
   margin-bottom: 5px;
 `;
 
-const Dietary = styled.div`
-  margin: 5px 0;
-`;
-
 const Description = styled.p`
   margin-top: 5px;
   margin-bottom: 10px;
@@ -109,10 +69,4 @@ const Image = styled.img`
 
 const Price = styled.h4`
   font-size: 17px;
-`;
-
-const Icon = styled.img`
-  width: 25px;
-  height: 25px;
-  margin-right: 5px;
 `;

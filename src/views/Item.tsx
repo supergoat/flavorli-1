@@ -6,6 +6,7 @@ import SelectQuantity from '../components/SelectQuantity';
 import AddToOrder from '../components/AddToOrder';
 import Modal from '../templates/ModalPage';
 import {items} from '../common/items';
+import Dietary from '../components/Dietary';
 
 export const OptionsContext = createContext<{
   selected: {[name: string]: string[]};
@@ -78,32 +79,7 @@ const Item = ({itemId}: Props) => {
             />
           )}
           <Name>{item.name}</Name>
-
-          <Dietary>
-            {(item.dietary || []).map(dietaryItem => {
-              return (
-                <Fragment key={dietaryItem}>
-                  {dietaryItem === 'vegan' && (
-                    <Icon src={require(`../assets/icons/plant.svg`)} />
-                  )}
-                  {dietaryItem === 'vegeterian' && (
-                    <Icon src={require(`../assets/icons/leaf.svg`)} />
-                  )}
-                  {dietaryItem === 'gluten-free' && (
-                    <Icon src={require(`../assets/icons/gluten-free.svg`)} />
-                  )}
-                  {(dietaryItem === 'dairy-free' ||
-                    dietaryItem === 'vegan') && (
-                    <Icon src={require(`../assets/icons/dairy.svg`)} />
-                  )}
-                  {dietaryItem === 'halal' && (
-                    <Icon src={require(`../assets/icons/halal.svg`)} />
-                  )}
-                </Fragment>
-              );
-            })}
-          </Dietary>
-
+          <Dietary dietary={item.dietary} />
           <Description>{item.description}</Description>
           <SelectOptions onSelection={onSelection} />
           <SelectQuantity qty={qty} setQty={setQty} />
@@ -206,16 +182,6 @@ const Name = styled.h1`
   font-size: 25px;
   color: var(--oxfordBlue);
   font-weight: 300;
-`;
-
-const Dietary = styled.div`
-  margin: 5px 0;
-`;
-
-const Icon = styled.img`
-  width: 25px;
-  height: 25px;
-  margin-right: 5px;
 `;
 
 const Description = styled.p`
