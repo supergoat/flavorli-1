@@ -1,4 +1,4 @@
-import React, {useState, useReducer, createContext, Fragment} from 'react';
+import React, {useState, useReducer, createContext} from 'react';
 import {RouteComponentProps} from '@reach/router';
 import styled from 'styled-components/macro';
 import SelectOptions from '../components/SelectOptions';
