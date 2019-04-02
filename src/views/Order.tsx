@@ -1,4 +1,6 @@
 import React, {Fragment} from 'react';
+import gql from 'graphql-tag';
+import {Query} from 'react-apollo';
 import {RouteComponentProps, navigate} from '@reach/router';
 import styled from 'styled-components/macro';
 import Page from '../templates/Page';
@@ -6,70 +8,91 @@ import Button from '../ui/Button';
 
 interface Props extends RouteComponentProps {}
 
+const GET_ORDER = gql`
+  query Order($id: ID!) {
+    order(id: $id) {
+      items {
+        id
+        name
+        options {
+          name
+          selections {
+            name
+            price
+            selected
+          }
+        }
+        price
+        quantity
+      }
+      total
+    }
+  }
+`;
+
+type SelectionType = {
+  name: string;
+  price: number;
+  selected: boolean;
+};
+
+type OptionType = {
+  name: string;
+  selections: SelectionType[];
+};
+
+type ItemType = {
+  id: string;
+  name: string;
+  options: OptionType[];
+  price: number;
+  quantity: number;
+};
+
 const Order = (_: Props) => {
-  const order = {
-    items: [
-      {
-        id: 0,
-        name: 'Farfalle alla Boscaiola',
-        options: [
-          {
-            name: 'Ingredients',
-            selections: [
-              {name: 'Mushrooms', price: 0.5, selected: true},
-              {name: 'Pancetta', price: 0.5, selected: true},
-              {name: 'Parmesan Cheese', price: 0.5, selected: true},
-            ],
-          },
-        ],
-        price: 6,
-        quantity: 1,
-      },
-      {
-        id: 0,
-        name: 'Farfalle alla Boscaiola',
-        options: [],
-        price: 6,
-        quantity: 1,
-      },
-    ],
-    total: 10,
-  };
-
   return (
-    <Page heading="Order" onClose={() => window.history.back()}>
-      <ClearItems />
+    <Query query={GET_ORDER} variables={{id: '1'}}>
+      {({loading, error, data}) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
 
-      {order.items.map(orderItem => (
-        <OrderItem key={orderItem.id}>
-          <OrderItemInfo>
-            <Quantity>{orderItem.quantity}</Quantity>
-            <Name>{orderItem.name}</Name>
-            <Price>{orderItem.price.toFixed(2)}</Price>
-          </OrderItemInfo>
+        return (
+          <Page heading="Order" onClose={() => window.history.back()}>
+            <ClearItems />
 
-          <Options>
-            {orderItem.options.map(option => (
-              <Fragment key={option.name}>
-                {option.selections.map(selection => (
-                  <SelectionName key={selection.name}>
-                    {selection.name}
-                  </SelectionName>
-                ))}
-              </Fragment>
+            {data.order.items.map((orderItem: ItemType) => (
+              <OrderItem key={orderItem.id}>
+                <OrderItemInfo>
+                  <Quantity>{orderItem.quantity}</Quantity>
+                  <Name>{orderItem.name}</Name>
+                  <Price>{orderItem.price.toFixed(2)}</Price>
+                </OrderItemInfo>
+
+                <Options>
+                  {orderItem.options.map(option => (
+                    <Fragment key={option.name}>
+                      {option.selections.map(selection => (
+                        <SelectionName key={selection.name}>
+                          {selection.name}
+                        </SelectionName>
+                      ))}
+                    </Fragment>
+                  ))}
+                </Options>
+              </OrderItem>
             ))}
-          </Options>
-        </OrderItem>
-      ))}
 
-      <Total>
-        <div>Total:</div>
-        <div>£{order.total.toFixed(2)}</div>
-      </Total>
-      <Button width="100%" onClick={() => navigate('/checkout')}>
-        Checkout
-      </Button>
-    </Page>
+            <Total>
+              <div>Total:</div>
+              <div>£{data.order.total.toFixed(2)}</div>
+            </Total>
+            <Button width="100%" onClick={() => navigate('/checkout')}>
+              Checkout
+            </Button>
+          </Page>
+        );
+      }}
+    </Query>
   );
 };
 

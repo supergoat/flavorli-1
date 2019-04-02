@@ -34,12 +34,6 @@ const client = new ApolloClient({
   cache,
 });
 
-cache.writeData({
-  data: {
-    order: [],
-  },
-});
-
 ReactDOM.render(
   <ApolloProvider client={client}>
     <App />

@@ -1,12 +1,37 @@
 import React, {Fragment} from 'react';
 import styled from 'styled-components/macro';
 import MenuItem from './MenuItem';
-import {items} from '../common/items';
 
-const Menu = () => {
+interface ItemType {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+  dietary?: string[];
+  options: {
+    name: string;
+    freeSelections: number;
+    description?: string;
+    selections: {
+      name: string;
+      price: number;
+      selected?: boolean;
+    }[];
+  }[];
+}
+
+interface Section {
+  name: string;
+  items: [ItemType];
+}
+interface Props {
+  menu: Section[];
+}
+const Menu = ({menu}: Props) => {
   return (
     <MenuWrapper>
-      {menu.map(section => {
+      {menu.map((section: Section) => {
         return (
           <Fragment key={section.name}>
             <CategoryName>{section.name}</CategoryName>
@@ -39,22 +64,3 @@ const CategoryName = styled.h4`
   font-weight: 400;
   color: var(--osloGrey);
 `;
-
-const menu = [
-  {
-    name: 'SPECIALS',
-    items: [items[0], items[1]],
-  },
-  {
-    name: 'SOUVLAKI',
-    items: [items[2], items[3], items[4], items[5], items[6], items[7]],
-  },
-  {
-    name: 'GYROS',
-    items: [items[8], items[9], items[10]],
-  },
-  {
-    name: 'SALADS',
-    items: [items[11], items[12]],
-  },
-];
