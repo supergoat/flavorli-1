@@ -36,7 +36,6 @@ const Order = (_: Props) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        console.log(data.activeOrderItems);
         return (
           <Page heading="Order" onClose={() => window.history.back()}>
             <ClearItems />

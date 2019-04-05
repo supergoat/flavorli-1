@@ -2,23 +2,34 @@ import React from 'react';
 import Button from '../ui/Button';
 import styled, {keyframes} from 'styled-components/macro';
 import {navigate} from '@reach/router';
+import {Query} from 'react-apollo';
+import {GET_ACTIVE_ORDER} from '../views/Order';
 
 const Footer = () => {
-  const noOfItems = 10;
   return (
-    <FooterWrapper>
-      <Button width="100%" onClick={() => navigate('/checkout')}>
-        Checkout
-      </Button>
+    <Query query={GET_ACTIVE_ORDER}>
+      {({loading, error, data}) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
 
-      <OrderButton secondary onClick={() => navigate('/order/1')}>
-        <NoOfItems>{noOfItems}</NoOfItems>
-        <OrderIcon
-          src={require('../assets/icons/basket.svg')}
-          alt="View Order"
-        />
-      </OrderButton>
-    </FooterWrapper>
+        const noOfItems = data.activeOrderItems.length;
+        return (
+          <FooterWrapper>
+            <Button width="100%" onClick={() => navigate('/checkout')}>
+              Checkout
+            </Button>
+
+            <OrderButton secondary onClick={() => navigate('/order/1')}>
+              <NoOfItems>{noOfItems > 0 && noOfItems}</NoOfItems>
+              <OrderIcon
+                src={require('../assets/icons/basket.svg')}
+                alt="View Order"
+              />
+            </OrderButton>
+          </FooterWrapper>
+        );
+      }}
+    </Query>
   );
 };
 

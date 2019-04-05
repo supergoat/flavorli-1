@@ -6,8 +6,8 @@ import gql from 'graphql-tag';
 import {Query} from 'react-apollo';
 
 const GET_ORDERS = gql`
-  {
-    orders {
+  query GetOrdersByUser($userId: ID!) {
+    ordersByUser(userId: $userId) {
       id
       createdAt
       total
