@@ -1,6 +1,7 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import styled from 'styled-components/macro';
 import MenuItem from './MenuItem';
+import Item from '../views/Item';
 
 interface ItemType {
   id: number;
@@ -29,6 +30,16 @@ interface Props {
   menu: Section[];
 }
 const Menu = ({menu}: Props) => {
+  const [itemId, setItemId] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (itemId) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [itemId]);
+
   return (
     <MenuWrapper>
       {menu.map((section: Section) => {
@@ -37,7 +48,17 @@ const Menu = ({menu}: Props) => {
             <CategoryName>{section.name}</CategoryName>
 
             {section.items.map(item => (
-              <MenuItem key={item.id} item={item} />
+              <>
+                <MenuItem
+                  key={item.id}
+                  item={item}
+                  onClick={() => setItemId(item.id)}
+                />
+
+                {item && itemId === item.id && (
+                  <Item item={item} onCancel={() => setItemId(undefined)} />
+                )}
+              </>
             ))}
           </Fragment>
         );

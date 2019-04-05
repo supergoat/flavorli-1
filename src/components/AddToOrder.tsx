@@ -3,12 +3,18 @@ import styled from 'styled-components/macro';
 import Button from '../ui/Button';
 import {navigate} from '@reach/router';
 
-const AddToOrder = ({price}: {price: number}) => {
+const AddToOrder = ({
+  price,
+  onCancel,
+}: {
+  price: number;
+  onCancel: () => void;
+}) => {
   return (
     <AddToOrderWrapper>
       <CancelButton
         secondary
-        onClick={() => window.history.back()}
+        onClick={onCancel}
         aria-label="Back to restaurant view"
       />
 

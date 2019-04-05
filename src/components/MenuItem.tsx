@@ -1,23 +1,22 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import Dietary from './Dietary';
-import {navigate} from '@reach/router';
 
 interface Props {
   item: {
-    id: number;
     name: string;
     description: string;
     price: number;
     image?: string;
     dietary?: string[];
   };
+  onClick: () => void;
 }
-const MenuItem = ({item}: Props) => {
-  const {id, name, description, price, image, dietary = []} = item;
+const MenuItem = ({item, onClick}: Props) => {
+  const {name, description, price, image, dietary = []} = item;
 
   return (
-    <Item onClick={() => navigate(`/restaurant/0/menu/item/${id}`)}>
+    <Item onClick={onClick}>
       <Name>{name}</Name>
 
       <Price>

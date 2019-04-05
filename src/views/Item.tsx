@@ -5,7 +5,6 @@ import SelectOptions from '../components/SelectOptions';
 import SelectQuantity from '../components/SelectQuantity';
 import AddToOrder from '../components/AddToOrder';
 import Modal from '../templates/ModalPage';
-import {items} from '../common/items';
 import Dietary from '../components/Dietary';
 
 export const OptionsContext = createContext<{
@@ -44,10 +43,10 @@ interface ItemType {
   }[];
 }
 interface Props extends RouteComponentProps {
-  itemId?: number;
+  item: ItemType;
+  onCancel: () => void;
 }
-const Item = ({itemId}: Props) => {
-  const item = items[itemId || 0];
+const Item = ({item, onCancel}: Props) => {
   const [state, dispatch] = useReducer(itemReducer, item, initReducer);
   const [qty, setQty] = useState(1);
 
@@ -83,7 +82,7 @@ const Item = ({itemId}: Props) => {
           <Description>{item.description}</Description>
           <SelectOptions onSelection={onSelection} />
           <SelectQuantity qty={qty} setQty={setQty} />
-          <AddToOrder price={state.price * qty} />
+          <AddToOrder price={state.price * qty} onCancel={onCancel} />
         </ItemWrapper>
       </OptionsContext.Provider>
     </Modal>

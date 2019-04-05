@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
-import {Router, RouteComponentProps} from '@reach/router';
+import {RouteComponentProps} from '@reach/router';
 import Menu from '../components/Menu';
-import ItemView from './Item';
 import CheckOutFooter from '../components/CheckOutFooter';
 import gql from 'graphql-tag';
 import {Query} from 'react-apollo';
@@ -165,9 +164,6 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
             </Reviews>
 
             <Menu menu={menu} />
-            <Router>
-              <ItemView path="/menu/item/:itemId" />
-            </Router>
             <CheckOutFooter />
           </>
         );
@@ -197,8 +193,6 @@ const Logo = styled.img`
   bottom: -20px;
   right: 20px;
   height: 100px;
-  border: 1px solid var(--gallery);
-  background: var(--white);
 `;
 
 const Name = styled.h1`
