@@ -24,7 +24,7 @@ const link = ApolloLink.from([
     if (networkError) console.log(`[Network error]: ${networkError}`);
   }),
   new HttpLink({
-    uri: 'http://localhost:4000',
+    uri: 'http://192.168.0.80:4000',
     credentials: 'same-origin',
   }),
 ]);

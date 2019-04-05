@@ -225,6 +225,7 @@ const Name = styled.h1`
   font-size: 22px;
   font-weight: 300;
   margin-bottom: 10px;
+  text-transform: uppercase;
 `;
 
 const Description = styled.p`
@@ -232,6 +233,7 @@ const Description = styled.p`
   font-weight: 300;
   margin-bottom: 10px;
   line-height: 1.5em;
+  text-transform: uppercase;
 `;
 
 const Info = styled.div`
