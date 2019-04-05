@@ -1,26 +1,29 @@
 import React from 'react';
-import CheckOutBtn from './CheckOutBtn';
 import Button from '../ui/Button';
 import styled, {keyframes} from 'styled-components/macro';
 import {navigate} from '@reach/router';
 
 const CheckOutFooter = () => {
-  const noOfBasketItems = 1;
+  const noOfItems = 10;
   return (
     <CheckOutFooterWrapper>
-      <CheckOutBtn />
+      <Button width="100%" onClick={() => navigate('/checkout')}>
+        Checkout
+      </Button>
 
-      <BasketButton secondary onClick={() => navigate('/basket')}>
-        <NoOfItems>{noOfBasketItems}</NoOfItems>
-        <BasketIcon
+      <OrderButton secondary onClick={() => navigate('/order/1')}>
+        <NoOfItems>{noOfItems}</NoOfItems>
+        <OrderIcon
           src={require('../assets/icons/basket.svg')}
-          alt="View Basket"
+          alt="View Order"
         />
-      </BasketButton>
+      </OrderButton>
     </CheckOutFooterWrapper>
   );
 };
 
+/* Export
+============================================================================= */
 export default CheckOutFooter;
 
 /* Styled Components
@@ -28,12 +31,6 @@ export default CheckOutFooter;
 const slideUp = keyframes`
   0% { transform: translateY(100%); }
   100% { transform: translateY(0); }
-`;
-
-const magnify = keyframes`
-  0% { transform: scale(1); transform-origin: 50% 70%; }
-  50% { transform: scale(1.2); transform-origin: 50% 70%; }
-  100% { transform: scale(1); transform-origin: 50% 70%; }
 `;
 
 const CheckOutFooterWrapper = styled.div`
@@ -49,11 +46,11 @@ const CheckOutFooterWrapper = styled.div`
   animation: ${slideUp} 0.2s;
 `;
 
-const BasketIcon = styled.img`
+const OrderIcon = styled.img`
   height: 35px;
   width: 35px;
-  animation: ${magnify} 0.8s;
 `;
+
 const NoOfItems = styled.p`
   display: flex;
   justify-content: center;
@@ -67,7 +64,7 @@ const NoOfItems = styled.p`
   bottom: 0;
 `;
 
-const BasketButton = styled(Button)`
+const OrderButton = styled(Button)`
   margin-left: 15px;
   padding: 0 10px;
   display: flex;

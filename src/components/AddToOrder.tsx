@@ -3,20 +3,37 @@ import styled from 'styled-components/macro';
 import Button from '../ui/Button';
 import {navigate} from '@reach/router';
 
-const AddToOrder = ({price}: {price: number}) => {
+const AddToOrder = ({
+  price,
+  onCancel,
+}: {
+  price: number;
+  onCancel: () => void;
+}) => {
   return (
     <AddToOrderWrapper>
-      <CancelButton secondary onClick={() => window.history.back()} />
+      <CancelButton
+        secondary
+        onClick={onCancel}
+        aria-label="Back to restaurant view"
+      />
 
-      <ConfirmButton onClick={() => navigate('/')}>
+      <ConfirmButton
+        onClick={() => navigate('/')}
+        aria-label="Add item to order"
+      >
         Add for £{price.toFixed(2)}
       </ConfirmButton>
     </AddToOrderWrapper>
   );
 };
 
+/* Export
+============================================================================= */
 export default AddToOrder;
 
+/* Styled Components
+============================================================================= */
 const AddToOrderWrapper = styled.div`
   display: flex;
 `;

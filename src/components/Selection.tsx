@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components/macro';
-import {OptionsContext} from '../views/Meal';
+import {OptionsContext} from '../views/Item';
 import Select from '../ui/Select';
 
 interface Props {
@@ -38,12 +38,14 @@ const Selection = ({
       name={optionName}
       type={selection.price > 0 ? 'checkbox' : 'radio'}
     >
-      <p>{selection.name}</p>
-      {showPrice && (
-        <Price isSelected={isSelected}>
-          {isSelected ? '-' : '+'} £{selection.price.toFixed(2)}
-        </Price>
-      )}
+      <div>
+        <Name>{selection.name}</Name>
+        {showPrice && (
+          <Price isSelected={isSelected}>
+            {isSelected ? '-' : '+'} £{selection.price.toFixed(2)}
+          </Price>
+        )}
+      </div>
     </Select>
   );
 };
@@ -53,6 +55,10 @@ export default Selection;
 interface PriceProps {
   isSelected: boolean;
 }
+const Name = styled.p`
+  font-weight: 300;
+`;
+
 const Price = styled.p`
   font-weight: ${(props: PriceProps) => (props.isSelected ? 'bold' : 'normal')};
   margin-top: 5px;

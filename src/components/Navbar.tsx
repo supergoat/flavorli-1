@@ -52,6 +52,8 @@ const Navbar = () => {
   );
 };
 
+/* Export
+============================================================================= */
 export default Navbar;
 
 /* Styled Components

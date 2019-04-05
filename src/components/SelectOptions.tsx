@@ -1,7 +1,7 @@
 import React, {useContext, Fragment} from 'react';
 import Selection from './Selection';
 import styled from 'styled-components/macro';
-import {OptionsContext} from '../views/Meal';
+import {OptionsContext} from '../views/Item';
 
 interface Props {
   onSelection: (
@@ -20,27 +20,44 @@ const SelectOptions = ({onSelection}: Props) => {
       {options.default.map(option => (
         <Fragment key={option.name}>
           <Name>{option.name}</Name>
+          {option.description && (
+            <Description>{option.description}</Description>
+          )}
 
-          {option.selections.map((selection: any) => (
-            <Selection
-              key={selection.name}
-              freeSelections={option.freeSelections}
-              optionName={option.name}
-              selection={selection}
-              onChange={() =>
-                onSelection(option.freeSelections, option.name, selection)
-              }
-            />
-          ))}
+          <Selections>
+            {option.selections.map((selection: any) => (
+              <Selection
+                key={selection.name}
+                freeSelections={option.freeSelections}
+                optionName={option.name}
+                selection={selection}
+                onChange={() =>
+                  onSelection(option.freeSelections, option.name, selection)
+                }
+              />
+            ))}
+          </Selections>
         </Fragment>
       ))}
     </>
   );
 };
 
+/* Export
+============================================================================= */
 export default SelectOptions;
 
+/* Styled Components
+============================================================================= */
 const Name = styled.h4`
-  margin: 15px 0;
-  font-weight: bold;
+  margin-top: 15px;
+`;
+
+const Description = styled.p`
+  margin: 5px 0;
+  color: var(--osloGrey);
+`;
+
+const Selections = styled.div`
+  margin-top: 15px;
 `;

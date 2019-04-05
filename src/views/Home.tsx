@@ -17,7 +17,7 @@ const Home = (_: Props) => {
         <FindFoodButton
           secondary
           width="300px"
-          onClick={() => navigate('/meals')}
+          onClick={() => navigate('/restaurants')}
         >
           Find Food Around You
         </FindFoodButton>

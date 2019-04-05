@@ -1,205 +1,125 @@
-import React from 'react';
-import Button from '../ui/Button';
-import styled from 'styled-components/macro';
+import React, {Fragment} from 'react';
+import gql from 'graphql-tag';
+import {Query} from 'react-apollo';
 import {RouteComponentProps, navigate} from '@reach/router';
+import styled from 'styled-components/macro';
 import Page from '../templates/Page';
-
-const getOrder = () => {
-  return {
-    id: 1,
-    placedOn: '14 April 2019, 19:27',
-    deliveredOn: '',
-    restaurant: {
-      name: 'Nandos Dalston',
-      address: '148 Kingsland High Street, London, E82NS',
-      tel: '02079233555',
-    },
-    customer: {
-      name: 'Panayiotis Nicolaou',
-      address: '7 Fermain Court North, De Beauvoir Roard, London, N15SX',
-      tel: '07960778401',
-    },
-    items: [
-      {
-        id: 0,
-        name: 'Chicken Butterfly',
-        options: {
-          ' Add a sauce': [
-            'Hot PERi-PERi Sauce 125ml',
-            'Extra Extra Hot PERi-PERi Sauce 125ml',
-            'Garlic PERi-PERi Sauce 125ml',
-          ],
-          'Choose Spice': ['Hot'],
-        },
-        price: 6,
-        quantity: 1,
-      },
-      {
-        id: 1,
-        name: 'Chicken Butterfly',
-        price: 6,
-        quantity: 1,
-      },
-    ],
-    total: 10,
-  };
-};
+import Button from '../ui/Button';
 
 interface Props extends RouteComponentProps {}
+
+const GET_ORDER = gql`
+  query Order($id: ID!) {
+    order(id: $id) {
+      items {
+        id
+        name
+        options {
+          name
+          selections {
+            name
+            price
+            selected
+          }
+        }
+        price
+        quantity
+      }
+      total
+    }
+  }
+`;
+
+type SelectionType = {
+  name: string;
+  price: number;
+  selected: boolean;
+};
+
+type OptionType = {
+  name: string;
+  selections: SelectionType[];
+};
+
+type ItemType = {
+  id: string;
+  name: string;
+  options: OptionType[];
+  price: number;
+  quantity: number;
+};
+
 const Order = (_: Props) => {
-  const order = getOrder();
   return (
-    <Page heading="Thank You!">
-      <OrderId>Order #{order.id}</OrderId>
+    <Query query={GET_ORDER} variables={{id: '1'}}>
+      {({loading, error, data}) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
 
-      <DeliveryDate>
-        <p>
-          Placed on: <span>{order.placedOn}</span>
-        </p>
-        <p>
-          Delivered on: <span>{order.deliveredOn || '--'}</span>
-        </p>
-      </DeliveryDate>
+        return (
+          <Page heading="Order" onClose={() => window.history.back()}>
+            <ClearItems />
 
-      <Details>
-        <span>From</span>
-        <FullName>{order.restaurant.name}</FullName>
-        <Address>{order.restaurant.address}</Address>
-        <Tel>{order.restaurant.tel}</Tel>
-      </Details>
-      <Details>
-        <span>To</span>
-        <FullName>{order.customer.name}</FullName>
-        <Address>{order.customer.address}</Address>
-        <Tel>{order.customer.tel}</Tel>
-      </Details>
-      <BasketItems>
-        {order.items.map(
-          (basketItem: {
-            id: number;
-            quantity: number;
-            name: string;
-            price: number;
-            options?: {
-              [categoryName: string]: string[];
-            };
-          }) => (
-            <BasketItem key={basketItem.id}>
-              <BasketItemInfo>
-                <Quantity>{basketItem.quantity}</Quantity>
-                <Name>{basketItem.name}</Name>
-                <Price>{basketItem.price.toFixed(2)}</Price>
-              </BasketItemInfo>
+            {data.order.items.map((orderItem: ItemType) => (
+              <OrderItem key={orderItem.id}>
+                <OrderItemInfo>
+                  <Quantity>{orderItem.quantity}</Quantity>
+                  <Name>{orderItem.name}</Name>
+                  <Price>{orderItem.price.toFixed(2)}</Price>
+                </OrderItemInfo>
 
-              {basketItem.options && (
                 <Options>
-                  {Object.keys(basketItem.options).map(
-                    (categoryName, index) =>
-                      basketItem.options &&
-                      basketItem.options[categoryName].map(
-                        (optionName, index) => (
-                          <OptionName>{optionName}</OptionName>
-                        ),
-                      ),
-                  )}
+                  {orderItem.options.map(option => (
+                    <Fragment key={option.name}>
+                      {option.selections.map(selection => (
+                        <SelectionName key={selection.name}>
+                          {selection.name}
+                        </SelectionName>
+                      ))}
+                    </Fragment>
+                  ))}
                 </Options>
-              )}
-            </BasketItem>
-          ),
-        )}
-      </BasketItems>
-      <Total>
-        <div>Total:</div>
-        <div>£{order.total.toFixed(2)}</div>
-      </Total>
-      <Button width="100%" onClick={() => navigate('/', {replace: true})}>
-        Home
-      </Button>
-    </Page>
+              </OrderItem>
+            ))}
+
+            <Total>
+              <div>Total:</div>
+              <div>£{data.order.total.toFixed(2)}</div>
+            </Total>
+            <Button width="100%" onClick={() => navigate('/checkout')}>
+              Checkout
+            </Button>
+          </Page>
+        );
+      }}
+    </Query>
   );
 };
 
-const OrderId = styled.h3`
-  color: var(--osloGrey);
-  margin-bottom: 20px;
-`;
+/* Export
+============================================================================= */
+export default Order;
 
-const DeliveryDate = styled.div`
-  margin-bottom: 20px;
-
-  p {
-    display: block;
-    font-size: 0.83em;
-    margin-bottom: 5px;
-  }
-
-  span {
-    font-weight: 300;
-    font-size: 14px;
+/* Styled Components
+============================================================================= */
+const ClearItems = styled.a`
+  display: block;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 0 20px;
+  color: var(--azure);
+  &:before {
+    content: 'Clear Items';
   }
 `;
 
-const Details = styled.div`
-  margin-bottom: 30px;
-
-  span {
-    display: block;
-    font-weight: 300;
-    margin-bottom: 5px;
-  }
-`;
-
-const FullName = styled.h5`
-  margin-bottom: 2px;
-`;
-
-const BasketItems = styled.div`
-  border-top: 1px solid var(--silver);
-  padding-top: 30px;
-`;
-
-const BasketItem = styled.div`
+const OrderItem = styled.div`
   margin-bottom: 15px;
 `;
 
-const BasketItemInfo = styled.div`
+const OrderItemInfo = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const Address = styled.p`
-  font-size: 14px;
-  font-weight: 300;
-  width: 60%;
-`;
-
-const Tel = styled.p`
-  font-size: 15px;
-  font-weight: 300;
-`;
-
-const Quantity = styled.div`
-  font-size: 16px;
-  width: 10%;
-  &:after {
-    content: 'x';
-  }
-`;
-
-const Name = styled.div`
-  width: 70%;
-  font-size: 16px;
-  margin-bottom: 5px;
-`;
-
-const Price = styled.div`
-  font-size: 16px;
-  width: 20%;
-  text-align: right;
-  color: var(--osloGrey);
-  &:before {
-    content: '£';
-  }
 `;
 
 const Options = styled.div`
@@ -208,10 +128,36 @@ const Options = styled.div`
   align-items: flex-end;
 `;
 
-const OptionName = styled.p`
+const SelectionName = styled.p`
   width: 90%;
   font-size: 13px;
   color: var(--osloGrey);
+`;
+
+const Quantity = styled.div`
+  justify-content: space-around;
+  width: 10%;
+  padding-top: 2px;
+  font-size: 18px;
+  &:after {
+    content: 'x';
+  }
+`;
+
+const Name = styled.div`
+  font-size: 18px;
+  font-weight: 300;
+  width: 70%;
+  margin-bottom: 5px;
+`;
+
+const Price = styled.div`
+  font-size: 18px;
+  width: 20%;
+  text-align: right;
+  &:before {
+    content: '£';
+  }
 `;
 
 const Total = styled.div`
@@ -219,7 +165,6 @@ const Total = styled.div`
   justify-content: space-between;
   font-size: 20px;
   font-weight: 800;
-  margin: 30px 0 40px;
+  border-top: 1px solid var(--silver);
+  padding: 20px 0;
 `;
-
-export default Order;

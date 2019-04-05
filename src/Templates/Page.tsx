@@ -18,6 +18,12 @@ const Page = ({onClose, showNavbar = false, heading, children}: Props) => {
   );
 };
 
+/* Export
+============================================================================= */
+export default Page;
+
+/* Styled Components
+============================================================================= */
 const PageWrapper = styled.div`
   ${(props: {showNavbar: boolean}) =>
     !props.showNavbar &&
@@ -52,5 +58,3 @@ const Heading = styled.header`
   font-weight: 300;
   margin-bottom: 20px;
 `;
-
-export default Page;

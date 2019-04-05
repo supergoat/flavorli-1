@@ -38,5 +38,5 @@ const SelectionWrapper = styled.label`
   border: 1px solid var(--gallery);
   border-radius: 3px;
   border: ${(props: SelectionWrapperProps) =>
-    props.checked ? '1px solid var(--oxfordBlue)' : '1px solid trasparent'};
+    props.checked ? '1px solid var(--osloGrey)' : '1px solid trasparent'};
 `;
