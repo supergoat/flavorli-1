@@ -48,17 +48,13 @@ const Menu = ({menu}: Props) => {
             <CategoryName>{section.name}</CategoryName>
 
             {section.items.map(item => (
-              <>
-                <MenuItem
-                  key={item.id}
-                  item={item}
-                  onClick={() => setItemId(item.id)}
-                />
+              <Fragment key={item.id}>
+                <MenuItem item={item} onClick={() => setItemId(item.id)} />
 
                 {item && itemId === item.id && (
                   <Item item={item} onCancel={() => setItemId(undefined)} />
                 )}
-              </>
+              </Fragment>
             ))}
           </Fragment>
         );
