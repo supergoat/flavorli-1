@@ -6,6 +6,7 @@ import {HttpLink} from 'apollo-link-http';
 import {onError} from 'apollo-link-error';
 import {ApolloLink} from 'apollo-link';
 import {ApolloProvider} from 'react-apollo';
+import {typeDefs, resolvers} from './resolvers';
 
 import './index.css';
 import App from './App';
@@ -32,6 +33,15 @@ const link = ApolloLink.from([
 const client = new ApolloClient({
   link,
   cache,
+  typeDefs,
+  resolvers,
+});
+
+cache.writeData({
+  data: {
+    activeOrderItems: [],
+    total: 0,
+  },
 });
 
 ReactDOM.render(

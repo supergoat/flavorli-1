@@ -3,10 +3,10 @@ import Button from '../ui/Button';
 import styled, {keyframes} from 'styled-components/macro';
 import {navigate} from '@reach/router';
 
-const CheckOutFooter = () => {
+const Footer = () => {
   const noOfItems = 10;
   return (
-    <CheckOutFooterWrapper>
+    <FooterWrapper>
       <Button width="100%" onClick={() => navigate('/checkout')}>
         Checkout
       </Button>
@@ -18,13 +18,13 @@ const CheckOutFooter = () => {
           alt="View Order"
         />
       </OrderButton>
-    </CheckOutFooterWrapper>
+    </FooterWrapper>
   );
 };
 
 /* Export
 ============================================================================= */
-export default CheckOutFooter;
+export default Footer;
 
 /* Styled Components
 ============================================================================= */
@@ -33,7 +33,7 @@ const slideUp = keyframes`
   100% { transform: translateY(0); }
 `;
 
-const CheckOutFooterWrapper = styled.div`
+const FooterWrapper = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;

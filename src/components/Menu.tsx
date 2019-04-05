@@ -52,7 +52,7 @@ const Menu = ({menu}: Props) => {
                 <MenuItem item={item} onClick={() => setItemId(item.id)} />
 
                 {item && itemId === item.id && (
-                  <Item item={item} onCancel={() => setItemId(undefined)} />
+                  <Item item={item} onCloseItem={() => setItemId(undefined)} />
                 )}
               </Fragment>
             ))}

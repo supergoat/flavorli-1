@@ -6,9 +6,11 @@ import {navigate} from '@reach/router';
 const AddToOrder = ({
   price,
   onCancel,
+  onClick,
 }: {
   price: number;
   onCancel: () => void;
+  onClick: () => void;
 }) => {
   return (
     <AddToOrderWrapper>
@@ -18,10 +20,7 @@ const AddToOrder = ({
         aria-label="Back to restaurant view"
       />
 
-      <ConfirmButton
-        onClick={() => navigate('/')}
-        aria-label="Add item to order"
-      >
+      <ConfirmButton onClick={onClick} aria-label="Add item to order">
         Add for £{price.toFixed(2)}
       </ConfirmButton>
     </AddToOrderWrapper>

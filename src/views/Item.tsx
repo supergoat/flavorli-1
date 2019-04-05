@@ -1,6 +1,8 @@
 import React, {useState, useReducer, createContext} from 'react';
-import {RouteComponentProps} from '@reach/router';
+import {RouteComponentProps, navigate} from '@reach/router';
 import styled from 'styled-components/macro';
+import {Mutation} from 'react-apollo';
+import gql from 'graphql-tag';
 import SelectOptions from '../components/SelectOptions';
 import SelectQuantity from '../components/SelectQuantity';
 import AddToOrder from '../components/AddToOrder';
@@ -42,11 +44,18 @@ interface ItemType {
     }[];
   }[];
 }
+
+const ADD_TO_ORDER = gql`
+  mutation addToOrder($orderItem: OrderItem!) {
+    addToOrder(orderItem: $orderItem) @client
+  }
+`;
+
 interface Props extends RouteComponentProps {
   item: ItemType;
-  onCancel: () => void;
+  onCloseItem: () => void;
 }
-const Item = ({item, onCancel}: Props) => {
+const Item = ({item, onCloseItem}: Props) => {
   const [state, dispatch] = useReducer(itemReducer, item, initReducer);
   const [qty, setQty] = useState(1);
 
@@ -65,27 +74,62 @@ const Item = ({item, onCancel}: Props) => {
     dispatch({type, freeSelections, optionName, ...selection});
   };
 
+  let selections: string[] = [];
+
+  Object.values(state.options).forEach((option: any) => {
+    option.forEach((option: any) => {
+      selections.push(option);
+    });
+  });
+
   return (
-    <Modal>
-      <OptionsContext.Provider
-        value={{selected: state.options, default: item.options}}
-      >
-        <ItemWrapper>
-          {item.image && (
-            <Image
-              src={require(`../assets/items/${item.image}`)}
-              alt={item.name}
-            />
-          )}
-          <Name>{item.name}</Name>
-          <Dietary dietary={item.dietary} />
-          <Description>{item.description}</Description>
-          <SelectOptions onSelection={onSelection} />
-          <SelectQuantity qty={qty} setQty={setQty} />
-          <AddToOrder price={state.price * qty} onCancel={onCancel} />
-        </ItemWrapper>
-      </OptionsContext.Provider>
-    </Modal>
+    <Mutation
+      mutation={ADD_TO_ORDER}
+      variables={{
+        orderItem: {
+          __typename: 'OrderItem',
+          name: item.name,
+          price: state.price,
+          selections,
+          quantity: qty,
+        },
+      }}
+    >
+      {(addToOrder, {loading, error}) => {
+        if (loading) return <p>Loading...</p>;
+        if (error) return <p>An error occurred</p>;
+
+        return (
+          <Modal>
+            <OptionsContext.Provider
+              value={{selected: state.options, default: item.options}}
+            >
+              <ItemWrapper>
+                {item.image && (
+                  <Image
+                    src={require(`../assets/items/${item.image}`)}
+                    alt={item.name}
+                  />
+                )}
+                <Name>{item.name}</Name>
+                <Dietary dietary={item.dietary} />
+                <Description>{item.description}</Description>
+                <SelectOptions onSelection={onSelection} />
+                <SelectQuantity qty={qty} setQty={setQty} />
+                <AddToOrder
+                  price={state.price * qty}
+                  onCancel={onCloseItem}
+                  onClick={() => {
+                    addToOrder();
+                    onCloseItem();
+                  }}
+                />
+              </ItemWrapper>
+            </OptionsContext.Provider>
+          </Modal>
+        );
+      }}
+    </Mutation>
   );
 };
 

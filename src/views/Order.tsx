@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
 import {Query} from 'react-apollo';
 import {RouteComponentProps, navigate} from '@reach/router';
@@ -8,59 +8,40 @@ import Button from '../ui/Button';
 
 interface Props extends RouteComponentProps {}
 
-const GET_ORDER = gql`
-  query Order($id: ID!) {
-    order(id: $id) {
-      items {
-        id
-        name
-        options {
-          name
-          selections {
-            name
-            price
-            selected
-          }
-        }
-        price
-        quantity
-      }
-      total
+export const GET_ACTIVE_ORDER = gql`
+  query GetActiveOrder {
+    activeOrderItems @client {
+      id
+      name
+      selections
+      price
+      quantity
     }
+    total @client
   }
 `;
 
-type SelectionType = {
-  name: string;
-  price: number;
-  selected: boolean;
-};
-
-type OptionType = {
-  name: string;
-  selections: SelectionType[];
-};
-
-type ItemType = {
+type OrderItemType = {
   id: string;
   name: string;
-  options: OptionType[];
+  selections: string[];
   price: number;
   quantity: number;
 };
 
 const Order = (_: Props) => {
   return (
-    <Query query={GET_ORDER} variables={{id: '1'}}>
+    <Query query={GET_ACTIVE_ORDER}>
       {({loading, error, data}) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
+        console.log(data.activeOrderItems);
         return (
           <Page heading="Order" onClose={() => window.history.back()}>
             <ClearItems />
 
-            {data.order.items.map((orderItem: ItemType) => (
+            {data.activeOrderItems.map((orderItem: OrderItemType) => (
               <OrderItem key={orderItem.id}>
                 <OrderItemInfo>
                   <Quantity>{orderItem.quantity}</Quantity>
@@ -68,23 +49,19 @@ const Order = (_: Props) => {
                   <Price>{orderItem.price.toFixed(2)}</Price>
                 </OrderItemInfo>
 
-                <Options>
-                  {orderItem.options.map(option => (
-                    <Fragment key={option.name}>
-                      {option.selections.map(selection => (
-                        <SelectionName key={selection.name}>
-                          {selection.name}
-                        </SelectionName>
-                      ))}
-                    </Fragment>
-                  ))}
-                </Options>
+                <Selections>
+                  {orderItem.selections.map(selection => {
+                    return (
+                      <SelectionName key={selection}>{selection}</SelectionName>
+                    );
+                  })}
+                </Selections>
               </OrderItem>
             ))}
 
             <Total>
               <div>Total:</div>
-              <div>£{data.order.total.toFixed(2)}</div>
+              <div>£{data.total.toFixed(2)}</div>
             </Total>
             <Button width="100%" onClick={() => navigate('/checkout')}>
               Checkout
@@ -122,7 +99,7 @@ const OrderItemInfo = styled.div`
   justify-content: space-between;
 `;
 
-const Options = styled.div`
+const Selections = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;

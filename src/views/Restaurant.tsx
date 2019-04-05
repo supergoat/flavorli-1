@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import {RouteComponentProps} from '@reach/router';
 import Menu from '../components/Menu';
-import CheckOutFooter from '../components/CheckOutFooter';
+import Footer from '../components/Footer';
 import gql from 'graphql-tag';
 import {Query} from 'react-apollo';
 
@@ -190,7 +190,7 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
             </Reviews>
 
             <Menu menu={menu} />
-            <CheckOutFooter />
+            <Footer />
           </>
         );
       }}
