@@ -50,6 +50,7 @@ const Name = styled.h3`
   font-weight: 300;
   color: var(--oxfordBlue);
   margin-bottom: 5px;
+  text-transform: capitalize;
 `;
 
 const Description = styled.p`

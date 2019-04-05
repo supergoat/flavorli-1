@@ -181,6 +181,7 @@ const Name = styled.h1`
   font-size: 25px;
   color: var(--oxfordBlue);
   font-weight: 300;
+  text-transform: capitalize;
 `;
 
 const Description = styled.p`

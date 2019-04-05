@@ -80,4 +80,5 @@ const CategoryName = styled.h4`
   padding: 15px 10px;
   font-weight: 400;
   color: var(--osloGrey);
+  text-transform: uppercase;
 `;

@@ -29,7 +29,14 @@ interface RestaurantType {
   name: string;
   logo?: string;
   image?: string;
+  tel: string;
   description: string;
+  address: {
+    number: string;
+    streetName: string;
+    city: string;
+    postalCode: string;
+  };
   tags: string[];
   menu: {
     name: string;
@@ -45,6 +52,13 @@ const GET_RESTAURANT = gql`
       logo
       image
       description
+      address {
+        number
+        streetName
+        city
+        postalCode
+      }
+      tel
       tags
       menu {
         name
@@ -82,7 +96,16 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
         if (error) return `Error! ${error.message}`;
 
         const restaurant: RestaurantType = data.restaurant;
-        const {logo, image, name, description, tags, menu} = restaurant;
+        const {
+          logo,
+          image,
+          name,
+          tel,
+          description,
+          address,
+          tags,
+          menu,
+        } = restaurant;
         return (
           <>
             <Cover>
@@ -125,14 +148,17 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
                   src={require('../assets/icons/tel.svg')}
                   alt="telephone icon"
                 />
-                <p> 07960778401</p>
+                <a href={`tel:${tel}`}>{tel}</a>
               </InfoItem>
               <InfoItem>
                 <Icon
                   src={require('../assets/icons/location.svg')}
                   alt="location icon"
                 />
-                <p> 7 Fermain Court North, De Beauvoir Road, London, N15SX</p>
+                <p>
+                  {address.number} {address.streetName}, {address.city},{' '}
+                  {address.postalCode}
+                </p>
               </InfoItem>
             </Info>
 
@@ -219,7 +245,8 @@ const InfoItem = styled.div`
   flex-wrap: wrap;
   padding: 5px 0;
 
-  p {
+  p,
+  a {
     font-size: 11px;
     text-transform: uppercase;
   }
