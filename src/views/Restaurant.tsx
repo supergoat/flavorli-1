@@ -28,6 +28,7 @@ interface ItemType {
 interface RestaurantType {
   id: number;
   name: string;
+  logo?: string;
   image?: string;
   description: string;
   tags: string[];
@@ -39,9 +40,10 @@ interface RestaurantType {
 
 const GET_RESTAURANT = gql`
   query GetRestaurant($restaurantId: ID!) {
-    restaurant(id: $restaurantId) {
+    restaurant(where: {id: $restaurantId}) {
       id
       name
+      logo
       image
       description
       tags
@@ -81,15 +83,20 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
         if (error) return `Error! ${error.message}`;
 
         const restaurant: RestaurantType = data.restaurant;
-        const {image, name, description, tags, menu} = restaurant;
+        const {logo, image, name, description, tags, menu} = restaurant;
         return (
           <>
-            {image && (
-              <Image
-                src={require(`../assets/restaurants/${image}`)}
-                alt={name}
-              />
-            )}
+            <Cover>
+              {image && (
+                <Image
+                  src={require(`../assets/restaurants/${image}`)}
+                  alt={name}
+                />
+              )}
+
+              {logo && <Logo src={require(`../assets/logos/${logo}`)} />}
+            </Cover>
+
             <Info>
               <Name>{name}</Name>
               <Description>{description}</Description>
@@ -130,6 +137,33 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
               </InfoItem>
             </Info>
 
+            <Reviews>
+              <Rating>
+                <h1>4.1</h1>
+                <p>203 reviews</p>
+              </Rating>
+              <Review>
+                <Avatar />
+                <Text>
+                  "Very tasty food, friendly staff, sizeable portions and Greek
+                  products."
+                </Text>
+              </Review>
+              <Review>
+                <Avatar />
+                <Text>
+                  "Good priced souvlaki - pita, fries and sauces are superb."
+                </Text>
+              </Review>
+              <Review>
+                <Avatar />
+                <Text>
+                  "Very friendly service and good location within Boxpark next
+                  to Beatbox bar."
+                </Text>
+              </Review>
+            </Reviews>
+
             <Menu menu={menu} />
             <Router>
               <ItemView path="/menu/item/:itemId" />
@@ -148,10 +182,23 @@ export default RestaurantView;
 
 /* Styled Compoents
 ============================================================================= */
+const Cover = styled.div`
+  position: relative;
+`;
+
 const Image = styled.img`
   width: 100%;
   height: 200px;
   object-fit: cover;
+`;
+
+const Logo = styled.img`
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+  height: 100px;
+  border: 1px solid var(--gallery);
+  background: var(--white);
 `;
 
 const Name = styled.h1`
@@ -169,7 +216,6 @@ const Description = styled.p`
 
 const Info = styled.div`
   padding: 30px 10px;
-  margin-bottom: 20px;
   border-bottom: 1px solid var(--gallery);
 `;
 
@@ -183,6 +229,41 @@ const InfoItem = styled.div`
     font-size: 11px;
     text-transform: uppercase;
   }
+`;
+
+const Reviews = styled.div`
+  padding: 30px 10px;
+  border-bottom: 1px solid var(--gallery);
+  margin-bottom: 20px;
+`;
+
+const Rating = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 40px;
+  }
+`;
+
+const Review = styled.div`
+  display: flex;
+  margin: 20px 0;
+  align-items: center;
+`;
+
+const Avatar = styled.div`
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  background: lightgrey;
+  border-radius: 15px;
+  margin-right: 10px;
+`;
+
+const Text = styled.p`
+  font-weight: 300;
 `;
 
 const Tag = styled.div`

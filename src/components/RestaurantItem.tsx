@@ -6,7 +6,7 @@ interface Props {
   restaurant: {
     id: number;
     name: string;
-    image: string;
+    image?: string;
     description: string;
     tags: string[];
   };
@@ -27,7 +27,9 @@ const RestaurantItem = ({restaurant}: Props) => {
           ))}
         </Tags>
       )}
-      <Image src={require(`../assets/restaurants/${image}`)} alt="" />
+      {image && (
+        <Image src={require(`../assets/restaurants/${image}`)} alt="" />
+      )}
     </RestaurantItemWrapper>
   );
 };

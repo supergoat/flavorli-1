@@ -9,7 +9,7 @@ import gql from 'graphql-tag';
 interface RestaurantType {
   id: number;
   name: string;
-  image: string;
+  image?: string;
   description: string;
   tags: string[];
 }
