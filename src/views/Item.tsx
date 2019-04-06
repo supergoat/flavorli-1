@@ -1,5 +1,5 @@
 import React, {useState, useReducer, createContext} from 'react';
-import {RouteComponentProps, navigate} from '@reach/router';
+import {RouteComponentProps} from '@reach/router';
 import styled from 'styled-components/macro';
 import {Mutation} from 'react-apollo';
 import gql from 'graphql-tag';
@@ -8,6 +8,7 @@ import SelectQuantity from '../components/SelectQuantity';
 import AddToOrder from '../components/AddToOrder';
 import Modal from '../templates/ModalPage';
 import Dietary from '../components/Dietary';
+import Button from '../ui/Button';
 
 export const OptionsContext = createContext<{
   selected: {[name: string]: string[]};
@@ -46,17 +47,38 @@ interface ItemType {
 }
 
 const ADD_TO_ORDER = gql`
-  mutation addToOrder($orderItem: OrderItem!) {
-    addToOrder(orderItem: $orderItem) @client
+  mutation addToOrder($restaurant: Restaurant, $orderItem: OrderItem!) {
+    addToOrder(restaurant: $restaurant, orderItem: $orderItem) @client
   }
 `;
 
 interface Props extends RouteComponentProps {
   item: ItemType;
   onCloseItem: () => void;
+  restaurant: {
+    id: number;
+    name: string;
+    address: {
+      number: string;
+      streetName: string;
+      city: string;
+      postalCode: string;
+    };
+    tel: string;
+  };
+  activeOrderRestaurant: {
+    id: number;
+    name: string;
+  };
 }
-const Item = ({item, onCloseItem}: Props) => {
+const Item = ({
+  item,
+  restaurant,
+  activeOrderRestaurant,
+  onCloseItem,
+}: Props) => {
   const [state, dispatch] = useReducer(itemReducer, item, initReducer);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [qty, setQty] = useState(1);
 
   const onSelection = (
@@ -86,6 +108,10 @@ const Item = ({item, onCloseItem}: Props) => {
     <Mutation
       mutation={ADD_TO_ORDER}
       variables={{
+        restaurant: {
+          __typename: 'Restaurant',
+          ...restaurant,
+        },
         orderItem: {
           __typename: 'OrderItem',
           name: item.name,
@@ -101,31 +127,75 @@ const Item = ({item, onCloseItem}: Props) => {
 
         return (
           <Modal>
-            <OptionsContext.Provider
-              value={{selected: state.options, default: item.options}}
-            >
-              <ItemWrapper>
-                {item.image && (
-                  <Image
-                    src={require(`../assets/items/${item.image}`)}
-                    alt={item.name}
+            <ItemWrapper>
+              {showConfirmation ? (
+                <>
+                  <h1>Start new order?</h1>
+
+                  <ConfirmationMessage>
+                    Are you sure you want to start a new order with
+                    <span>{restaurant.name}</span>?
+                    <br />
+                    Your order with
+                    <span>{activeOrderRestaurant.name}</span> will be lost
+                  </ConfirmationMessage>
+
+                  <ConfirmationButtons>
+                    <Button
+                      width={'25%'}
+                      secondary
+                      onClick={() => {
+                        setShowConfirmation(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+
+                    <Button
+                      width={'70%'}
+                      onClick={() => {
+                        setShowConfirmation(false);
+                        addToOrder();
+                        onCloseItem();
+                      }}
+                    >
+                      Start new order
+                    </Button>
+                  </ConfirmationButtons>
+                </>
+              ) : (
+                <OptionsContext.Provider
+                  value={{selected: state.options, default: item.options}}
+                >
+                  {item.image && (
+                    <Image
+                      src={require(`../assets/items/${item.image}`)}
+                      alt={item.name}
+                    />
+                  )}
+                  <Name>{item.name}</Name>
+                  <Dietary dietary={item.dietary} />
+                  <Description>{item.description}</Description>
+                  <SelectOptions onSelection={onSelection} />
+                  <SelectQuantity qty={qty} setQty={setQty} />
+                  <AddToOrder
+                    price={state.price * qty}
+                    onCancel={onCloseItem}
+                    onClick={() => {
+                      if (
+                        activeOrderRestaurant.id !== -1 &&
+                        activeOrderRestaurant.id !== restaurant.id
+                      ) {
+                        setShowConfirmation(true);
+                        return;
+                      }
+                      addToOrder();
+                      onCloseItem();
+                    }}
                   />
-                )}
-                <Name>{item.name}</Name>
-                <Dietary dietary={item.dietary} />
-                <Description>{item.description}</Description>
-                <SelectOptions onSelection={onSelection} />
-                <SelectQuantity qty={qty} setQty={setQty} />
-                <AddToOrder
-                  price={state.price * qty}
-                  onCancel={onCloseItem}
-                  onClick={() => {
-                    addToOrder();
-                    onCloseItem();
-                  }}
-                />
-              </ItemWrapper>
-            </OptionsContext.Provider>
+                </OptionsContext.Provider>
+              )}
+            </ItemWrapper>
           </Modal>
         );
       }}
@@ -213,6 +283,23 @@ const ItemWrapper = styled.div`
   max-width: 450px;
   border-radius: 3px;
   margin: 0 auto;
+`;
+
+const ConfirmationMessage = styled.p`
+  margin: 15px 0 20px;
+  line-height: 1.5em;
+  color: var(--osloGrey);
+
+  span {
+    margin: 0 5px;
+    font-size: 16px;
+    color: var(--oxfordBlue);
+  }
+`;
+
+const ConfirmationButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Image = styled.img`

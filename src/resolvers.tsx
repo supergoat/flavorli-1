@@ -3,14 +3,30 @@ import {GET_ACTIVE_ORDER} from './views/Order';
 
 export const typeDefs = gql`
   extend type Query {
-    activeOrderItems: [OrderItem]!
+    activeOrder: AcriveOrder!
+  }
+
+  type AcriveOrder {
+    restaurant: Restaurant
+    items: [OrderItem]!
     total: Float
   }
 
   extend type Mutation {
-    addToOrder(orderItem: OrderItem!): Float
+    addToOrder(restaurant: Restaurant, orderItem: OrderItem!): AcriveOrder!
   }
 `;
+type RestaurantType = {
+  id: number;
+  name: string;
+  address: {
+    number: string;
+    streetName: string;
+    city: string;
+    postalCode: string;
+  };
+  tel: string;
+};
 
 type OrderItemType = {
   name: string;
@@ -29,20 +45,39 @@ export const resolvers = {
   Mutation: {
     addToOrder: (
       _: any,
-      {orderItem}: {orderItem: OrderItemType},
+      {
+        restaurant,
+        orderItem,
+      }: {restaurant: RestaurantType; orderItem: OrderItemType},
       {cache}: {cache: any},
     ) => {
-      const {activeOrderItems, total} = cache.readQuery({
+      const {activeOrder} = cache.readQuery({
         query: GET_ACTIVE_ORDER,
       });
+
+      const isSameRestaurant = activeOrder.restaurant.id === restaurant.id;
       const id = idIterator.next().value;
+
       const data = {
-        activeOrderItems: [...activeOrderItems, {id, ...orderItem}],
-        total: total + orderItem.price,
+        activeOrder: {
+          __typename: 'ActiveOrder',
+          restaurant: restaurant,
+          items: isSameRestaurant
+            ? [...activeOrder.items, {id, ...orderItem}]
+            : [{id, ...orderItem}],
+          total: isSameRestaurant
+            ? activeOrder.total + orderItem.price
+            : orderItem.price,
+        },
       };
 
       cache.writeQuery({query: GET_ACTIVE_ORDER, data});
-      return data.total;
+
+      return {
+        restaurant: data.activeOrder.restaurant,
+        items: data.activeOrder.items,
+        total: data.activeOrder.total,
+      };
     },
   },
 };

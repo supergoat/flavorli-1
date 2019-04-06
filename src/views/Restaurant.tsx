@@ -39,13 +39,21 @@ interface RestaurantType {
   };
   tags: string[];
   menu: {
-    name: string;
-    items: [ItemType];
-  }[];
+    sections: {
+      name: string;
+      items: [ItemType];
+    }[];
+  };
 }
 
 const GET_RESTAURANT = gql`
   query GetRestaurant($restaurantId: ID!) {
+    activeOrder @client {
+      restaurant {
+        id
+        name
+      }
+    }
     restaurant(where: {id: $restaurantId}) {
       id
       name
@@ -61,22 +69,24 @@ const GET_RESTAURANT = gql`
       tel
       tags
       menu {
-        name
-        items {
-          id
+        sections {
           name
-          description
-          price
-          image
-          dietary
-          options {
+          items {
+            id
             name
-            freeSelections
             description
-            selections {
+            price
+            image
+            dietary
+            options {
               name
-              price
-              selected
+              freeSelections
+              description
+              selections {
+                name
+                price
+                selected
+              }
             }
           }
         }
@@ -95,6 +105,7 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
+        const activeOrderRestaurant = data.activeOrder.restaurant;
         const restaurant: RestaurantType = data.restaurant;
         const {
           logo,
@@ -189,7 +200,16 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
               </Review>
             </Reviews>
 
-            <Menu menu={menu} />
+            <Menu
+              restaurant={{
+                id: restaurant.id,
+                name: restaurant.name,
+                address: restaurant.address,
+                tel: restaurant.tel,
+              }}
+              sections={menu.sections}
+              activeOrderRestaurant={activeOrderRestaurant}
+            />
             <Footer />
           </>
         );

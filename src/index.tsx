@@ -39,8 +39,27 @@ const client = new ApolloClient({
 
 cache.writeData({
   data: {
-    activeOrderItems: [],
-    total: 0,
+    viewer: {
+      __typename: 'User',
+    },
+    activeOrder: {
+      __typename: 'ActiveOrder',
+      restaurant: {
+        __typename: 'Restaurant',
+        id: -1,
+        name: '',
+        tel: '',
+        address: {
+          __typename: 'Address',
+          number: '',
+          streetName: '',
+          city: '',
+          postalCode: '',
+        },
+      },
+      items: [],
+      total: 0,
+    },
   },
 });
 

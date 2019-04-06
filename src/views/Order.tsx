@@ -10,14 +10,27 @@ interface Props extends RouteComponentProps {}
 
 export const GET_ACTIVE_ORDER = gql`
   query GetActiveOrder {
-    activeOrderItems @client {
-      id
-      name
-      selections
-      price
-      quantity
+    activeOrder @client {
+      restaurant {
+        id
+        name
+        tel
+        address {
+          number
+          streetName
+          city
+          postalCode
+        }
+      }
+      items {
+        id
+        name
+        selections
+        price
+        quantity
+      }
+      total
     }
-    total @client
   }
 `;
 
@@ -36,11 +49,13 @@ const Order = (_: Props) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
+        const activeOrder = data.activeOrder;
+
         return (
           <Page heading="Order" onClose={() => window.history.back()}>
             <ClearItems />
 
-            {data.activeOrderItems.map((orderItem: OrderItemType) => (
+            {activeOrder.items.map((orderItem: OrderItemType) => (
               <OrderItem key={orderItem.id}>
                 <OrderItemInfo>
                   <Quantity>{orderItem.quantity}</Quantity>
@@ -60,7 +75,7 @@ const Order = (_: Props) => {
 
             <Total>
               <div>Total:</div>
-              <div>£{data.total.toFixed(2)}</div>
+              <div>£{activeOrder.total.toFixed(2)}</div>
             </Total>
             <Button width="100%" onClick={() => navigate('/checkout')}>
               Checkout

@@ -12,7 +12,7 @@ const Footer = () => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const noOfItems = data.activeOrderItems.length;
+        const noOfItems = data.activeOrder.items.length;
         return (
           <FooterWrapper>
             <Button width="100%" onClick={() => navigate('/checkout')}>

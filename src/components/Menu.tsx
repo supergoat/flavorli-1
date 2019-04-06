@@ -27,9 +27,24 @@ interface Section {
   items: [ItemType];
 }
 interface Props {
-  menu: Section[];
+  activeOrderRestaurant: {
+    id: number;
+    name: string;
+  };
+  restaurant: {
+    id: number;
+    name: string;
+    address: {
+      number: string;
+      streetName: string;
+      city: string;
+      postalCode: string;
+    };
+    tel: string;
+  };
+  sections: Section[];
 }
-const Menu = ({menu}: Props) => {
+const Menu = ({sections, restaurant, activeOrderRestaurant}: Props) => {
   const [itemId, setItemId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
@@ -42,7 +57,7 @@ const Menu = ({menu}: Props) => {
 
   return (
     <MenuWrapper>
-      {menu.map((section: Section) => {
+      {sections.map((section: Section) => {
         return (
           <Fragment key={section.name}>
             <CategoryName>{section.name}</CategoryName>
@@ -52,7 +67,12 @@ const Menu = ({menu}: Props) => {
                 <MenuItem item={item} onClick={() => setItemId(item.id)} />
 
                 {item && itemId === item.id && (
-                  <Item item={item} onCloseItem={() => setItemId(undefined)} />
+                  <Item
+                    item={item}
+                    onCloseItem={() => setItemId(undefined)}
+                    restaurant={restaurant}
+                    activeOrderRestaurant={activeOrderRestaurant}
+                  />
                 )}
               </Fragment>
             ))}

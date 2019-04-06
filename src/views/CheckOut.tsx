@@ -37,7 +37,6 @@ const account: AccountType = {
 const orderTotal: number = 10;
 
 const CheckOut = (_: Props) => {
-  const [isTimeModalOpen, setIsTimeModalOpen] = useState(false);
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -56,21 +55,6 @@ const CheckOut = (_: Props) => {
         heading={`Total: £${orderTotal.toFixed(2)}`}
         cta={'View Basket'}
       />
-
-      <Tile
-        onClick={() => setIsTimeModalOpen(s => !s)}
-        heading={`Take Away: ASAP `}
-        subHeading={`Approx. 30 mins`}
-        cta={'Change time'}
-      />
-
-      {isTimeModalOpen && (
-        <ChangeTime
-          openingTime={11}
-          closingTime={20}
-          onCancel={() => setIsTimeModalOpen(false)}
-        />
-      )}
 
       <Label>Payment</Label>
 
