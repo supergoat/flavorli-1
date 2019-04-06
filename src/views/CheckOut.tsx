@@ -1,11 +1,10 @@
-import React, {MouseEvent, useState} from 'react';
+import React, {MouseEvent} from 'react';
 import Tile from '../ui/Tile';
 import Button from '../ui/Button';
 import Label from '../ui/Label';
 import styled from 'styled-components/macro';
 import {navigate, RouteComponentProps} from '@reach/router';
 import Page from '../templates/Page';
-import ChangeTime from '../components/ChangeTime';
 
 interface Props extends RouteComponentProps {}
 
