@@ -10,7 +10,7 @@ const Home = (_: Props) => {
     <HomeWrapper>
       <Cover>
         <Title>flavorli</Title>
-        <Description>Buy homeade food from your neighbours</Description>
+        <Description>One app for all your favourite restaurants</Description>
 
         <PostCodeInput placeholder="Enter your postcode" />
 
