@@ -16,6 +16,7 @@ export const typeDefs = gql`
     addToOrder(restaurant: Restaurant, orderItem: OrderItem!): AcriveOrder!
   }
 `;
+
 type RestaurantType = {
   id: number;
   name: string;

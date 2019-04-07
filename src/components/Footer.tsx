@@ -1,32 +1,58 @@
 import React from 'react';
-import Button from '../ui/Button';
-import styled, {keyframes} from 'styled-components/macro';
+import gql from 'graphql-tag';
 import {navigate} from '@reach/router';
 import {Query} from 'react-apollo';
-import {GET_ACTIVE_ORDER} from '../views/Order';
+import Button from '../ui/Button';
+import styled, {keyframes} from 'styled-components/macro';
+
+export const GET_DATA = gql`
+  query GetData {
+    isLoggedIn @client
+    activeOrder @client {
+      restaurant {
+        name
+      }
+      items {
+        id
+      }
+      total
+    }
+  }
+`;
 
 const Footer = () => {
   return (
-    <Query query={GET_ACTIVE_ORDER}>
+    <Query query={GET_DATA}>
       {({loading, error, data}) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
         const noOfItems = data.activeOrder.items.length;
-        return (
-          <FooterWrapper>
-            <Button width="100%" onClick={() => navigate('/checkout')}>
-              Checkout
-            </Button>
+        const isLoggedIn = data.isLoggedIn;
 
-            <OrderButton secondary onClick={() => navigate('/order/1')}>
-              <NoOfItems>{noOfItems > 0 && noOfItems}</NoOfItems>
-              <OrderIcon
-                src={require('../assets/icons/basket.svg')}
-                alt="View Order"
-              />
-            </OrderButton>
-          </FooterWrapper>
+        return (
+          noOfItems > 0 && (
+            <FooterWrapper>
+              <Button
+                width="100%"
+                onClick={() =>
+                  isLoggedIn
+                    ? navigate('/checkout')
+                    : navigate('/register', {state: {redirectTo: '/checkout'}})
+                }
+              >
+                Checkout
+              </Button>
+
+              <OrderButton secondary onClick={() => navigate('/order')}>
+                <NoOfItems>{noOfItems}</NoOfItems>
+                <OrderIcon
+                  src={require('../assets/icons/basket.svg')}
+                  alt="View Order"
+                />
+              </OrderButton>
+            </FooterWrapper>
+          )
         );
       }}
     </Query>

@@ -62,6 +62,4 @@ const Name = styled.p`
 const Price = styled.p`
   font-weight: ${(props: PriceProps) => (props.isSelected ? 'bold' : 'normal')};
   margin-top: 5px;
-  color: ${(props: PriceProps) =>
-    props.isSelected ? 'red' : 'var(--forestGreen)'};
 `;

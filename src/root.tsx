@@ -1,6 +1,8 @@
 import React from 'react';
 import {Router} from '@reach/router';
 import Home from './views/Home';
+import Register from './views/Register';
+
 import Order from './views/Order';
 import Details from './views/Details';
 import Account from './views/Account';
@@ -15,8 +17,9 @@ const Root = () => {
   return (
     <Router>
       <Home path="/" />
+      <Register path="/register" />
       <CheckOut path="/checkout" />
-      <Order path="/order/:id" />
+      <Order path="/order" />
       <Account path="/account" />
       <Details path="/details" />
       <Addresses path="/address" />

@@ -27,7 +27,6 @@ const TileWrapper = styled.button`
   width: 100%;
   border: 1px solid var(--silver);
   text-align: left;
-  margin-bottom: 20px;
   font-size: 16px;
   padding: 15px;
   border-radius: 3px;

@@ -6,8 +6,8 @@ import {Query} from 'react-apollo';
 import gql from 'graphql-tag';
 
 const GET_USER = gql`
-  query User($id: ID!) {
-    user(id: $id) {
+  query User {
+    me {
       name
       email
       tel
@@ -18,7 +18,7 @@ const GET_USER = gql`
 interface Props extends RouteComponentProps {}
 const Account = (_: Props) => {
   return (
-    <Query query={GET_USER} variables={{id: '1'}}>
+    <Query query={GET_USER}>
       {({loading, error, data}) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
@@ -27,11 +27,11 @@ const Account = (_: Props) => {
           <Page heading="Account" showNavbar>
             <Tile
               onClick={() => navigate('/details')}
-              heading={data.user.name}
+              heading={data.me.name}
               subHeading={
                 <>
-                  <p>{data.user.email}</p>
-                  <p>{data.user.tel}</p>
+                  <p>{data.me.email}</p>
+                  <p>{data.me.tel}</p>
                 </>
               }
               cta={'Change Details'}

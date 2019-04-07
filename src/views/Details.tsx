@@ -1,10 +1,23 @@
 import React, {useState, FormEvent} from 'react';
+import gql from 'graphql-tag';
 import {navigate, RouteComponentProps} from '@reach/router';
-import FAButton from '../ui/Button';
+import {Query} from 'react-apollo';
+import Button from '../ui/Button';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import styled from 'styled-components/macro';
 import Page from '../templates/Page';
+
+export const GET_VIEWER = gql`
+  query getViewer {
+    me {
+      id
+      name
+      email
+      tel
+    }
+  }
+`;
 
 interface Props extends RouteComponentProps {}
 const Details = (_: Props) => {
@@ -37,48 +50,63 @@ const Details = (_: Props) => {
   };
 
   return (
-    <Page heading="Details">
-      {errors.map(error => (
-        <Error>{error}</Error>
-      ))}
+    <Query query={GET_VIEWER}>
+      {({loading, error, data}) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
 
-      <form onSubmit={handleSubmit}>
-        <Label htmlFor="name">Name</Label>
-        <DetailsInput
-          id="name"
-          type="text"
-          placeholder="e.g. James"
-          name="name"
-          value={name}
-          onChange={e => setName(e.currentTarget.value)}
-        />
+        const viewer = data.me;
 
-        <Label htmlFor="email">Email</Label>
-        <DetailsInput
-          id="email"
-          type="email"
-          placeholder="email@example.com"
-          name="email"
-          value={email}
-          onChange={e => setEmail(e.currentTarget.value)}
-        />
+        setName(viewer.name);
+        setEmail(viewer.email);
+        setTel(viewer.tel);
 
-        <Label htmlFor="tel">Mobile phone</Label>
-        <DetailsInput
-          id="tel"
-          type="tel"
-          placeholder="e.g. +44 0000 000000"
-          name="tel"
-          value={tel}
-          onChange={e => setTel(e.currentTarget.value)}
-        />
+        return (
+          <Page heading="Details">
+            {errors.map((error, index) => (
+              <Error key={index}>{error}</Error>
+            ))}
 
-        <div>
-          <CancelButton secondary onClick={() => window.history.back()} />
-          <SaveButton type="submit" />
-        </div>
-      </form>
-    </Page>
+            <form onSubmit={handleSubmit}>
+              <DetailsLabel htmlFor="name">Change name</DetailsLabel>
+              <DetailsInput
+                id="name"
+                type="text"
+                placeholder="Name"
+                name="name"
+                value={name}
+                onChange={e => setName(e.currentTarget.value)}
+              />
+
+              <DetailsLabel htmlFor="email">Change Email</DetailsLabel>
+              <DetailsInput
+                id="email"
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={email}
+                onChange={e => setEmail(e.currentTarget.value)}
+              />
+
+              <DetailsLabel htmlFor="tel">Change Mobile Phone</DetailsLabel>
+              <DetailsInput
+                id="tel"
+                type="tel"
+                placeholder="Mobile Phone"
+                name="tel"
+                value={tel}
+                onChange={e => setTel(e.currentTarget.value)}
+              />
+
+              <div>
+                <CancelButton secondary onClick={() => window.history.back()} />
+                <UpdateDetailsButton type="submit" />
+              </div>
+            </form>
+          </Page>
+        );
+      }}
+    </Query>
   );
 };
 
@@ -86,6 +114,10 @@ export default Details;
 
 /* Styled Components
 ============================================================================= */
+const DetailsLabel = styled(Label)`
+  font-size: 15px;
+`;
+
 const DetailsInput = styled(Input)`
   margin-bottom: 15px;
 `;
@@ -95,7 +127,7 @@ const Error = styled.p`
   margin: 5px 0 20px;
 `;
 
-const CancelButton = styled(FAButton)`
+const CancelButton = styled(Button)`
   margin-top: 10px;
   width: 27.5%;
   margin-right: 2.5%;
@@ -104,10 +136,10 @@ const CancelButton = styled(FAButton)`
   }
 `;
 
-const SaveButton = styled(FAButton)`
+const UpdateDetailsButton = styled(Button)`
   margin-top: 10px;
   width: 70%;
   &::before {
-    content: 'Save Details';
+    content: 'Update Details';
   }
 `;

@@ -1,87 +1,66 @@
 import React, {MouseEvent} from 'react';
-import Tile from '../ui/Tile';
-import Button from '../ui/Button';
-import Label from '../ui/Label';
+import {Query} from 'react-apollo';
 import styled from 'styled-components/macro';
+import Tile from '../ui/Tile';
 import {navigate, RouteComponentProps} from '@reach/router';
+import OrderItems from '../components/OrderItems';
+import {GET_ACTIVE_ORDER} from './Order';
+
+import Button from '../ui/Button';
+
 import Page from '../templates/Page';
 
 interface Props extends RouteComponentProps {}
-
-interface AccountType {
-  email: string;
-  name: string;
-  address: {
-    houseNumber: number;
-    streetName: string;
-    city: string;
-    postalCode: string;
-    notes: string;
-  };
-  tel: string;
-}
-
-const account: AccountType = {
-  name: 'Panayiotis Nicolaou',
-  email: 'p.nicolaou.13@gmail.com',
-  address: {
-    houseNumber: 7,
-    streetName: 'Fermain Court North, De Beauvoir Road',
-    city: 'London',
-    postalCode: 'N15SX',
-    notes: 'Please come from Downham Road',
-  },
-  tel: '07960778401',
-};
-const orderTotal: number = 10;
-
 const CheckOut = (_: Props) => {
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    navigate('/order/1');
+    navigate('/order');
   };
 
   return (
-    <Page
-      heading="Checkout"
-      onClose={() => navigate('/restaurants', {replace: true})}
-    >
-      <Label>Order Summary</Label>
+    <Query query={GET_ACTIVE_ORDER}>
+      {({loading, error, data}) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
 
-      <Tile
-        onClick={() => navigate('/order/1')}
-        heading={`Total: £${orderTotal.toFixed(2)}`}
-        cta={'View Basket'}
-      />
+        const activeOrder = data.activeOrder;
 
-      <Label>Payment</Label>
+        return (
+          <Page heading="Checkout" onClose={() => window.history.back()}>
+            <RestaurantName>{activeOrder.restaurant.name}</RestaurantName>
+            <Table>Table: 10</Table>
 
-      <Tile
-        onClick={() => navigate('/details')}
-        heading={'American Express'}
-        subHeading={'Ending 0000'}
-        cta={'Change Payment'}
-      />
+            <Summary>
+              <Tile
+                onClick={() => navigate('/order')}
+                heading={<OrderItems items={activeOrder.items} />}
+                subHeading={
+                  <Total>
+                    <div>Total:</div>
+                    <div>£{activeOrder.total}</div>
+                  </Total>
+                }
+                cta={'Change Order'}
+              />
+            </Summary>
 
-      <Label>Details</Label>
+            <Summary>
+              <Tile
+                onClick={() => navigate('/details')}
+                heading={'American Express'}
+                subHeading={'Ending 0000'}
+                cta={'Change Payment'}
+              />
+            </Summary>
 
-      <Tile
-        onClick={() => navigate('/details')}
-        heading={'Panayiotis Nicolaou'}
-        subHeading={
-          <>
-            <p>{account.email}</p>
-            <p>{account.tel}</p>
-          </>
-        }
-        cta={'Change Contact'}
-      />
-
-      <SendOrderBtn onClick={handleSubmit} type="submit">
-        Send Order
-      </SendOrderBtn>
-    </Page>
+            <PlaceOrderBtn onClick={handleSubmit} type="submit">
+              Place Order
+            </PlaceOrderBtn>
+          </Page>
+        );
+      }}
+    </Query>
   );
 };
 
@@ -89,7 +68,26 @@ export default CheckOut;
 
 /* Styled Components
 ============================================================================= */
-const SendOrderBtn = styled(Button)`
-  margin-top: 10px;
+const PlaceOrderBtn = styled(Button)`
   width: 100%;
+  margin-top: 30px;
+`;
+
+const RestaurantName = styled.h1`
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+`;
+
+const Table = styled.h3``;
+
+const Total = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+`;
+
+const Summary = styled.div`
+  padding-top: 20px;
 `;
