@@ -27,6 +27,9 @@ const link = ApolloLink.from([
   new HttpLink({
     uri: 'http://192.168.0.80:4000',
     credentials: 'same-origin',
+    headers: {
+      authorization: localStorage.getItem(process.env.JWT_TOKEN || ''),
+    },
   }),
 ]);
 
@@ -39,9 +42,7 @@ const client = new ApolloClient({
 
 cache.writeData({
   data: {
-    viewer: {
-      __typename: 'User',
-    },
+    isLoggedIn: !!localStorage.getItem(process.env.JWT_TOKEN || ''),
     activeOrder: {
       __typename: 'ActiveOrder',
       restaurant: {
