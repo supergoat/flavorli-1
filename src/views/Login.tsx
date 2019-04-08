@@ -2,29 +2,24 @@ import React from 'react';
 import gql from 'graphql-tag';
 import {Mutation, ApolloConsumer} from 'react-apollo';
 import {WindowLocation, RouteComponentProps, navigate} from '@reach/router';
-import RegisterForm from '../Forms/RegisterForm';
+import LoginForm from '../Forms/LoginForm';
 
 interface Props extends RouteComponentProps {
   location?: WindowLocation;
 }
 
-const REGISTER = gql`
-  mutation register(
-    $email: String!
-    $password: String!
-    $name: String!
-    $tel: String!
-  ) {
-    register(email: $email, password: $password, name: $name, tel: $tel) {
+const LOG_IN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       token
     }
   }
 `;
 
-const RegisterView = ({location}: Props) => {
+const Login = ({location}: Props) => {
   const redirectTo = location && location.state && location.state.redirectTo;
 
-  const onRegister = () => {
+  const onLogin = () => {
     navigate(redirectTo || '/');
   };
 
@@ -32,21 +27,15 @@ const RegisterView = ({location}: Props) => {
     <ApolloConsumer>
       {client => (
         <Mutation
-          mutation={REGISTER}
+          mutation={LOG_IN}
           onCompleted={({token}) => {
             localStorage.setItem('flavorli-token', token);
             client.writeData({data: {isLoggedIn: true}});
-            onRegister();
+            onLogin();
           }}
         >
-          {(register, {loading, error, data}) => {
-            return (
-              <RegisterForm
-                register={register}
-                error={error}
-                loading={loading}
-              />
-            );
+          {(login, {loading, error, data}) => {
+            return <LoginForm login={login} error={error} loading={loading} />;
           }}
         </Mutation>
       )}
@@ -54,4 +43,4 @@ const RegisterView = ({location}: Props) => {
   );
 };
 
-export default RegisterView;
+export default Login;

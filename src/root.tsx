@@ -2,6 +2,7 @@ import React from 'react';
 import {Router} from '@reach/router';
 import Home from './views/Home';
 import Register from './views/Register';
+import Login from './views/Login';
 
 import Order from './views/Order';
 import Details from './views/Details';
@@ -18,6 +19,7 @@ const Root = () => {
     <Router>
       <Home path="/" />
       <Register path="/register" />
+      <Login path="/login" />
       <CheckOut path="/checkout" />
       <Order path="/order" />
       <Account path="/account" />

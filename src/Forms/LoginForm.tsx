@@ -10,27 +10,19 @@ import Input from '../ui/Input';
 import styled from 'styled-components/macro';
 
 interface Props extends RouteComponentProps {
-  register: MutationFn<
-    any,
-    {email: string; name: string; tel: string; password: string}
-  >;
+  login: MutationFn<any, {email: string; password: string}>;
   loading: boolean;
   error: ApolloError | undefined;
 }
-const RegisterForm = ({register, loading, error}: Props) => {
-  const [name, setName] = useState('');
+const LoginForm = ({login, loading, error}: Props) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [tel, setTel] = useState('');
   const [errors, setErrors] = useState<Set<String>>(new Set());
 
   const isFormValid = () => {
     let errors: Set<String> = new Set();
-    if (name.trim() === '') errors.add('name');
 
     if (email.trim() === '') errors.add('email');
-
-    if (tel.trim() === '') errors.add('tel');
 
     if (password.trim() === '') errors.add('password');
 
@@ -43,7 +35,7 @@ const RegisterForm = ({register, loading, error}: Props) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isFormValid()) return;
-    register({variables: {email, name, tel, password}});
+    login({variables: {email, password}});
   };
 
   const clearError = (error: string) => {
@@ -55,27 +47,11 @@ const RegisterForm = ({register, loading, error}: Props) => {
   return (
     <Page showNavbar>
       <Separator>
-        <span>Create Account</span>
+        <span>Log In</span>
       </Separator>
-      <SubHeading>Create an account</SubHeading>
+      <SubHeading>Log In</SubHeading>
 
       <form onSubmit={handleSubmit}>
-        <DetailsLabel hasError={errors.has('name')} htmlFor="name">
-          Name {errors.has('name') && ' - required'}
-        </DetailsLabel>
-        <DetailsInput
-          hasError={errors.has('name')}
-          id="name"
-          type="text"
-          placeholder="Name"
-          name="name"
-          value={name}
-          onChange={e => {
-            setName(e.currentTarget.value);
-            clearError('name');
-          }}
-        />
-
         <DetailsLabel
           hasError={
             errors.has('email') || (error && error.message.includes('email'))
@@ -102,22 +78,6 @@ const RegisterForm = ({register, loading, error}: Props) => {
           }}
         />
 
-        <DetailsLabel hasError={errors.has('tel')} htmlFor="tel">
-          Mobile Phone {errors.has('tel') && '- required'}
-        </DetailsLabel>
-        <DetailsInput
-          hasError={errors.has('tel')}
-          id="tel"
-          type="tel"
-          placeholder="Mobile Phone"
-          name="tel"
-          value={tel}
-          onChange={e => {
-            setTel(e.currentTarget.value);
-            clearError('tel');
-          }}
-        />
-
         <DetailsLabel hasError={errors.has('password')} htmlFor="password">
           Password {errors.has('password') && '- required'}
         </DetailsLabel>
@@ -134,28 +94,25 @@ const RegisterForm = ({register, loading, error}: Props) => {
           }}
         />
 
-        <CreateAccountButton type="submit">
-          {loading ? 'Creating Account...' : 'Create Account'}
-        </CreateAccountButton>
-
-        <TermsAndConditions>
-          By creating an acount, you agree to our Terms and Conditions. Learn
-          how we use your data to improve your experience in our Data Policy.
-        </TermsAndConditions>
+        <LoginButton type="submit">
+          {loading ? 'Loging in...' : 'Log In'}
+        </LoginButton>
       </form>
-      <Separator>
-        <span>Login</span>
-      </Separator>
-      <SubHeading>Already have an account?</SubHeading>
 
-      <Button secondary width="100%" onClick={() => navigate('/login')}>
-        Login
+      <Separator>
+        <span>Create Account</span>
+      </Separator>
+
+      <SubHeading>Don't have an account?</SubHeading>
+
+      <Button secondary width="100%" onClick={() => navigate('/register')}>
+        Create Account
       </Button>
     </Page>
   );
 };
 
-export default RegisterForm;
+export default LoginForm;
 
 /* Styled Components
 ============================================================================= */
@@ -190,15 +147,7 @@ const DetailsInput = styled(Input)`
   margin-bottom: 15px;
 `;
 
-const CreateAccountButton = styled(Button)`
+const LoginButton = styled(Button)`
   margin-top: 10px;
   width: 100%;
-`;
-
-const TermsAndConditions = styled.p`
-  color: var(--osloGrey);
-  font-size: 14px;
-  margin-top: 20px;
-  margin-left: 5px;
-  line-height: 1.4em;
 `;

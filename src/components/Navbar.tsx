@@ -1,8 +1,25 @@
 import React, {useState, useEffect} from 'react';
+import {ChildDataProps, graphql, ApolloConsumer} from 'react-apollo';
 import styled from 'styled-components/macro';
 import {navigate} from '@reach/router';
+import gql from 'graphql-tag';
 
-const Navbar = () => {
+const IS_LOGGED_IN_QUERY = gql`
+  query IsLoggedIn {
+    isLoggedIn @client
+  }
+`;
+
+type Response = {
+  isLoggedIn: string;
+};
+
+type ChildProps = ChildDataProps<{}, Response, {}>;
+const withIsLoggedIn = graphql<{}, Response, {}, ChildProps>(
+  IS_LOGGED_IN_QUERY,
+);
+
+const Navbar = withIsLoggedIn(({data: {loading, isLoggedIn, error}}) => {
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
@@ -31,26 +48,57 @@ const Navbar = () => {
 
         <Title>flavorli</Title>
 
-        <MenuItem
-          onClick={() => {
-            setShowMenu(false);
-            navigate('/account');
-          }}
-        >
-          Account
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setShowMenu(false);
-            navigate('/orders');
-          }}
-        >
-          Order History
-        </MenuItem>
+        {!isLoggedIn && (
+          <MenuItem
+            onClick={() => {
+              setShowMenu(false);
+              navigate('/register');
+            }}
+          >
+            Log In
+          </MenuItem>
+        )}
+
+        {isLoggedIn && (
+          <>
+            <MenuItem
+              onClick={() => {
+                setShowMenu(false);
+                navigate('/account');
+              }}
+            >
+              Account
+            </MenuItem>
+
+            <MenuItem
+              onClick={() => {
+                setShowMenu(false);
+                navigate('/orders');
+              }}
+            >
+              Order History
+            </MenuItem>
+
+            <ApolloConsumer>
+              {client => (
+                <MenuItem
+                  onClick={() => {
+                    client.writeData({data: {isLoggedIn: false}});
+                    localStorage.clear();
+
+                    setShowMenu(false);
+                  }}
+                >
+                  Log Out
+                </MenuItem>
+              )}
+            </ApolloConsumer>
+          </>
+        )}
       </Menu>
     </>
   );
-};
+});
 
 /* Export
 ============================================================================= */

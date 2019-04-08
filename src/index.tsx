@@ -25,7 +25,7 @@ const link = ApolloLink.from([
     if (networkError) console.log(`[Network error]: ${networkError}`);
   }),
   new HttpLink({
-    uri: 'http://192.168.0.80:4000',
+    uri: 'http://localhost:4000',
     credentials: 'same-origin',
     headers: {
       authorization: 'Bearer ' + localStorage.getItem('flavorli-token'),

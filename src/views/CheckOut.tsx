@@ -38,7 +38,7 @@ const CheckOut = (_: Props) => {
               subHeading={
                 <Total>
                   <div>Total:</div>
-                  <div>£{activeOrder.total}</div>
+                  <div>£{activeOrder.total.toFixed(2)}</div>
                 </Total>
               }
               cta={'Change Order'}
