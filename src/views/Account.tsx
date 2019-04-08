@@ -1,6 +1,6 @@
 import React from 'react';
 import {RouteComponentProps, navigate} from '@reach/router';
-import Tile from '../ui/Tile';
+import Tile from '../components/Tile';
 import Page from '../templates/Page';
 import {Query} from 'react-apollo';
 import gql from 'graphql-tag';
@@ -26,6 +26,7 @@ const Account = (_: Props) => {
         return (
           <Page heading="Account" showNavbar>
             <Tile
+              margin="0 0 20px"
               onClick={() => navigate('/details')}
               heading={data.me.name}
               subHeading={

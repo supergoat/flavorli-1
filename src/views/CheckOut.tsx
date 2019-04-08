@@ -1,7 +1,7 @@
 import React, {MouseEvent} from 'react';
 import {Query} from 'react-apollo';
 import styled from 'styled-components/macro';
-import Tile from '../ui/Tile';
+import Tile from '../components/Tile';
 import {navigate, RouteComponentProps} from '@reach/router';
 import OrderItems from '../components/OrderItems';
 import {GET_ACTIVE_ORDER} from './Order';
@@ -31,28 +31,25 @@ const CheckOut = (_: Props) => {
             <RestaurantName>{activeOrder.restaurant.name}</RestaurantName>
             <Table>Table: 10</Table>
 
-            <Summary>
-              <Tile
-                onClick={() => navigate('/order')}
-                heading={<OrderItems items={activeOrder.items} />}
-                subHeading={
-                  <Total>
-                    <div>Total:</div>
-                    <div>£{activeOrder.total}</div>
-                  </Total>
-                }
-                cta={'Change Order'}
-              />
-            </Summary>
+            <Tile
+              margin="20px 0"
+              onClick={() => navigate('/order')}
+              heading={<OrderItems items={activeOrder.items} />}
+              subHeading={
+                <Total>
+                  <div>Total:</div>
+                  <div>£{activeOrder.total}</div>
+                </Total>
+              }
+              cta={'Change Order'}
+            />
 
-            <Summary>
-              <Tile
-                onClick={() => navigate('/details')}
-                heading={'American Express'}
-                subHeading={'Ending 0000'}
-                cta={'Change Payment'}
-              />
-            </Summary>
+            <Tile
+              onClick={() => navigate('/details')}
+              heading={'American Express'}
+              subHeading={'Ending 0000'}
+              cta={'Change Payment'}
+            />
 
             <PlaceOrderBtn onClick={handleSubmit} type="submit">
               Place Order
@@ -86,8 +83,4 @@ const Total = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 16px;
-`;
-
-const Summary = styled.div`
-  padding-top: 20px;
 `;

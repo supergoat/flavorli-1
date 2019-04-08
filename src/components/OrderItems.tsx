@@ -10,12 +10,12 @@ type OrderItemType = {
 };
 
 interface Props {
-  items: any;
+  items: OrderItemType[];
 }
 const OrderItems = ({items}: Props) => {
   return (
     <>
-      {items.map((orderItem: OrderItemType) => (
+      {items.map(orderItem => (
         <OrderItem key={orderItem.id}>
           <OrderItemInfo>
             <Quantity>{orderItem.quantity}</Quantity>

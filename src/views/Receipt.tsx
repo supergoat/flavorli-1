@@ -22,25 +22,16 @@ const getOrder = () => {
     },
     items: [
       {
-        id: 0,
+        id: '0',
         name: 'Farfalle alla Boscaiola',
-        options: [
-          {
-            name: 'Ingredients',
-            selections: [
-              {name: 'Mushrooms', price: 0.5, selected: true},
-              {name: 'Pancetta', price: 0.5, selected: true},
-              {name: 'Parmesan Cheese', price: 0.5, selected: true},
-            ],
-          },
-        ],
+        selections: ['Mushrooms', 'Pancetta', 'Parmesan Cheese'],
         price: 6,
         quantity: 1,
       },
       {
-        id: 0,
+        id: '1',
         name: 'Farfalle alla Boscaiola',
-        options: [],
+        selections: [],
         price: 6,
         quantity: 1,
       },

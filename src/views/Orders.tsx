@@ -1,6 +1,6 @@
 import React from 'react';
 import {navigate, RouteComponentProps} from '@reach/router';
-import Tile from '../ui/Tile';
+import Tile from '../components/Tile';
 import Page from '../templates/Page';
 import gql from 'graphql-tag';
 import {Query} from 'react-apollo';

@@ -6,10 +6,11 @@ interface Props {
   heading: any;
   subHeading?: any;
   cta: any;
+  margin?: string;
 }
-const Tile = ({onClick, heading, subHeading, cta}: Props) => {
+const Tile = ({onClick, heading, subHeading, cta, margin}: Props) => {
   return (
-    <TileWrapper onClick={onClick}>
+    <TileWrapper onClick={onClick} margin={margin}>
       <Heading>{heading}</Heading>
       <SubHeading>{subHeading}</SubHeading>
       <CTA>{cta}</CTA>
@@ -23,6 +24,9 @@ export default Tile;
 
 /* Styled Components 
 ============================================================================= */
+interface TileWrapperProps {
+  margin?: string;
+}
 const TileWrapper = styled.button`
   width: 100%;
   border: 1px solid var(--silver);
@@ -31,6 +35,7 @@ const TileWrapper = styled.button`
   padding: 15px;
   border-radius: 3px;
   background: var(--white);
+  margin: ${(props: TileWrapperProps) => props.margin};
 `;
 
 const Heading = styled.h5`
