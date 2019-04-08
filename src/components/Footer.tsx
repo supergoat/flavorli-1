@@ -38,7 +38,7 @@ const Footer = () => {
                 onClick={() =>
                   isLoggedIn
                     ? navigate('/checkout')
-                    : navigate('/register', {state: {redirectTo: '/checkout'}})
+                    : navigate('/register', {state: {navigateTo: '/checkout'}})
                 }
               >
                 Checkout

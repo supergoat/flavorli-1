@@ -22,10 +22,10 @@ const REGISTER = gql`
 `;
 
 const RegisterView = ({location}: Props) => {
-  const redirectTo = location && location.state && location.state.redirectTo;
+  const navigateTo = location && location.state && location.state.navigateTo;
 
   const onRegister = () => {
-    navigate(redirectTo || '/');
+    navigate(navigateTo || '/');
   };
 
   return (
@@ -42,6 +42,7 @@ const RegisterView = ({location}: Props) => {
           {(register, {loading, error, data}) => {
             return (
               <RegisterForm
+                navigateTo={navigateTo}
                 register={register}
                 error={error}
                 loading={loading}

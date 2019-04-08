@@ -2,7 +2,7 @@ import React, {MouseEvent} from 'react';
 import {Query} from 'react-apollo';
 import styled from 'styled-components/macro';
 import Tile from '../components/Tile';
-import {navigate, RouteComponentProps} from '@reach/router';
+import {navigate, RouteComponentProps, Redirect} from '@reach/router';
 import OrderItems from '../components/OrderItems';
 import {GET_ACTIVE_ORDER} from './Order';
 
@@ -25,6 +25,9 @@ const CheckOut = (_: Props) => {
         if (error) return `Error! ${error.message}`;
 
         const activeOrder = data.activeOrder;
+
+        if (!data.isLoggedIn || activeOrder.restaurant.id === -1)
+          return <Redirect to="/" noThrow />;
 
         return (
           <Page heading="Checkout" onClose={() => window.history.back()}>

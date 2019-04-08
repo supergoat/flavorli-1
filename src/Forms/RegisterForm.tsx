@@ -16,6 +16,7 @@ interface Props extends RouteComponentProps {
   >;
   loading: boolean;
   error: ApolloError | undefined;
+  navigateTo: string;
 }
 const RegisterForm = ({register, loading, error}: Props) => {
   const [name, setName] = useState('');
@@ -148,7 +149,11 @@ const RegisterForm = ({register, loading, error}: Props) => {
       </Separator>
       <SubHeading>Already have an account?</SubHeading>
 
-      <Button secondary width="100%" onClick={() => navigate('/login')}>
+      <Button
+        secondary
+        width="100%"
+        onClick={() => navigate('/login', {state: {navigateTo: '/checkout'}})}
+      >
         Login
       </Button>
     </Page>

@@ -11,6 +11,7 @@ interface Props extends RouteComponentProps {}
 
 export const GET_ACTIVE_ORDER = gql`
   query GetActiveOrder {
+    isLoggedIn @client
     activeOrder @client {
       restaurant {
         id

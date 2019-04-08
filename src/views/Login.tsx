@@ -17,10 +17,10 @@ const LOG_IN = gql`
 `;
 
 const Login = ({location}: Props) => {
-  const redirectTo = location && location.state && location.state.redirectTo;
+  const navigateTo = location && location.state && location.state.navigateTo;
 
   const onLogin = () => {
-    navigate(redirectTo || '/');
+    navigate(navigateTo || '/');
   };
 
   return (
