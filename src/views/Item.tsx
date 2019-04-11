@@ -5,10 +5,11 @@ import {Mutation} from 'react-apollo';
 import gql from 'graphql-tag';
 import SelectOptions from '../components/SelectOptions';
 import SelectQuantity from '../components/SelectQuantity';
-import AddToOrder from '../components/AddToOrder';
+import Button from '../ui/Button';
+
 import Modal from '../templates/ModalPage';
 import Dietary from '../components/Dietary';
-import Button from '../ui/Button';
+import StartNewOrder from '../components/StartNewOrder';
 
 export const OptionsContext = createContext<{
   selected: {[name: string]: string[]};
@@ -108,12 +109,8 @@ const Item = ({
     <Mutation
       mutation={ADD_TO_ORDER}
       variables={{
-        restaurant: {
-          __typename: 'Restaurant',
-          ...restaurant,
-        },
+        restaurant,
         orderItem: {
-          __typename: 'OrderItem',
           name: item.name,
           price: state.price,
           selections,
@@ -125,44 +122,26 @@ const Item = ({
         if (loading) return <p>Loading...</p>;
         if (error) return <p>An error occurred</p>;
 
+        const onCancel = () => {
+          setShowConfirmation(false);
+        };
+
+        const onStartNewOrder = () => {
+          setShowConfirmation(false);
+          addToOrder();
+          onCloseItem();
+        };
+
         return (
           <Modal>
             <ItemWrapper>
               {showConfirmation ? (
-                <>
-                  <h1>Start new order?</h1>
-
-                  <ConfirmationMessage>
-                    Are you sure you want to start a new order with
-                    <span>{restaurant.name}</span>?
-                    <br />
-                    Your order with
-                    <span>{activeOrderRestaurant.name}</span> will be lost
-                  </ConfirmationMessage>
-
-                  <ConfirmationButtons>
-                    <Button
-                      width={'25%'}
-                      secondary
-                      onClick={() => {
-                        setShowConfirmation(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-
-                    <Button
-                      width={'70%'}
-                      onClick={() => {
-                        setShowConfirmation(false);
-                        addToOrder();
-                        onCloseItem();
-                      }}
-                    >
-                      Start new order
-                    </Button>
-                  </ConfirmationButtons>
-                </>
+                <StartNewOrder
+                  activeRestaurant={activeOrderRestaurant}
+                  newRestaurant={restaurant}
+                  onCancel={onCancel}
+                  onStartNewOrder={onStartNewOrder}
+                />
               ) : (
                 <OptionsContext.Provider
                   value={{selected: state.options, default: item.options}}
@@ -178,21 +157,30 @@ const Item = ({
                   <Description>{item.description}</Description>
                   <SelectOptions onSelection={onSelection} />
                   <SelectQuantity qty={qty} setQty={setQty} />
-                  <AddToOrder
-                    price={state.price * qty}
-                    onCancel={onCloseItem}
-                    onClick={() => {
-                      if (
-                        activeOrderRestaurant.id !== -1 &&
-                        activeOrderRestaurant.id !== restaurant.id
-                      ) {
-                        setShowConfirmation(true);
-                        return;
-                      }
-                      addToOrder();
-                      onCloseItem();
-                    }}
-                  />
+                  <AddToOrderWrapper>
+                    <CancelButton
+                      secondary
+                      onClick={onCloseItem}
+                      aria-label="Back to restaurant view"
+                    />
+
+                    <ConfirmButton
+                      onClick={() => {
+                        if (
+                          activeOrderRestaurant.id !== -1 &&
+                          activeOrderRestaurant.id !== restaurant.id
+                        ) {
+                          setShowConfirmation(true);
+                          return;
+                        }
+                        addToOrder();
+                        onCloseItem();
+                      }}
+                      aria-label="Add item to order"
+                    >
+                      Add for £{(state.price * qty).toFixed(2)}
+                    </ConfirmButton>
+                  </AddToOrderWrapper>
                 </OptionsContext.Provider>
               )}
             </ItemWrapper>
@@ -285,23 +273,6 @@ const ItemWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const ConfirmationMessage = styled.p`
-  margin: 15px 0 20px;
-  line-height: 1.5em;
-  color: var(--osloGrey);
-
-  span {
-    margin: 0 5px;
-    font-size: 16px;
-    color: var(--oxfordBlue);
-  }
-`;
-
-const ConfirmationButtons = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 const Image = styled.img`
   width: 100%;
   height: 100%;
@@ -319,4 +290,20 @@ const Description = styled.p`
   font-size: 18px;
   color: var(--osloGrey);
   font-weight: 300;
+`;
+
+const AddToOrderWrapper = styled.div`
+  display: flex;
+`;
+
+const CancelButton = styled(Button)`
+  flex: 0.3;
+  margin-right: 15px;
+  &:before {
+    content: 'Cancel';
+  }
+`;
+
+const ConfirmButton = styled(Button)`
+  flex: 0.7;
 `;

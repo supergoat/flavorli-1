@@ -59,16 +59,26 @@ export const resolvers = {
       const isSameRestaurant = activeOrder.restaurant.id === restaurant.id;
       const id = idIterator.next().value;
 
+      const item = {
+        __typename: 'OrderItem',
+        id,
+        ...orderItem,
+      };
+
+      const items = isSameRestaurant ? [...activeOrder.items, item] : [item];
+      const total = isSameRestaurant
+        ? activeOrder.total + orderItem.price
+        : orderItem.price;
+
       const data = {
         activeOrder: {
           __typename: 'ActiveOrder',
-          restaurant: restaurant,
-          items: isSameRestaurant
-            ? [...activeOrder.items, {id, ...orderItem}]
-            : [{id, ...orderItem}],
-          total: isSameRestaurant
-            ? activeOrder.total + orderItem.price
-            : orderItem.price,
+          restaurant: {
+            __typename: 'Restaurant',
+            ...restaurant,
+          },
+          items,
+          total,
         },
       };
 
