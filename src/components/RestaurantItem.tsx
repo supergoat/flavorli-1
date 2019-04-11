@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import {navigate} from '@reach/router';
+import Tags from './Tags';
 
 interface Props {
   restaurant: {
@@ -19,14 +20,7 @@ const RestaurantItem = ({restaurant}: Props) => {
     >
       <Name>{name}</Name>
       <Description>{description}</Description>
-      {tags.length > 0 && (
-        <Tags>
-          <TagIcon src={require('../assets/icons/tag.svg')} alt="tag icon" />
-          {tags.map(tag => (
-            <li key={tag}>{tag}</li>
-          ))}
-        </Tags>
-      )}
+      <Tags tags={tags} margin="0 0 10px" />
       {image && (
         <Image src={require(`../assets/restaurants/${image}`)} alt="" />
       )}
@@ -56,32 +50,6 @@ const Description = styled.p`
   color: var(--osloGrey);
   margin-bottom: 5px;
   text-transform: uppercase;
-`;
-
-const Tags = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-
-  li {
-    font-size: 10px;
-    text-transform: uppercase;
-    margin-right: 5px;
-  }
-
-  li:after {
-    content: ',';
-  }
-
-  li:last-of-type:after {
-    content: '';
-  }
-`;
-
-const TagIcon = styled.img`
-  width: 15px;
-  height: 15px;
-  margin-right: 5px;
 `;
 
 const Image = styled.img`
