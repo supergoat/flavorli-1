@@ -12,12 +12,22 @@ interface Props {
       price: number;
     },
   ) => void;
+  options: {
+    name: string;
+    freeSelections: number;
+    description?: string;
+    selections: {
+      name: string;
+      price: number;
+      selected?: boolean;
+    }[];
+  }[];
+  selected: {[name: string]: string[]};
 }
-const SelectOptions = ({onSelection}: Props) => {
-  const options = useContext(OptionsContext);
+const SelectOptions = ({onSelection, options, selected}: Props) => {
   return (
     <>
-      {options.default.map(option => (
+      {options.map(option => (
         <Fragment key={option.name}>
           <Name>{option.name}</Name>
           {option.description && (
@@ -28,6 +38,7 @@ const SelectOptions = ({onSelection}: Props) => {
             {option.selections.map((selection: any) => (
               <Selection
                 key={selection.name}
+                selected={selected}
                 freeSelections={option.freeSelections}
                 optionName={option.name}
                 selection={selection}

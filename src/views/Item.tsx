@@ -13,19 +13,8 @@ import StartNewOrder from '../components/StartNewOrder';
 
 export const OptionsContext = createContext<{
   selected: {[name: string]: string[]};
-  default: {
-    name: string;
-    freeSelections: number;
-    description?: string;
-    selections: {
-      name: string;
-      price: number;
-      selected?: boolean;
-    }[];
-  }[];
 }>({
   selected: {},
-  default: [],
 });
 
 interface ItemType {
@@ -143,9 +132,7 @@ const Item = ({
                   onStartNewOrder={onStartNewOrder}
                 />
               ) : (
-                <OptionsContext.Provider
-                  value={{selected: state.options, default: item.options}}
-                >
+                <>
                   {item.image && (
                     <Image
                       src={require(`../assets/items/${item.image}`)}
@@ -155,7 +142,11 @@ const Item = ({
                   <Name>{item.name}</Name>
                   <Dietary dietary={item.dietary} />
                   <Description>{item.description}</Description>
-                  <SelectOptions onSelection={onSelection} />
+                  <SelectOptions
+                    selected={state.options}
+                    onSelection={onSelection}
+                    options={item.options}
+                  />
                   <SelectQuantity qty={qty} setQty={setQty} />
                   <AddToOrderWrapper>
                     <CancelButton
@@ -181,7 +172,7 @@ const Item = ({
                       Add for £{(state.price * qty).toFixed(2)}
                     </ConfirmButton>
                   </AddToOrderWrapper>
-                </OptionsContext.Provider>
+                </>
               )}
             </ItemWrapper>
           </Modal>

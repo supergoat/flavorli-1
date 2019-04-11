@@ -11,14 +11,15 @@ interface Props {
     price: number;
   };
   onChange: () => void;
+  selected: {[name: string]: string[]};
 }
 const Selection = ({
   freeSelections,
   optionName,
   selection,
   onChange,
+  selected,
 }: Props) => {
-  const {selected} = useContext(OptionsContext);
   const optionSelections = selected[optionName];
 
   const isSelected = optionSelections.includes(selection.name);
