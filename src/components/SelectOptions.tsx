@@ -1,16 +1,9 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, Dispatch} from 'react';
 import Selection from './Selection';
 import styled from 'styled-components/macro';
 
 interface Props {
-  onSelection: (
-    freeSelections: number,
-    optionName: string,
-    selection: {
-      name: string;
-      price: number;
-    },
-  ) => void;
+  dispatch: Dispatch<any>;
   options: {
     name: string;
     freeSelections: number;
@@ -22,8 +15,24 @@ interface Props {
     }[];
   }[];
   selected: {[name: string]: string[]};
+  state: any;
 }
-const SelectOptions = ({onSelection, options, selected}: Props) => {
+const SelectOptions = ({options, selected, state, dispatch}: Props) => {
+  const onSelection = (
+    freeSelections: number,
+    optionName: string,
+    selection: {
+      name: string;
+      price: number;
+    },
+  ) => {
+    const optionSelections = state.options[optionName];
+    const isSelected = optionSelections.includes(selection.name);
+    const type = !isSelected ? 'ADD_SELECTION' : 'REMOVE_SELECTION';
+
+    dispatch({type, freeSelections, optionName, ...selection});
+  };
+
   return (
     <>
       {options.map(option => (

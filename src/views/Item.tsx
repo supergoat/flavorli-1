@@ -65,21 +65,6 @@ const Item = ({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [qty, setQty] = useState(1);
 
-  const onSelection = (
-    freeSelections: number,
-    optionName: string,
-    selection: {
-      name: string;
-      price: number;
-    },
-  ) => {
-    const optionSelections = state.options[optionName];
-    const isSelected = optionSelections.includes(selection.name);
-    const type = !isSelected ? 'ADD_SELECTION' : 'REMOVE_SELECTION';
-
-    dispatch({type, freeSelections, optionName, ...selection});
-  };
-
   let selections: string[] = [];
 
   Object.values(state.options).forEach((option: any) => {
@@ -137,9 +122,10 @@ const Item = ({
                   <Dietary dietary={item.dietary} />
                   <Description>{item.description}</Description>
                   <SelectOptions
+                    dispatch={dispatch}
                     selected={state.options}
-                    onSelection={onSelection}
                     options={item.options}
+                    state={state}
                   />
                   <SelectQuantity qty={qty} setQty={setQty} />
                   <AddToOrderWrapper>
