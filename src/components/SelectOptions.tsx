@@ -1,7 +1,6 @@
-import React, {useContext, Fragment} from 'react';
+import React, {Fragment} from 'react';
 import Selection from './Selection';
 import styled from 'styled-components/macro';
-import {OptionsContext} from '../views/Item';
 
 interface Props {
   onSelection: (

@@ -1,4 +1,4 @@
-import React, {useState, useReducer, createContext} from 'react';
+import React, {useState, useReducer} from 'react';
 import {RouteComponentProps} from '@reach/router';
 import styled from 'styled-components/macro';
 import {Mutation} from 'react-apollo';
@@ -10,12 +10,6 @@ import Button from '../ui/Button';
 import Modal from '../templates/ModalPage';
 import Dietary from '../components/Dietary';
 import StartNewOrder from '../components/StartNewOrder';
-
-export const OptionsContext = createContext<{
-  selected: {[name: string]: string[]};
-}>({
-  selected: {},
-});
 
 interface ItemType {
   id: number;
