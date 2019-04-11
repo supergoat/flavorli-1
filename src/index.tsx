@@ -6,7 +6,8 @@ import {HttpLink} from 'apollo-link-http';
 import {onError} from 'apollo-link-error';
 import {ApolloLink} from 'apollo-link';
 import {ApolloProvider} from 'react-apollo';
-import {typeDefs, resolvers} from './resolvers';
+import resolvers from './resolvers';
+import typeDefs from './typeDefs';
 
 import './index.css';
 import App from './App';

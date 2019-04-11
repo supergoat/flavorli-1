@@ -1,21 +1,4 @@
-import gql from 'graphql-tag';
-import {GET_ACTIVE_ORDER} from './views/Order';
-
-export const typeDefs = gql`
-  extend type Query {
-    activeOrder: AcriveOrder!
-  }
-
-  type AcriveOrder {
-    restaurant: Restaurant
-    items: [OrderItem]!
-    total: Float
-  }
-
-  extend type Mutation {
-    addToOrder(restaurant: Restaurant, orderItem: OrderItem!): AcriveOrder!
-  }
-`;
+import {GET_ACTIVE_ORDER} from '../views/Order';
 
 type RestaurantType = {
   id: number;
@@ -42,7 +25,7 @@ function* generateId() {
 }
 const idIterator = generateId();
 
-export const resolvers = {
+const resolvers = {
   Mutation: {
     addToOrder: (
       _: any,
@@ -92,3 +75,5 @@ export const resolvers = {
     },
   },
 };
+
+export default resolvers;
