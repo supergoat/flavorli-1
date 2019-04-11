@@ -45,15 +45,15 @@ interface Props {
   sections: Section[];
 }
 const Menu = ({sections, restaurant, activeOrderRestaurant}: Props) => {
-  const [itemId, setItemId] = useState<number | undefined>(undefined);
+  const [item, setItem] = useState<ItemType | undefined>(undefined);
 
   useEffect(() => {
-    if (itemId) {
+    if (item) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
-  }, [itemId]);
+  }, [item]);
 
   return (
     <MenuWrapper>
@@ -63,22 +63,24 @@ const Menu = ({sections, restaurant, activeOrderRestaurant}: Props) => {
             <CategoryName>{section.name}</CategoryName>
 
             {section.items.map(item => (
-              <Fragment key={item.id}>
-                <MenuItem item={item} onClick={() => setItemId(item.id)} />
-
-                {item && itemId === item.id && (
-                  <Item
-                    item={item}
-                    onCloseItem={() => setItemId(undefined)}
-                    restaurant={restaurant}
-                    activeOrderRestaurant={activeOrderRestaurant}
-                  />
-                )}
-              </Fragment>
+              <MenuItem
+                key={item.id}
+                item={item}
+                onClick={() => setItem(item)}
+              />
             ))}
           </Fragment>
         );
       })}
+
+      {item && (
+        <Item
+          item={item}
+          onCloseItem={() => setItem(undefined)}
+          restaurant={restaurant}
+          activeOrderRestaurant={activeOrderRestaurant}
+        />
+      )}
     </MenuWrapper>
   );
 };
