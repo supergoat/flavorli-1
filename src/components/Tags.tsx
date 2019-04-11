@@ -5,12 +5,13 @@ import InfoItem from './InfoItem';
 
 interface Props {
   tags: string[];
+  margin?: string;
 }
-const Tags = ({tags}: Props) => {
+const Tags = ({tags, margin}: Props) => {
   return (
     <>
       {tags.length > 0 && (
-        <InfoItem icon={require('../assets/icons/tag.svg')}>
+        <InfoItem icon={require('../assets/icons/tag.svg')} margin={margin}>
           {tags.map(tag => (
             <Tag key={tag}>{tag}</Tag>
           ))}

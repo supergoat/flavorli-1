@@ -4,10 +4,11 @@ import styled from 'styled-components/macro';
 interface Props {
   icon: string;
   children: any;
+  margin?: string;
 }
-const InfoItem = ({icon, children}: Props) => {
+const InfoItem = ({icon, children, margin}: Props) => {
   return (
-    <InfoItemWrapper>
+    <InfoItemWrapper margin={margin}>
       <Icon src={icon} />
 
       {children}
@@ -17,12 +18,15 @@ const InfoItem = ({icon, children}: Props) => {
 
 export default InfoItem;
 
+interface InfoItemWrapperProps {
+  margin?: string;
+}
+
 const InfoItemWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding: 5px 0;
-
+  margin: ${(props: InfoItemWrapperProps) => props.margin};
   p,
   a {
     font-size: 11px;

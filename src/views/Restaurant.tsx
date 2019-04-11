@@ -46,7 +46,7 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
             <Info>
               <Name>{name}</Name>
               <Description>{description}</Description>
-              <Tags tags={tags} />
+              <Tags tags={tags} margin="5px 0" />
               <OpeningTimes />
               <Tel tel={tel} />
               <Address address={address} />

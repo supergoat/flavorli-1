@@ -24,7 +24,7 @@ interface ItemType {
 
 interface Section {
   name: string;
-  items: [ItemType];
+  items: ItemType[];
 }
 interface Props {
   activeOrderRestaurant: {

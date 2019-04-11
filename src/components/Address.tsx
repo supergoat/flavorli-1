@@ -12,7 +12,7 @@ interface Props {
 
 const Address = ({address}: Props) => {
   return (
-    <InfoItem icon={require('../assets/icons/location.svg')}>
+    <InfoItem icon={require('../assets/icons/location.svg')} margin="5px 0">
       <p>
         {address.number} {address.streetName}, {address.city},{' '}
         {address.postalCode}
