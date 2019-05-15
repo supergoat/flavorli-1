@@ -2,17 +2,11 @@ import React from 'react';
 import styled from 'styled-components/macro';
 
 interface Props {
-  image?: string;
+  image: string;
   name: string;
 }
 const RestaurantImage = ({image, name}: Props) => {
-  return (
-    <>
-      {image && (
-        <Image src={require(`../assets/restaurants/${image}`)} alt={name} />
-      )}
-    </>
-  );
+  return <>{image && <Image src={image} alt={name} />}</>;
 };
 export default RestaurantImage;
 

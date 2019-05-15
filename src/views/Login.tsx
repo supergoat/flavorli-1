@@ -28,7 +28,8 @@ const Login = ({location}: Props) => {
       {client => (
         <Mutation
           mutation={LOG_IN}
-          onCompleted={({token}) => {
+          onCompleted={({login}) => {
+            const {token} = login;
             localStorage.setItem('flavorli-token', token);
             client.writeData({data: {isLoggedIn: true}});
             onLogin();

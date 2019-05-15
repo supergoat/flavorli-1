@@ -3,46 +3,40 @@ import styled from 'styled-components/macro';
 import Select from '../ui/Select';
 
 interface Props {
-  freeSelections: number;
   optionName: string;
-  selection: {
+  min: string;
+  max: string;
+  item: {
     name: string;
     price: number;
   };
   onChange: () => void;
   selected: {[name: string]: string[]};
 }
-const Selection = ({
-  freeSelections,
+const OptionItem = ({
   optionName,
-  selection,
+  min,
+  max,
+  item,
   onChange,
   selected,
 }: Props) => {
   const optionSelections = selected[optionName];
-
-  const isSelected = optionSelections.includes(selection.name);
-  const isIncluded = selection.price === 0;
-  const hasFreeSelections = freeSelections > optionSelections.length;
-  const doesNotHaveFreeSelections = freeSelections < optionSelections.length;
-  const isFreeSelection = hasFreeSelections && !isSelected;
-  const isNotFreeSelection =
-    (!isSelected && !hasFreeSelections) || doesNotHaveFreeSelections;
-
-  const showPrice = !isIncluded && !isFreeSelection && isNotFreeSelection;
+  const isSelected = optionSelections.includes(item.name);
+  const showPrice = item.price !== 0;
 
   return (
     <Select
       onChange={onChange}
       checked={isSelected || false}
       name={optionName}
-      type={selection.price > 0 ? 'checkbox' : 'radio'}
+      type={min === '1' && max === '1' ? 'radio' : 'checkbox'}
     >
       <div>
-        <Name>{selection.name}</Name>
+        <Name>{item.name}</Name>
         {showPrice && (
           <Price isSelected={isSelected}>
-            {isSelected ? '-' : '+'} £{selection.price.toFixed(2)}
+            {isSelected ? '-' : '+'} £{item.price}
           </Price>
         )}
       </div>
@@ -50,7 +44,7 @@ const Selection = ({
   );
 };
 
-export default Selection;
+export default OptionItem;
 
 interface PriceProps {
   isSelected: boolean;

@@ -21,9 +21,7 @@ const RestaurantItem = ({restaurant}: Props) => {
       <Name>{name}</Name>
       <Description>{description}</Description>
       <Tags tags={tags} margin="0 0 10px" />
-      {image && (
-        <Image src={require(`../assets/restaurants/${image}`)} alt="" />
-      )}
+      {image && <Image src={image} alt="" />}
     </RestaurantItemWrapper>
   );
 };

@@ -33,14 +33,16 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
           description,
           address,
           tags,
-          menu,
+          menus,
         } = data.restaurant;
+
+        const menu = menus[0];
 
         return (
           <>
             <Cover>
               <RestaurantImage image={image} name={name} />
-              <RestaurantLogo logo={logo} />
+              <RestaurantLogo logo={logo} name={name} />
             </Cover>
 
             <Info>
@@ -56,7 +58,7 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
 
             <Menu
               restaurant={{...data.restaurant}}
-              sections={menu.sections}
+              categories={menu.categories}
               activeOrderRestaurant={activeOrderRestaurant}
             />
             <Footer />
@@ -95,8 +97,8 @@ const GET_RESTAURANT = gql`
       }
       tel
       tags
-      menu {
-        sections {
+      menus {
+        categories {
           name
           items {
             id
@@ -107,12 +109,11 @@ const GET_RESTAURANT = gql`
             dietary
             options {
               name
-              freeSelections
-              description
-              selections {
+              min
+              max
+              items {
                 name
                 price
-                selected
               }
             }
           }

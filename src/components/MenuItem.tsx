@@ -17,17 +17,15 @@ const MenuItem = ({item, onClick}: Props) => {
 
   return (
     <Item onClick={onClick}>
-      <Name>{name}</Name>
+      <div>
+        <Name>{name}</Name>
 
-      <Price>
-        &pound;
-        {price.toFixed(2)}
-      </Price>
+        <Price>£{price}</Price>
 
-      <Dietary dietary={dietary} />
-      <Description>{description}</Description>
-
-      {image && <Image src={require(`../assets/items/${image}`)} alt={name} />}
+        <Dietary dietary={dietary} />
+        <Description>{description}</Description>
+      </div>
+      {image && <Image src={image} alt={name} />}
     </Item>
   );
 };
@@ -39,6 +37,7 @@ export default MenuItem;
 /* Styled Components
 ============================================================================= */
 const Item = styled.div`
+  display: flex;
   padding: 20px 0;
   cursor: pointer;
   position: relative;
@@ -62,9 +61,10 @@ const Description = styled.p`
 `;
 
 const Image = styled.img`
-  width: 100%;
+  align-self: flex-start;
+  width: 35%;
   border-radius: 3px;
-  object-fit: cover;
+  margin-left: 5px;
 `;
 
 const Price = styled.h4`

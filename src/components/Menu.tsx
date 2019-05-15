@@ -12,12 +12,11 @@ interface ItemType {
   dietary?: string[];
   options: {
     name: string;
-    freeSelections: number;
-    description?: string;
-    selections: {
+    min: string;
+    max: string;
+    items: {
       name: string;
       price: number;
-      selected?: boolean;
     }[];
   }[];
 }
@@ -42,9 +41,9 @@ interface Props {
     };
     tel: string;
   };
-  sections: Section[];
+  categories: Section[];
 }
-const Menu = ({sections, restaurant, activeOrderRestaurant}: Props) => {
+const Menu = ({categories, restaurant, activeOrderRestaurant}: Props) => {
   const [item, setItem] = useState<ItemType | undefined>(undefined);
 
   useEffect(() => {
@@ -57,7 +56,7 @@ const Menu = ({sections, restaurant, activeOrderRestaurant}: Props) => {
 
   return (
     <MenuWrapper>
-      {sections.map((section: Section) => {
+      {categories.map((section: Section) => {
         return (
           <Fragment key={section.name}>
             <CategoryName>{section.name}</CategoryName>

@@ -32,7 +32,12 @@ const resolvers = {
       {
         restaurant,
         orderItem,
-      }: {restaurant: RestaurantType; orderItem: OrderItemType},
+        force,
+      }: {
+        restaurant: RestaurantType;
+        orderItem: OrderItemType;
+        force?: boolean;
+      },
       {cache}: {cache: any},
     ) => {
       const {activeOrder} = cache.readQuery({
@@ -40,6 +45,13 @@ const resolvers = {
       });
 
       const isSameRestaurant = activeOrder.restaurant.id === restaurant.id;
+
+      if (activeOrder.restaurant.id !== -1 && !isSameRestaurant && !force) {
+        return {
+          error: 'Cannot add order item from two different restaurants',
+        };
+      }
+
       const id = idIterator.next().value;
 
       const item = {

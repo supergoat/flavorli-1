@@ -2,17 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface Props {
-  logo?: string;
+  logo: string;
+  name: string;
 }
 
-const RestaurantLogo = ({logo}: Props) => {
-  return (
-    <>
-      {logo && (
-        <RestaurantLogoWrapper src={require(`../assets/logos/${logo}`)} />
-      )}
-    </>
-  );
+const RestaurantLogo = ({logo, name}: Props) => {
+  return <>{logo && <RestaurantLogoWrapper src={logo} alt={name} />}</>;
 };
 
 export default RestaurantLogo;

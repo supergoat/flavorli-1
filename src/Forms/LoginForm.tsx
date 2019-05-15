@@ -59,9 +59,6 @@ const LoginForm = ({login, loading, error}: Props) => {
           htmlFor="email"
         >
           Email {errors.has('email') && '- required'}
-          {error &&
-            error.message.includes('email') &&
-            ' - has already been taken'}
         </DetailsLabel>
         <DetailsInput
           hasError={

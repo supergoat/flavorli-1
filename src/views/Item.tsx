@@ -20,19 +20,23 @@ interface ItemType {
   dietary?: string[];
   options: {
     name: string;
-    freeSelections: number;
-    description?: string;
-    selections: {
+    min: string;
+    max: string;
+    items: {
       name: string;
       price: number;
-      selected?: boolean;
     }[];
   }[];
 }
 
 const ADD_TO_ORDER = gql`
-  mutation addToOrder($restaurant: Restaurant, $orderItem: OrderItem!) {
-    addToOrder(restaurant: $restaurant, orderItem: $orderItem) @client
+  mutation addToOrder(
+    $restaurant: Restaurant
+    $orderItem: OrderItem!
+    $force: Boolean
+  ) {
+    addToOrder(restaurant: $restaurant, orderItem: $orderItem, force: $force)
+      @client
   }
 `;
 
@@ -74,18 +78,7 @@ const Item = ({
   });
 
   return (
-    <Mutation
-      mutation={ADD_TO_ORDER}
-      variables={{
-        restaurant,
-        orderItem: {
-          name: item.name,
-          price: state.price,
-          selections,
-          quantity: qty,
-        },
-      }}
-    >
+    <Mutation mutation={ADD_TO_ORDER}>
       {(addToOrder, {loading, error}) => {
         if (loading) return <p>Loading...</p>;
         if (error) return <p>An error occurred</p>;
@@ -96,8 +89,39 @@ const Item = ({
 
         const onStartNewOrder = () => {
           setShowConfirmation(false);
-          addToOrder();
+          addToOrder({
+            variables: {
+              force: true,
+              restaurant,
+              orderItem: {
+                name: item.name,
+                price: state.price,
+                selections,
+                quantity: qty,
+              },
+            },
+          });
+
           onCloseItem();
+        };
+
+        const onAddToOrder = async () => {
+          const result: any = await addToOrder({
+            variables: {
+              restaurant,
+              orderItem: {
+                name: item.name,
+                price: state.price,
+                selections,
+                quantity: qty,
+              },
+              force: false,
+            },
+          });
+
+          if (!result.data.addToOrder.error) return onCloseItem();
+
+          setShowConfirmation(true);
         };
 
         return (
@@ -112,12 +136,7 @@ const Item = ({
                 />
               ) : (
                 <>
-                  {item.image && (
-                    <Image
-                      src={require(`../assets/items/${item.image}`)}
-                      alt={item.name}
-                    />
-                  )}
+                  {item.image && <Image src={item.image} alt={item.name} />}
                   <Name>{item.name}</Name>
                   <Dietary dietary={item.dietary} />
                   <Description>{item.description}</Description>
@@ -136,17 +155,7 @@ const Item = ({
                     />
 
                     <ConfirmButton
-                      onClick={() => {
-                        if (
-                          activeOrderRestaurant.id !== -1 &&
-                          activeOrderRestaurant.id !== restaurant.id
-                        ) {
-                          setShowConfirmation(true);
-                          return;
-                        }
-                        addToOrder();
-                        onCloseItem();
-                      }}
+                      onClick={onAddToOrder}
                       aria-label="Add item to order"
                     >
                       Add for £{(state.price * qty).toFixed(2)}
@@ -174,11 +183,6 @@ const initReducer = (item: ItemType) => {
   item.options.forEach(option => {
     options[option.name] = [];
 
-    option.selections.forEach(
-      selection =>
-        selection.selected && options[option.name].push(selection.name),
-    );
-
     return options[option.name];
   });
 
@@ -192,19 +196,15 @@ const itemReducer = (state: any, action: any) => {
   const options = optionsReducer(state.options, action);
   switch (action.type) {
     case 'ADD_SELECTION': {
-      const isFreeSelection =
-        action.freeSelections >= options[action.optionName].length;
       return {
         options,
-        price: isFreeSelection ? state.price : state.price + action.price,
+        price: Number(state.price) + Number(action.price),
       };
     }
     case 'REMOVE_SELECTION': {
-      const isFreeSelection =
-        action.freeSelections > options[action.optionName].length;
       return {
         options,
-        price: isFreeSelection ? state.price : state.price - action.price,
+        price: Number(state.price) - Number(action.price),
       };
     }
     default:
@@ -219,10 +219,12 @@ const optionsReducer = (state: {[name: string]: string[]}, action: any) => {
       return {
         ...state,
         [action.optionName]:
-          action.price > 0 ? [...optionSelections, action.name] : [action.name],
+          action.min === '1' && action.max === '1'
+            ? [action.name]
+            : [...optionSelections, action.name],
       };
     case 'REMOVE_SELECTION':
-      if (action.price === 0) return state;
+      if (action.min === '1' && action.max === '1') return state;
       return {
         ...state,
         [action.optionName]: optionSelections.filter(c => c !== action.name),

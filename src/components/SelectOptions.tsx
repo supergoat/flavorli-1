@@ -1,17 +1,16 @@
 import React, {Fragment, Dispatch} from 'react';
-import Selection from './Selection';
+import OptionItem from './OptionItem';
 import styled from 'styled-components/macro';
 
 interface Props {
   dispatch: Dispatch<any>;
   options: {
     name: string;
-    freeSelections: number;
-    description?: string;
-    selections: {
+    min: string;
+    max: string;
+    items: {
       name: string;
       price: number;
-      selected?: boolean;
     }[];
   }[];
   selected: {[name: string]: string[]};
@@ -19,18 +18,28 @@ interface Props {
 }
 const SelectOptions = ({options, selected, state, dispatch}: Props) => {
   const onSelection = (
-    freeSelections: number,
     optionName: string,
-    selection: {
+    min: string,
+    max: string,
+    item: {
       name: string;
       price: number;
     },
   ) => {
-    const optionSelections = state.options[optionName];
-    const isSelected = optionSelections.includes(selection.name);
+    const optionItems = state.options[optionName];
+    const isSelected = optionItems.includes(item.name);
     const type = !isSelected ? 'ADD_SELECTION' : 'REMOVE_SELECTION';
 
-    dispatch({type, freeSelections, optionName, ...selection});
+    dispatch({type, optionName, min, max, ...item});
+  };
+
+  const getChoices = (min: any, max: any) => {
+    min = Number(min);
+    max = Number(max);
+    if (min === 1 && max === 1) return 'Choose One';
+
+    if (min > 0 && !max) return `Choose alteast ${min}`;
+    if (min > 0 && max > 0) return `Choose between ${min} and ${min}`;
   };
 
   return (
@@ -38,24 +47,23 @@ const SelectOptions = ({options, selected, state, dispatch}: Props) => {
       {options.map(option => (
         <Fragment key={option.name}>
           <Name>{option.name}</Name>
-          {option.description && (
-            <Description>{option.description}</Description>
-          )}
+          {getChoices(option.min, option.max)}
 
-          <Selections>
-            {option.selections.map((selection: any) => (
-              <Selection
-                key={selection.name}
+          <OptionItems>
+            {option.items.map((item: any) => (
+              <OptionItem
+                key={item.name}
                 selected={selected}
-                freeSelections={option.freeSelections}
                 optionName={option.name}
-                selection={selection}
+                min={option.min}
+                max={option.max}
+                item={item}
                 onChange={() =>
-                  onSelection(option.freeSelections, option.name, selection)
+                  onSelection(option.name, option.min, option.max, item)
                 }
               />
             ))}
-          </Selections>
+          </OptionItems>
         </Fragment>
       ))}
     </>
@@ -72,11 +80,6 @@ const Name = styled.h4`
   margin-top: 15px;
 `;
 
-const Description = styled.p`
-  margin: 5px 0;
-  color: var(--osloGrey);
-`;
-
-const Selections = styled.div`
+const OptionItems = styled.div`
   margin-top: 15px;
 `;
