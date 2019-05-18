@@ -26,12 +26,12 @@ const CheckOut = (_: Props) => {
 
         const activeOrder = data.activeOrder;
 
-        if (!data.isLoggedIn || activeOrder.restaurant.id === -1)
+        if (!data.isLoggedIn || activeOrder.restaurantId === -1)
           return <Redirect to="/" noThrow />;
 
         return (
           <Page heading="Checkout" onClose={() => window.history.back()}>
-            <RestaurantName>{activeOrder.restaurant.name}</RestaurantName>
+            <RestaurantName>{activeOrder.restaurantName}</RestaurantName>
             <Table>Table: 10</Table>
 
             <Tile

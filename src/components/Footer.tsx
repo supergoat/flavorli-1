@@ -9,9 +9,7 @@ export const GET_DATA = gql`
   query GetData {
     isLoggedIn @client
     activeOrder @client {
-      restaurant {
-        name
-      }
+      restaurantName
       items {
         id
       }

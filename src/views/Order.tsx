@@ -13,17 +13,8 @@ export const GET_ACTIVE_ORDER = gql`
   query GetActiveOrder {
     isLoggedIn @client
     activeOrder @client {
-      restaurant {
-        id
-        name
-        tel
-        address {
-          number
-          streetName
-          city
-          postalCode
-        }
-      }
+      restaurantId
+      restaurantName
       items {
         id
         name
@@ -55,7 +46,7 @@ const Order = (_: Props) => {
 
             <Total>
               <div>Total:</div>
-              <div>£{activeOrder.total.toFixed(2)}</div>
+              <div>£{Number(activeOrder.total).toFixed(2)}</div>
             </Total>
             <Button width="100%" onClick={() => navigate('/checkout')}>
               Checkout

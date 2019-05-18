@@ -31,12 +31,17 @@ interface ItemType {
 
 const ADD_TO_ORDER = gql`
   mutation addToOrder(
-    $restaurant: Restaurant
+    $restaurantId: String!
+    $restaurantName: String!
     $orderItem: OrderItem!
     $force: Boolean
   ) {
-    addToOrder(restaurant: $restaurant, orderItem: $orderItem, force: $force)
-      @client
+    addToOrder(
+      restaurantId: $restaurantId
+      restaurantName: $restaurantName
+      orderItem: $orderItem
+      force: $force
+    ) @client
   }
 `;
 
@@ -46,13 +51,6 @@ interface Props extends RouteComponentProps {
   restaurant: {
     id: number;
     name: string;
-    address: {
-      number: string;
-      streetName: string;
-      city: string;
-      postalCode: string;
-    };
-    tel: string;
   };
   activeOrderRestaurant: {
     id: number;
@@ -92,7 +90,8 @@ const Item = ({
           addToOrder({
             variables: {
               force: true,
-              restaurant,
+              restaurantId: restaurant.id,
+              restaurantName: restaurant.name,
               orderItem: {
                 name: item.name,
                 price: state.price,
@@ -108,7 +107,8 @@ const Item = ({
         const onAddToOrder = async () => {
           const result: any = await addToOrder({
             variables: {
-              restaurant,
+              restaurantId: restaurant.id,
+              restaurantName: restaurant.name,
               orderItem: {
                 name: item.name,
                 price: state.price,

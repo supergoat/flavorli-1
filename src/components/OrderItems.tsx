@@ -20,7 +20,7 @@ const OrderItems = ({items}: Props) => {
           <OrderItemInfo>
             <Quantity>{orderItem.quantity}</Quantity>
             <Name>{orderItem.name}</Name>
-            <Price>{orderItem.price.toFixed(2)}</Price>
+            <Price>{Number(orderItem.price).toFixed(2)}</Price>
           </OrderItemInfo>
 
           <Selections>

@@ -11,8 +11,6 @@ import Tags from '../components/Tags';
 import OpeningTimes from '../components/OpeningTimes';
 import Tel from '../components/Tel';
 import Address from '../components/Address';
-import RestaurantImage from '../components/RestaurantImage';
-import RestaurantLogo from '../components/RestaurantLogo';
 
 interface Props extends RouteComponentProps {
   restaurantId?: string;
@@ -24,7 +22,11 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const activeOrderRestaurant = data.activeOrder.restaurant;
+        const activeOrderRestaurant = {
+          id: data.activeOrder.restaurantId,
+          name: data.activeOrder.restaurantName,
+        };
+
         const {
           logo,
           image,
@@ -41,8 +43,8 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
         return (
           <>
             <Cover>
-              <RestaurantImage image={image} name={name} />
-              <RestaurantLogo logo={logo} name={name} />
+              {image && <RestaurantImage src={image} alt={name} />}
+              {logo && <RestaurantLogo src={logo} alt={name} />}
             </Cover>
 
             <Info>
@@ -78,10 +80,8 @@ export default RestaurantView;
 const GET_RESTAURANT = gql`
   query GetRestaurant($restaurantId: ID!) {
     activeOrder @client {
-      restaurant {
-        id
-        name
-      }
+      restaurantId
+      restaurantName
     }
     restaurant(where: {id: $restaurantId}) {
       id
@@ -127,6 +127,19 @@ const GET_RESTAURANT = gql`
 ============================================================================= */
 const Cover = styled.div`
   position: relative;
+`;
+
+const RestaurantImage = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+`;
+
+const RestaurantLogo = styled.img`
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+  height: 100px;
 `;
 
 const Name = styled.h1`

@@ -46,19 +46,8 @@ cache.writeData({
     isLoggedIn: !!localStorage.getItem('flavorli-token'),
     activeOrder: {
       __typename: 'ActiveOrder',
-      restaurant: {
-        __typename: 'Restaurant',
-        id: -1,
-        name: '',
-        tel: '',
-        address: {
-          __typename: 'Address',
-          number: '',
-          streetName: '',
-          city: '',
-          postalCode: '',
-        },
-      },
+      restaurantName: '',
+      restaurantId: -1,
       items: [],
       total: 0,
     },

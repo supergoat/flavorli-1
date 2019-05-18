@@ -1,17 +1,5 @@
 import {GET_ACTIVE_ORDER} from '../views/Order';
 
-type RestaurantType = {
-  id: number;
-  name: string;
-  address: {
-    number: string;
-    streetName: string;
-    city: string;
-    postalCode: string;
-  };
-  tel: string;
-};
-
 type OrderItemType = {
   name: string;
   selections: string[];
@@ -30,11 +18,13 @@ const resolvers = {
     addToOrder: (
       _: any,
       {
-        restaurant,
+        restaurantId,
+        restaurantName,
         orderItem,
         force,
       }: {
-        restaurant: RestaurantType;
+        restaurantId: string;
+        restaurantName: string;
         orderItem: OrderItemType;
         force?: boolean;
       },
@@ -44,9 +34,9 @@ const resolvers = {
         query: GET_ACTIVE_ORDER,
       });
 
-      const isSameRestaurant = activeOrder.restaurant.id === restaurant.id;
+      const isSameRestaurant = activeOrder.restaurantId === restaurantId;
 
-      if (activeOrder.restaurant.id !== -1 && !isSameRestaurant && !force) {
+      if (activeOrder.restaurantId !== -1 && !isSameRestaurant && !force) {
         return {
           error: 'Cannot add order item from two different restaurants',
         };
@@ -62,16 +52,14 @@ const resolvers = {
 
       const items = isSameRestaurant ? [...activeOrder.items, item] : [item];
       const total = isSameRestaurant
-        ? activeOrder.total + orderItem.price
+        ? Number(activeOrder.total) + Number(orderItem.price)
         : orderItem.price;
 
       const data = {
         activeOrder: {
           __typename: 'ActiveOrder',
-          restaurant: {
-            __typename: 'Restaurant',
-            ...restaurant,
-          },
+          restaurantId,
+          restaurantName,
           items,
           total,
         },
@@ -80,7 +68,8 @@ const resolvers = {
       cache.writeQuery({query: GET_ACTIVE_ORDER, data});
 
       return {
-        restaurant: data.activeOrder.restaurant,
+        restaurantId,
+        restaurantName,
         items: data.activeOrder.items,
         total: data.activeOrder.total,
       };
