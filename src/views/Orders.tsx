@@ -28,14 +28,15 @@ const Orders = (_: Props) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const orders = data.orders || [];
+        const orders = data.userOrders || [];
         return (
           <Page heading="Orders" showNavbar>
             {orders.map((order: OrderType) => (
               <Tile
+                margin="0 0 15px 0"
                 key={order.id}
                 onClick={() => navigate(`/receipt/${order.id}`)}
-                heading={`Total: £${order.total.toFixed(2)}`}
+                heading={`Total: £${order.total}`}
                 subHeading={<>{order.createdAt}</>}
                 cta={'View Order'}
               />

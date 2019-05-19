@@ -1,91 +1,128 @@
 import React from 'react';
+import gql from 'graphql-tag';
+import {Query} from 'react-apollo';
 import Button from '../ui/Button';
 import OrderItems from '../components/OrderItems';
 import styled from 'styled-components/macro';
 import {RouteComponentProps, navigate} from '@reach/router';
 import Page from '../templates/Page';
+import {formatDate} from '../_utils/formatDate';
+import {formatTime} from '../_utils/formatTime';
 
-const getOrder = () => {
-  return {
-    id: 1,
-    placedOn: '14 April 2019, 19:27',
-    deliveredOn: '',
-    restaurant: {
-      name: 'Nandos Dalston',
-      address: '148 Kingsland High Street, London, E82NS',
-      tel: '02079233555',
-    },
-    customer: {
-      name: 'Panayiotis Nicolaou',
-      address: '7 Fermain Court North, De Beauvoir Roard, London, N15SX',
-      tel: '07960778401',
-    },
-    items: [
-      {
-        id: '0',
-        name: 'Farfalle alla Boscaiola',
-        selections: ['Mushrooms', 'Pancetta', 'Parmesan Cheese'],
-        price: 6,
-        quantity: 1,
-      },
-      {
-        id: '1',
-        name: 'Farfalle alla Boscaiola',
-        selections: [],
-        price: 6,
-        quantity: 1,
-      },
-    ],
-    total: 10,
-  };
-};
+const GET_CUSTOMER_ORDER = gql`
+  query getCustomerOrder($orderId: ID!) {
+    getCustomerOrder(orderId: $orderId) {
+      id
+      updatedAt
+      createdAt
+      total
+      orderNo
+      status
+      customer {
+        name
+        tel
+      }
+      restaurant {
+        name
+        tel
+        address {
+          number
+          streetName
+          city
+          postalCode
+        }
+      }
+      items {
+        id
+        name
+        price
+        quantity
+        options {
+          id
+          name
+          items {
+            id
+            name
+            price
+          }
+        }
+      }
+    }
+  }
+`;
 
-interface Props extends RouteComponentProps {}
-const Receipt = (_: Props) => {
-  const order = getOrder();
+interface Props extends RouteComponentProps {
+  receiptId?: string;
+}
+const Receipt = ({receiptId}: Props) => {
   return (
-    <Page heading="Thank You!">
-      <OrderId>Order #{order.id}</OrderId>
+    <Query query={GET_CUSTOMER_ORDER} variables={{orderId: receiptId}}>
+      {({loading, error, data: {getCustomerOrder}}) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
 
-      <DeliveryDate>
-        <p>
-          Placed on: <span>{order.placedOn}</span>
-        </p>
-        <p>
-          Delivered on: <span>{order.deliveredOn || '--'}</span>
-        </p>
-      </DeliveryDate>
+        return (
+          <Page heading="Thank You!">
+            <OrderId>Order #{getCustomerOrder.orderNo}</OrderId>
 
-      <Details>
-        <span>From</span>
-        <FullName>{order.restaurant.name}</FullName>
-        <Address>{order.restaurant.address}</Address>
-        <Tel>{order.restaurant.tel}</Tel>
-      </Details>
+            <DeliveryDate>
+              <p>
+                Placed on:{' '}
+                <span>
+                  {formatTime(new Date(getCustomerOrder.createdAt))},{' '}
+                  {formatDate(new Date(getCustomerOrder.createdAt))}
+                </span>
+              </p>
+              <p>
+                Collected on:{' '}
+                {getCustomerOrder.status === 'Collected' ? (
+                  <span>
+                    {formatTime(new Date(getCustomerOrder.createdAt))},{' '}
+                    {formatDate(new Date(getCustomerOrder.createdAt))}
+                  </span>
+                ) : (
+                  '--'
+                )}
+              </p>
+            </DeliveryDate>
 
-      <Details>
-        <span>To</span>
-        <FullName>{order.customer.name}</FullName>
-        <Address>{order.customer.address}</Address>
-        <Tel>{order.customer.tel}</Tel>
-      </Details>
+            <Details>
+              <span>From</span>
+              <FullName>{getCustomerOrder.restaurant.name}</FullName>
+              <Address>
+                {getCustomerOrder.restaurant.address.number},{' '}
+                {getCustomerOrder.restaurant.address.streetName},{' '}
+                {getCustomerOrder.restaurant.address.city},{' '}
+                {getCustomerOrder.restaurant.address.postalCode}
+              </Address>
+              <Tel>{getCustomerOrder.restaurant.tel}</Tel>
+            </Details>
 
-      <ReceiptItems>
-        <OrderItems items={order.items} />
+            <Details>
+              <span>To</span>
+              <FullName>{getCustomerOrder.customer.name}</FullName>
+              <Tel>{getCustomerOrder.customer.tel}</Tel>
+            </Details>
 
-        <Total>
-          <div>Total:</div>
-          <div>£{order.total.toFixed(2)}</div>
-        </Total>
-      </ReceiptItems>
+            <ReceiptItems>
+              <OrderItems items={getCustomerOrder.items} />
 
-      <Button
-        width="100%"
-        onClick={() => navigate('/restaurants', {replace: true})}
-      >
-        Home
-      </Button>
-    </Page>
+              <Total>
+                <div>Total:</div>
+                <div>£{getCustomerOrder.total}</div>
+              </Total>
+            </ReceiptItems>
+
+            <Button
+              width="100%"
+              onClick={() => navigate('/restaurants', {replace: true})}
+            >
+              Home
+            </Button>
+          </Page>
+        );
+      }}
+    </Query>
   );
 };
 
@@ -103,7 +140,6 @@ const DeliveryDate = styled.div`
 
   p {
     display: block;
-    font-size: 0.83em;
     margin-bottom: 5px;
   }
 
@@ -117,6 +153,7 @@ const Details = styled.div`
   margin-bottom: 30px;
 
   span {
+    font-size: 16px;
     display: block;
     font-weight: 300;
     margin-bottom: 5px;
@@ -128,7 +165,6 @@ const FullName = styled.h5`
 `;
 
 const Address = styled.p`
-  font-size: 14px;
   font-weight: 300;
   width: 60%;
 `;

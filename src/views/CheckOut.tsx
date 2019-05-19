@@ -15,6 +15,23 @@ const CheckOut = (_: Props) => {
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    // const items = {
+    //   name: 'The Big Jack',
+    //   price: '8.00',
+    //   quantity: 1,
+    //   options: {
+    //     create: {
+    //       name: 'Make It a Filthy Box',
+    //       items: {
+    //         create: {
+    //           name: 'Bang Bang',
+    //           price: '2.00',
+    //         },
+    //       },
+    //     },
+    //   },
+    // };
+
     navigate('/order');
   };
 

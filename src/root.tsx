@@ -29,7 +29,7 @@ const Root = () => {
       <Details path="/details" />
       <Addresses path="/address" />
       <Orders path="/orders" />
-      <Receipt path="/receipt/:id" />
+      <Receipt path="/receipt/:receiptId" />
       <Restaurant path="/restaurant/:restaurantId/*" />
     </Router>
   );
