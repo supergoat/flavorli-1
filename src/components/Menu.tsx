@@ -3,48 +3,16 @@ import styled from 'styled-components/macro';
 import MenuItem from './MenuItem';
 import Item from '../views/Item';
 
-interface ItemType {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image?: string;
-  dietary?: string[];
-  options: {
-    name: string;
-    min: string;
-    max: string;
-    items: {
-      name: string;
-      price: number;
-    }[];
-  }[];
-}
-
 interface Section {
   name: string;
-  items: ItemType[];
+  items: any[];
 }
 interface Props {
-  activeOrderRestaurant: {
-    id: number;
-    name: string;
-  };
-  restaurant: {
-    id: number;
-    name: string;
-    address: {
-      number: string;
-      streetName: string;
-      city: string;
-      postalCode: string;
-    };
-    tel: string;
-  };
   categories: Section[];
+  restaurantId: string;
 }
-const Menu = ({categories, restaurant, activeOrderRestaurant}: Props) => {
-  const [item, setItem] = useState<ItemType | undefined>(undefined);
+const Menu = ({categories, restaurantId}: Props) => {
+  const [item, setItem] = useState<any>(null);
 
   useEffect(() => {
     if (item) {
@@ -75,9 +43,8 @@ const Menu = ({categories, restaurant, activeOrderRestaurant}: Props) => {
       {item && (
         <Item
           item={item}
-          onCloseItem={() => setItem(undefined)}
-          restaurant={restaurant}
-          activeOrderRestaurant={activeOrderRestaurant}
+          onCloseItem={() => setItem(null)}
+          restaurantId={restaurantId}
         />
       )}
     </MenuWrapper>

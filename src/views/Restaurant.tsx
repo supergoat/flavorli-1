@@ -22,11 +22,6 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const activeOrderRestaurant = {
-          id: data.activeOrder.restaurantId,
-          name: data.activeOrder.restaurantName,
-        };
-
         const {
           logo,
           image,
@@ -59,9 +54,8 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
             <Reviews />
 
             <Menu
-              restaurant={{...data.restaurant}}
               categories={menu.categories}
-              activeOrderRestaurant={activeOrderRestaurant}
+              restaurantId={menu.restaurant.id}
             />
             <Footer />
           </>
@@ -79,10 +73,6 @@ export default RestaurantView;
 ============================================================================= */
 const GET_RESTAURANT = gql`
   query GetRestaurant($restaurantId: ID!) {
-    activeOrder @client {
-      restaurantId
-      restaurantName
-    }
     restaurant(where: {id: $restaurantId}) {
       id
       name
@@ -108,15 +98,20 @@ const GET_RESTAURANT = gql`
             image
             dietary
             options {
+              id
               name
               min
               max
               items {
+                id
                 name
                 price
               }
             }
           }
+        }
+        restaurant {
+          id
         }
       }
     }

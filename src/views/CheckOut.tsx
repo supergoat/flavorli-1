@@ -48,13 +48,12 @@ const CheckOut = (_: Props) => {
 
         return (
           <Page heading="Checkout" onClose={() => window.history.back()}>
-            <RestaurantName>{activeOrder.restaurantName}</RestaurantName>
-            <Table>Table: 10</Table>
+            {/* <RestaurantName>{activeOrder.restaurantName}</RestaurantName> */}
 
             <Tile
               margin="20px 0"
               onClick={() => navigate('/order')}
-              heading={<OrderItems items={activeOrder.items} />}
+              heading={<OrderItems items={activeOrder.orderItems} />}
               subHeading={
                 <Total>
                   <div>Total:</div>
@@ -96,8 +95,6 @@ const RestaurantName = styled.h1`
   margin-bottom: 10px;
   text-transform: uppercase;
 `;
-
-const Table = styled.h3``;
 
 const Total = styled.div`
   display: flex;

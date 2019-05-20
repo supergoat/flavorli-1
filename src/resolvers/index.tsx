@@ -1,12 +1,5 @@
 import {GET_ACTIVE_ORDER} from '../views/Order';
 
-type OrderItemType = {
-  name: string;
-  selections: string[];
-  price: number;
-  quantity: number;
-};
-
 function* generateId() {
   let x = 0;
   while (true) yield x++;
@@ -19,14 +12,10 @@ const resolvers = {
       _: any,
       {
         restaurantId,
-        restaurantName,
         orderItem,
-        force,
       }: {
         restaurantId: string;
-        restaurantName: string;
-        orderItem: OrderItemType;
-        force?: boolean;
+        orderItem: any;
       },
       {cache}: {cache: any},
     ) => {
@@ -36,21 +25,29 @@ const resolvers = {
 
       const isSameRestaurant = activeOrder.restaurantId === restaurantId;
 
-      if (activeOrder.restaurantId !== -1 && !isSameRestaurant && !force) {
-        return {
-          error: 'Cannot add order item from two different restaurants',
-        };
-      }
-
       const id = idIterator.next().value;
 
       const item = {
         __typename: 'OrderItem',
         id,
-        ...orderItem,
+        name: orderItem.name,
+        price: orderItem.price,
+        total: orderItem.total,
+        quantity: orderItem.quantity,
+        options: orderItem.options.map((option: any) => ({
+          __typename: 'OrderItemOption',
+          name: option.name,
+          items: option.items.map((item: any) => ({
+            __typename: 'OrderItemOptionItem',
+            name: item.name,
+            price: item.price,
+          })),
+        })),
       };
 
-      const items = isSameRestaurant ? [...activeOrder.items, item] : [item];
+      const orderItems = isSameRestaurant
+        ? [...activeOrder.orderItems, item]
+        : [item];
       const total = isSameRestaurant
         ? Number(activeOrder.total) + Number(orderItem.price)
         : orderItem.price;
@@ -59,8 +56,7 @@ const resolvers = {
         activeOrder: {
           __typename: 'ActiveOrder',
           restaurantId,
-          restaurantName,
-          items,
+          orderItems,
           total,
         },
       };
@@ -69,8 +65,7 @@ const resolvers = {
 
       return {
         restaurantId,
-        restaurantName,
-        items: data.activeOrder.items,
+        orderItems: data.activeOrder.orderItems,
         total: data.activeOrder.total,
       };
     },

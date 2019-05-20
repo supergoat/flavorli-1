@@ -14,11 +14,16 @@ export const GET_ACTIVE_ORDER = gql`
     isLoggedIn @client
     activeOrder @client {
       restaurantId
-      restaurantName
-      items {
+      orderItems {
         id
         name
-        selections
+        options {
+          name
+          items {
+            name
+            price
+          }
+        }
         price
         quantity
       }
@@ -33,16 +38,13 @@ const Order = (_: Props) => {
       {({loading, error, data}) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
-
         const activeOrder = data.activeOrder;
 
         return (
           <Page heading="Order" onClose={() => window.history.back()}>
-            <RestaurantName>Breakfast Club Spitafields</RestaurantName>
-
             <ClearItems />
 
-            <OrderItems items={activeOrder.items} />
+            <OrderItems items={activeOrder.orderItems} />
 
             <Total>
               <div>Total:</div>

@@ -9,8 +9,7 @@ export const GET_DATA = gql`
   query GetData {
     isLoggedIn @client
     activeOrder @client {
-      restaurantName
-      items {
+      orderItems {
         id
       }
       total
@@ -25,7 +24,7 @@ const Footer = () => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const noOfItems = data.activeOrder.items.length;
+        const noOfItems = data.activeOrder.orderItems.length;
         const isLoggedIn = data.isLoggedIn;
 
         return (
