@@ -130,6 +130,7 @@ const Item = ({
           price: (price * qty).toFixed(2),
           options,
           quantity: qty,
+          image: item.image,
         },
       },
     });

@@ -34,6 +34,7 @@ const resolvers = {
         id,
         name: orderItem.name,
         price: orderItem.price,
+        image: orderItem.image,
         total: orderItem.total,
         quantity: orderItem.quantity,
         options: orderItem.options.map((option: any) => ({

@@ -21,6 +21,7 @@ export const GET_ACTIVE_ORDER = gql`
         name
         price
         quantity
+        image
         options {
           name
           items {
@@ -62,6 +63,7 @@ const Order = (_: Props) => {
             name: orderItem.name,
             price: orderItem.price,
             quantity: orderItem.quantity,
+            image: orderItem.image,
             options: orderItem.options.map((option: any) => ({
               name: option.name,
               items: option.items.map((item: any) => ({
