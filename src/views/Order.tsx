@@ -4,7 +4,7 @@ import {Query} from 'react-apollo';
 import Button from '../ui/Button';
 import OrderItems from '../components/OrderItems';
 import styled from 'styled-components/macro';
-import {RouteComponentProps, navigate} from '@reach/router';
+import {RouteComponentProps} from '@reach/router';
 import Page from '../templates/Page';
 import {formatDate} from '../_utils/formatDate';
 import {formatTime} from '../_utils/formatTime';
@@ -52,11 +52,11 @@ const GET_CUSTOMER_ORDER = gql`
 `;
 
 interface Props extends RouteComponentProps {
-  receiptId?: string;
+  orderId?: string;
 }
-const Receipt = ({receiptId}: Props) => {
+const Order = ({orderId}: Props) => {
   return (
-    <Query query={GET_CUSTOMER_ORDER} variables={{orderId: receiptId}}>
+    <Query query={GET_CUSTOMER_ORDER} variables={{orderId: orderId}}>
       {({loading, error, data: {getCustomerOrder}}) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
@@ -104,20 +104,17 @@ const Receipt = ({receiptId}: Props) => {
               <Tel>{getCustomerOrder.customer.tel}</Tel>
             </Details>
 
-            <ReceiptItems>
+            <OrderItemsWrapper>
               <OrderItems items={getCustomerOrder.items} />
 
               <Total>
                 <div>Total:</div>
                 <div>£{getCustomerOrder.total}</div>
               </Total>
-            </ReceiptItems>
+            </OrderItemsWrapper>
 
-            <Button
-              width="100%"
-              onClick={() => navigate('/restaurants', {replace: true})}
-            >
-              Home
+            <Button width="100%" onClick={() => window.history.back()}>
+              Back
             </Button>
           </Page>
         );
@@ -128,7 +125,7 @@ const Receipt = ({receiptId}: Props) => {
 
 /* Export
 ============================================================================= */
-export default Receipt;
+export default Order;
 
 const OrderId = styled.h3`
   color: var(--osloGrey);
@@ -174,7 +171,7 @@ const Tel = styled.p`
   font-weight: 300;
 `;
 
-const ReceiptItems = styled.div`
+const OrderItemsWrapper = styled.div`
   border-top: 1px solid var(--silver);
   padding-top: 30px;
 `;

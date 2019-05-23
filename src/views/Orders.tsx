@@ -35,7 +35,7 @@ const Orders = (_: Props) => {
               <Tile
                 margin="0 0 15px 0"
                 key={order.id}
-                onClick={() => navigate(`/receipt/${order.id}`)}
+                onClick={() => navigate(`/order/${order.id}`)}
                 heading={`Total: £${order.total}`}
                 subHeading={<>{order.createdAt}</>}
                 cta={'View Order'}
