@@ -23,6 +23,7 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
         if (error) return `Error! ${error.message}`;
 
         const {
+          id,
           logo,
           image,
           name,
@@ -55,7 +56,8 @@ const RestaurantView = ({restaurantId = '0'}: Props) => {
 
             <Menu
               categories={menu.categories}
-              restaurantId={menu.restaurant.id}
+              restaurantId={id}
+              restaurantName={name}
             />
             <Footer />
           </>

@@ -14,6 +14,7 @@ export const GET_ACTIVE_ORDER = gql`
     isLoggedIn @client
     activeOrder @client {
       restaurantId
+      restaurantName
       total
       orderItems {
         id
@@ -73,6 +74,7 @@ const Order = (_: Props) => {
 
         return (
           <Page heading="Order" onClose={() => window.history.back()}>
+            <RestaurantName>{activeOrder.restaurantName}</RestaurantName>
             <ClearItems />
 
             <OrderItems items={activeOrder.orderItems} />

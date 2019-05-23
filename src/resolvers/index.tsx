@@ -12,8 +12,10 @@ const resolvers = {
       _: any,
       {
         restaurantId,
+        restaurantName,
         orderItem,
       }: {
+        restaurantName: string;
         restaurantId: string;
         orderItem: any;
       },
@@ -55,6 +57,7 @@ const resolvers = {
       const data = {
         activeOrder: {
           __typename: 'ActiveOrder',
+          restaurantName,
           restaurantId,
           orderItems,
           total,
@@ -65,6 +68,7 @@ const resolvers = {
 
       return {
         restaurantId,
+        restaurantName,
         orderItems: data.activeOrder.orderItems,
         total: data.activeOrder.total,
       };

@@ -10,8 +10,9 @@ interface Section {
 interface Props {
   categories: Section[];
   restaurantId: string;
+  restaurantName: string;
 }
-const Menu = ({categories, restaurantId}: Props) => {
+const Menu = ({categories, restaurantId, restaurantName}: Props) => {
   const [item, setItem] = useState<any>(null);
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const Menu = ({categories, restaurantId}: Props) => {
           item={item}
           onCloseItem={() => setItem(null)}
           restaurantId={restaurantId}
+          restaurantName={restaurantName}
         />
       )}
     </MenuWrapper>

@@ -5,8 +5,16 @@ import gql from 'graphql-tag';
 import Item from '../components/Item';
 
 const ADD_TO_ORDER = gql`
-  mutation addToOrder($restaurantId: String!, $orderItem: OrderItem!) {
-    addToOrder(restaurantId: $restaurantId, orderItem: $orderItem) @client
+  mutation addToOrder(
+    $restaurantName: String!
+    $restaurantId: String!
+    $orderItem: OrderItem!
+  ) {
+    addToOrder(
+      restaurantName: $restaurantName
+      restaurantId: $restaurantId
+      orderItem: $orderItem
+    ) @client
   }
 `;
 
@@ -14,8 +22,9 @@ interface Props extends RouteComponentProps {
   item: any;
   onCloseItem: () => void;
   restaurantId: string;
+  restaurantName: string;
 }
-const ItemView = ({item, onCloseItem, restaurantId}: Props) => {
+const ItemView = ({item, onCloseItem, restaurantId, restaurantName}: Props) => {
   return (
     <Mutation mutation={ADD_TO_ORDER} onCompleted={() => onCloseItem()}>
       {(addToOrder, {loading, error}) => {
@@ -28,6 +37,7 @@ const ItemView = ({item, onCloseItem, restaurantId}: Props) => {
             onCancel={onCloseItem}
             addToOrder={addToOrder}
             restaurantId={restaurantId}
+            restaurantName={restaurantName}
           />
         );
       }}

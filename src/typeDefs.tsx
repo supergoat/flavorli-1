@@ -6,13 +6,18 @@ const typeDefs = gql`
   }
 
   type AcriveOrder {
-    restaurant: Restaurant
-    items: [OrderItem]!
-    total: Float
+    restaurantName: String
+    restaurantId: String
+    orderItems: [OrderItem]
+    total: String
   }
 
   extend type Mutation {
-    addToOrder(restaurant: Restaurant, orderItem: OrderItem!): AcriveOrder!
+    addToOrder(
+      restaurantName: String!
+      restaurantId: String!
+      orderItem: OrderItem!
+    ): AcriveOrder!
   }
 `;
 

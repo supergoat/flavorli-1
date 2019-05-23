@@ -10,10 +10,17 @@ import Dietary from '../components/Dietary';
 interface Props extends RouteComponentProps {
   item: any;
   restaurantId: string;
+  restaurantName: string;
   addToOrder: any;
   onCancel: () => void;
 }
-const Item = ({item, restaurantId, addToOrder, onCancel}: Props) => {
+const Item = ({
+  item,
+  restaurantName,
+  restaurantId,
+  addToOrder,
+  onCancel,
+}: Props) => {
   const [price, setPrice] = useState(Number(item.price));
   const [qty, setQty] = useState(1);
   const [options, setOptions] = useState<any[]>([]);
@@ -116,7 +123,8 @@ const Item = ({item, restaurantId, addToOrder, onCancel}: Props) => {
   const handleAddToOrder = async () => {
     await addToOrder({
       variables: {
-        restaurantId: restaurantId,
+        restaurantId,
+        restaurantName,
         orderItem: {
           name: item.name,
           price: (price * qty).toFixed(2),

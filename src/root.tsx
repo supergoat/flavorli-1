@@ -7,7 +7,6 @@ import Login from './views/Login';
 import Order from './views/Order';
 import Details from './views/Details';
 import Account from './views/Account';
-import CheckOut from './views/CheckOut';
 import Receipt from './views/Receipt';
 import Orders from './views/Orders';
 import Addresses from './views/Address';
@@ -23,7 +22,6 @@ const Root = () => {
       {/* <Home path="/" /> */}
 
       <Restaurants path="/" />
-      <CheckOut path="/checkout" />
       <Order path="/order" />
       <Account path="/account" />
       <Details path="/details" />
