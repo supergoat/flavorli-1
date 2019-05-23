@@ -35,7 +35,7 @@ const Details = ({viewer}: Props) => {
     // Do not submit form if its invalid
     if (!isFormValid()) return;
 
-    navigate('/order');
+    navigate('/basket');
   };
 
   return (

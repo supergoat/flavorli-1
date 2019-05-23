@@ -34,8 +34,8 @@ const Footer = () => {
                 width="100%"
                 onClick={() =>
                   isLoggedIn
-                    ? navigate('/order')
-                    : navigate('/register', {state: {navigateTo: '/order'}})
+                    ? navigate('/basket')
+                    : navigate('/register', {state: {navigateTo: '/basket'}})
                 }
               >
                 View Order ({noOfItems})

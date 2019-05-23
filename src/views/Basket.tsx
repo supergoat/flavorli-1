@@ -34,7 +34,7 @@ export const GET_ACTIVE_ORDER = gql`
   }
 `;
 
-const Order = (_: Props) => {
+const Basket = (_: Props) => {
   const handleSubmit = async ({stripe_user_id, sessionId}: any) => {
     // eslint-disable-next-line
     var stripe: any = Stripe('pk_test_Qvu3FuHyFpup5hiPyh0u1GWE', {
@@ -75,7 +75,7 @@ const Order = (_: Props) => {
         };
 
         return (
-          <Page heading="Order" onClose={() => window.history.back()}>
+          <Page heading="Basket" onClose={() => window.history.back()}>
             <RestaurantName>{activeOrder.restaurantName}</RestaurantName>
             <ClearItems />
 
@@ -116,7 +116,7 @@ const Order = (_: Props) => {
 
 /* Export
 ============================================================================= */
-export default Order;
+export default Basket;
 
 const CREATE_CHECKOUT_SESSION = gql`
   mutation createCheckOutSession(

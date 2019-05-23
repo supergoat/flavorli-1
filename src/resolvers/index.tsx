@@ -1,4 +1,4 @@
-import {GET_ACTIVE_ORDER} from '../views/Order';
+import {GET_ACTIVE_ORDER} from '../views/Basket';
 
 function* generateId() {
   let x = 0;

@@ -152,7 +152,7 @@ const RegisterForm = ({register, loading, error}: Props) => {
       <Button
         secondary
         width="100%"
-        onClick={() => navigate('/login', {state: {navigateTo: '/order'}})}
+        onClick={() => navigate('/login', {state: {navigateTo: '/basket'}})}
       >
         Login
       </Button>

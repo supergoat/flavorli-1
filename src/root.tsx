@@ -4,7 +4,7 @@ import {Router} from '@reach/router';
 import Register from './views/Register';
 import Login from './views/Login';
 
-import Order from './views/Order';
+import Basket from './views/Basket';
 import Details from './views/Details';
 import Account from './views/Account';
 import Receipt from './views/Receipt';
@@ -22,7 +22,7 @@ const Root = () => {
       {/* <Home path="/" /> */}
 
       <Restaurants path="/" />
-      <Order path="/order" />
+      <Basket path="/basket" />
       <Account path="/account" />
       <Details path="/details" />
       <Addresses path="/address" />
