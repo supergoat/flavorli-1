@@ -34,20 +34,12 @@ const Footer = () => {
                 width="100%"
                 onClick={() =>
                   isLoggedIn
-                    ? navigate('/checkout')
-                    : navigate('/register', {state: {navigateTo: '/checkout'}})
+                    ? navigate('/order')
+                    : navigate('/register', {state: {navigateTo: '/order'}})
                 }
               >
-                Checkout
+                View Order ({noOfItems})
               </Button>
-
-              <OrderButton secondary onClick={() => navigate('/order')}>
-                <NoOfItems>{noOfItems}</NoOfItems>
-                <OrderIcon
-                  src={require('../assets/icons/basket.svg')}
-                  alt="View Order"
-                />
-              </OrderButton>
             </FooterWrapper>
           )
         );

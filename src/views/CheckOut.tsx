@@ -1,5 +1,6 @@
-import React, {MouseEvent} from 'react';
-import {Query} from 'react-apollo';
+import React from 'react';
+import gql from 'graphql-tag';
+import {Query, Mutation} from 'react-apollo';
 import styled from 'styled-components/macro';
 import Tile from '../components/Tile';
 import {navigate, RouteComponentProps, Redirect} from '@reach/router';
@@ -12,27 +13,15 @@ import Page from '../templates/Page';
 
 interface Props extends RouteComponentProps {}
 const CheckOut = (_: Props) => {
-  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSubmit = async ({stripe_user_id, sessionId}: any) => {
+    // eslint-disable-next-line
+    var stripe: any = Stripe('pk_test_Qvu3FuHyFpup5hiPyh0u1GWE', {
+      stripeAccount: stripe_user_id,
+    });
 
-    // const items = {
-    //   name: 'The Big Jack',
-    //   price: '8.00',
-    //   quantity: 1,
-    //   options: {
-    //     create: {
-    //       name: 'Make It a Filthy Box',
-    //       items: {
-    //         create: {
-    //           name: 'Bang Bang',
-    //           price: '2.00',
-    //         },
-    //       },
-    //     },
-    //   },
-    // };
-
-    navigate('/order');
+    await stripe.redirectToCheckout({
+      sessionId: sessionId,
+    });
   };
 
   return (
@@ -42,6 +31,23 @@ const CheckOut = (_: Props) => {
         if (error) return `Error! ${error.message}`;
 
         const activeOrder = data.activeOrder;
+
+        const variables = {
+          ...activeOrder,
+          total: String(activeOrder.total),
+          orderItems: activeOrder.orderItems.map((orderItem: any) => ({
+            name: orderItem.name,
+            price: orderItem.price,
+            quantity: orderItem.quantity,
+            options: orderItem.options.map((option: any) => ({
+              name: option.name,
+              items: option.items.map((item: any) => ({
+                name: item.name,
+                price: item.price,
+              })),
+            })),
+          })),
+        };
 
         if (!data.isLoggedIn || activeOrder.restaurantId === -1)
           return <Redirect to="/" noThrow />;
@@ -57,7 +63,7 @@ const CheckOut = (_: Props) => {
               subHeading={
                 <Total>
                   <div>Total:</div>
-                  <div>£{activeOrder.total.toFixed(2)}</div>
+                  <div>£{activeOrder.total}</div>
                 </Total>
               }
               cta={'Change Order'}
@@ -70,9 +76,26 @@ const CheckOut = (_: Props) => {
               cta={'Change Payment'}
             />
 
-            <PlaceOrderBtn onClick={handleSubmit} type="submit">
-              Place Order
-            </PlaceOrderBtn>
+            <Mutation
+              mutation={CREATE_CHECKOUT_SESSION}
+              onCompleted={({
+                createCheckOutSession,
+              }: {
+                createCheckOutSession: string;
+              }) => handleSubmit(createCheckOutSession)}
+              variables={variables}
+            >
+              {(createCheckOutSession, {loading, error, data}) => {
+                return (
+                  <PlaceOrderBtn
+                    onClick={() => createCheckOutSession()}
+                    type="submit"
+                  >
+                    Place Order
+                  </PlaceOrderBtn>
+                );
+              }}
+            </Mutation>
           </Page>
         );
       }}
@@ -81,6 +104,23 @@ const CheckOut = (_: Props) => {
 };
 
 export default CheckOut;
+
+const CREATE_CHECKOUT_SESSION = gql`
+  mutation createCheckOutSession(
+    $restaurantId: ID!
+    $total: String!
+    $orderItems: [OrderItemInput!]!
+  ) {
+    createCheckOutSession(
+      restaurantId: $restaurantId
+      total: $total
+      orderItems: $orderItems
+    ) {
+      sessionId
+      stripe_user_id
+    }
+  }
+`;
 
 /* Styled Components
 ============================================================================= */
