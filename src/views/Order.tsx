@@ -9,7 +9,7 @@ import Page from '../templates/Page';
 import {formatDate} from '../_utils/formatDate';
 import {formatTime} from '../_utils/formatTime';
 
-const GET_CUSTOMER_ORDER = gql`
+export const GET_CUSTOMER_ORDER = gql`
   query getCustomerOrder($orderId: ID!) {
     getCustomerOrder(orderId: $orderId) {
       id
@@ -18,6 +18,7 @@ const GET_CUSTOMER_ORDER = gql`
       total
       orderNo
       status
+      dueAt
       customer {
         name
         tel

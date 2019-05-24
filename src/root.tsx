@@ -8,6 +8,7 @@ import Basket from './views/Basket';
 import Details from './views/Details';
 import Account from './views/Account';
 import Order from './views/Order';
+import OrderStatus from './views/OrderStatus';
 import Orders from './views/Orders';
 import Addresses from './views/Address';
 import Restaurants from './views/Restaurants';
@@ -28,6 +29,7 @@ const Root = () => {
       <Addresses path="/address" />
       <Orders path="/orders" />
       <Order path="/order/:orderId" />
+      <OrderStatus path="/order/:orderId/status" />
       <Restaurant path="/restaurant/:restaurantId/*" />
     </Router>
   );
