@@ -3,7 +3,6 @@ import {Router} from '@reach/router';
 // import Home from './views/Home';
 import Register from './views/Register';
 import Login from './views/Login';
-
 import Basket from './views/Basket';
 import Details from './views/Details';
 import Account from './views/Account';
@@ -13,6 +12,7 @@ import Orders from './views/Orders';
 import Addresses from './views/Address';
 import Restaurants from './views/Restaurants';
 import Restaurant from './views/Restaurant';
+import CheckOut from './views/CheckOut';
 
 const Root = () => {
   return (
@@ -31,6 +31,7 @@ const Root = () => {
       <Order path="/order/:orderId" />
       <OrderStatus path="/order/:orderId/status" />
       <Restaurant path="/restaurant/:restaurantId/*" />
+      <CheckOut path="/checkout" />
     </Router>
   );
 };

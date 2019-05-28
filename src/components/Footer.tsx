@@ -31,15 +31,27 @@ const Footer = () => {
           noOfItems > 0 && (
             <FooterWrapper>
               <Button
-                width="100%"
+                width="80%"
                 onClick={() =>
                   isLoggedIn
-                    ? navigate('/basket')
+                    ? navigate('/checkout')
                     : navigate('/register', {state: {navigateTo: '/basket'}})
                 }
               >
-                View Order ({noOfItems})
+                Checkout
               </Button>
+
+              <OrderButton
+                secondary
+                onClick={() => navigate('/basket')}
+                width="15%"
+              >
+                <NoOfItems>{noOfItems}</NoOfItems>
+                <OrderIcon
+                  src={require('../assets/icons/basket.svg')}
+                  alt="View Order"
+                />
+              </OrderButton>
             </FooterWrapper>
           )
         );
@@ -73,27 +85,18 @@ const FooterWrapper = styled.div`
 `;
 
 const OrderIcon = styled.img`
-  height: 35px;
-  width: 35px;
-`;
-
-const NoOfItems = styled.p`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
+  height: 30px;
+  width: 30px;
   position: absolute;
-  padding-top: 5px;
-  top: 0;
+  margin: 0 auto;
+  top: 5px;
   right: 0;
   left: 0;
   bottom: 0;
 `;
 
+const NoOfItems = styled.p``;
+
 const OrderButton = styled(Button)`
-  margin-left: 15px;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
   position: relative;
 `;

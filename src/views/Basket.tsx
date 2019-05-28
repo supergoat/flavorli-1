@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import {Query, Mutation} from 'react-apollo';
-import {RouteComponentProps, Redirect} from '@reach/router';
+import {Query} from 'react-apollo';
+import {RouteComponentProps, Redirect, navigate} from '@reach/router';
 import styled from 'styled-components/macro';
 import Page from '../templates/Page';
 import Button from '../ui/Button';
@@ -35,17 +35,6 @@ export const GET_ACTIVE_ORDER = gql`
 `;
 
 const Basket = (_: Props) => {
-  const handleSubmit = async ({stripe_user_id, sessionId}: any) => {
-    // eslint-disable-next-line
-    var stripe: any = Stripe('pk_test_Qvu3FuHyFpup5hiPyh0u1GWE', {
-      stripeAccount: stripe_user_id,
-    });
-
-    await stripe.redirectToCheckout({
-      sessionId: sessionId,
-    });
-  };
-
   return (
     <Query query={GET_ACTIVE_ORDER}>
       {({loading, error, data}) => {
@@ -56,57 +45,24 @@ const Basket = (_: Props) => {
         if (!data.isLoggedIn || activeOrder.restaurantId === -1)
           return <Redirect to="/" noThrow />;
 
-        const variables = {
-          ...activeOrder,
-          total: String(activeOrder.total),
-          orderItems: activeOrder.orderItems.map((orderItem: any) => ({
-            name: orderItem.name,
-            price: orderItem.price,
-            quantity: orderItem.quantity,
-            image: orderItem.image,
-            options: orderItem.options.map((option: any) => ({
-              name: option.name,
-              items: option.items.map((item: any) => ({
-                name: item.name,
-                price: item.price,
-              })),
-            })),
-          })),
-        };
-
         return (
           <Page heading="Basket" onClose={() => window.history.back()}>
             <RestaurantName>{activeOrder.restaurantName}</RestaurantName>
             <ClearItems />
-
             <OrderItems items={activeOrder.orderItems} />
-
             <Total>
               <div>Total:</div>
               <div>£{Number(activeOrder.total).toFixed(2)}</div>
             </Total>
-
-            <Mutation
-              mutation={CREATE_CHECKOUT_SESSION}
-              onCompleted={({
-                createCheckOutSession,
-              }: {
-                createCheckOutSession: string;
-              }) => handleSubmit(createCheckOutSession)}
-              variables={variables}
-            >
-              {(createCheckOutSession, {loading, error, data}) => {
-                return (
-                  <Button
-                    width="100%"
-                    onClick={() => createCheckOutSession()}
-                    type="submit"
-                  >
-                    {loading ? 'Processing...' : ' Checkout'}
-                  </Button>
-                );
-              }}
-            </Mutation>
+            <BasketFooter>
+              <Button
+                width="100%"
+                onClick={() => navigate('/checkout')}
+                type="submit"
+              >
+                Checkout
+              </Button>
+            </BasketFooter>
           </Page>
         );
       }}
@@ -114,26 +70,7 @@ const Basket = (_: Props) => {
   );
 };
 
-/* Export
-============================================================================= */
 export default Basket;
-
-const CREATE_CHECKOUT_SESSION = gql`
-  mutation createCheckOutSession(
-    $restaurantId: ID!
-    $total: String!
-    $orderItems: [OrderItemInput!]!
-  ) {
-    createCheckOutSession(
-      restaurantId: $restaurantId
-      total: $total
-      orderItems: $orderItems
-    ) {
-      sessionId
-      stripe_user_id
-    }
-  }
-`;
 
 /* Styled Components
 ============================================================================= */
@@ -162,4 +99,16 @@ const Total = styled.div`
   font-weight: 800;
   border-top: 1px solid var(--silver);
   padding: 20px 0;
+`;
+
+const BasketFooter = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background: var(--alabasterLight);
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 -1px 3px rgba(200, 200, 200, 0.5);
 `;
