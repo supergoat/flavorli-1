@@ -28,6 +28,7 @@ const Button = styled.button`
     props.secondary ? 'var(--oxfordBlue)' : 'var(--white)'};
   width: ${(props: Props) => props.width || 'auto'};
   align-self: flex-start;
+  cursor: pointer;
 
   &:disabled {
     opacity: 0.8;

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styled from 'styled-components/macro';
+import styled, {keyframes} from 'styled-components/macro';
 import {navigate} from '@reach/router';
 import Tile from '../components/Tile';
 import Page from '../templates/Page';
@@ -9,6 +9,7 @@ import InjectedAddPaymentMethod from '../components/AddPaymentMethod';
 import gql from 'graphql-tag';
 import {Mutation} from 'react-apollo';
 import {Elements, StripeProvider} from 'react-stripe-elements';
+import {GET_ACTIVE_ORDER} from '../views/Basket';
 
 const CheckOut = ({activeOrder, me}: any) => {
   const [error, setError] = useState('');
@@ -18,7 +19,9 @@ const CheckOut = ({activeOrder, me}: any) => {
     me.paymentMethod,
   );
 
-  const handleSubmit = async ({stripe_user_id, client_secret, order}: any) => {
+  const handleSubmit = async (cache: any, {data: {upsertOrder}}: any) => {
+    const {stripe_user_id, client_secret, order} = upsertOrder;
+
     // eslint-disable-next-line
     var stripe: any = Stripe('pk_test_Qvu3FuHyFpup5hiPyh0u1GWE', {
       stripeAccount: stripe_user_id,
@@ -33,6 +36,18 @@ const CheckOut = ({activeOrder, me}: any) => {
     if (error) {
       setError(error.message);
     } else {
+      const data = {
+        activeOrder: {
+          __typename: 'ActiveOrder',
+          restaurantName: '',
+          restaurantId: -1,
+          orderItems: [],
+          total: 0,
+        },
+      };
+
+      cache.writeQuery({query: GET_ACTIVE_ORDER, data});
+
       navigate(`/order/${order.id}/status`);
     }
   };
@@ -134,21 +149,23 @@ const CheckOut = ({activeOrder, me}: any) => {
           setError(error);
         }}
         mutation={UPSERT_ORDER}
-        onCompleted={({upsertOrder}: {upsertOrder: string}) =>
-          handleSubmit(upsertOrder)
-        }
+        update={handleSubmit}
       >
         {(upsertOrder, {loading, error, data}) => {
           return (
             <CheckOutFooter>
-              <Button
+              <PlaceOrderButton
                 disabled={!defaultPaymentMethod || addingPaymentMethod}
                 width="100%"
                 onClick={() => hanldePlaceOrder(upsertOrder)}
                 type="submit"
               >
-                {loading ? 'Processing...' : ' Place Order'}
-              </Button>
+                {loading ? 'Processing...' : `Pay £${activeOrder.total}`}
+                <img
+                  src={require(`../assets/icons/lock.svg`)}
+                  alt={defaultPaymentMethod.brand}
+                />
+              </PlaceOrderButton>
             </CheckOutFooter>
           );
         }}
@@ -215,4 +232,46 @@ const CardIcon = styled.img`
 
 const AddPaymentMethodButton = styled.div`
   cursor: pointer;
+`;
+
+const progressBarShimmer = keyframes`
+    0%{
+        background-position: 100% 0
+    }
+    100%{
+        background-position: -100% 0
+    }
+`;
+
+const PlaceOrderButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    to right,
+    rgb(0, 23, 61) 1%,
+    rgba(0, 23, 61, 0.8) 10%,
+    rgb(0, 23, 61) 18%
+  );
+  background-size: 400% 30px;
+  animation: ${progressBarShimmer} 3s linear forwards infinite;
+
+  img {
+    position: absolute;
+    right: 30px;
+    height: 22px;
+  }
+
+  &:hover {
+    animation: none;
+    background: rgba(0, 23, 61, 0.95);
+  }
+
+  &:disabled {
+    background: var(--oxfordBlue);
+    animation: none;
+    img {
+      display: none;
+    }
+  }
 `;

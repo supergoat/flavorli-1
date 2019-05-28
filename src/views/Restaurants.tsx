@@ -35,10 +35,7 @@ const RestaurantsView = (_: Props) => {
         if (error) return `Error! ${error.message}`;
 
         return (
-          <Page heading="BoxPark" showNavbar>
-            <NoOfRestaurants>
-              {data.restaurants.length} Restaurants
-            </NoOfRestaurants>
+          <Page showNavbar>
             {data.restaurants.map((restaurant: RestaurantType) => (
               <RestaurantItem key={restaurant.id} restaurant={restaurant} />
             ))}

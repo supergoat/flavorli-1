@@ -38,9 +38,10 @@ const RestaurantItemWrapper = styled.div`
   cursor: pointer;
 `;
 
-const Name = styled.h4`
-  font-size: 16px;
-  margin-bottom: 5px;
+const Name = styled.header`
+  font-size: 30px;
+  font-weight: 300;
+  margin-bottom: 10px;
 `;
 
 const Description = styled.p`
